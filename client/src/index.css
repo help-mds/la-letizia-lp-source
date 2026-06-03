@@ -188,3 +188,12 @@ html.lenis, html.lenis body {
     }
   }
 }
+
+/* ─── Salon "The Ritual" template tokens ─── */
+:root {
+  --salon-bg: #fafaf9;
+  --salon-ink: #1a1a1a;
+  --salon-muted: #888888;
+  --salon-font-heading: 'Fraunces', serif;
+  --salon-accent: #1a1a1a;
+}

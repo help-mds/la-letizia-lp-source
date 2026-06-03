@@ -5,7 +5,7 @@
 export default function MdsBadge() {
   return (
     <a
-      href="https://[MDS-WEB-DESIGN-URL-PLACEHOLDER]"
+      href="https://mds-fund.com"
       target="_blank"
       rel="noopener noreferrer"
       className="mds-badge"

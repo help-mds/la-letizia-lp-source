@@ -124,3 +124,23 @@
 - [x] DemoPageのハードコードされたテキスト（atmosphere caption, gallery captions, CTA title等）をDB駆動に変更
 - [x] フォーム送信後にLP URLを表示する成功画面
 - [x] テスト: フォーム入力→DB保存→LP表示の一連フロー確認
+
+## Phase 13: Salon "The Ritual" テンプレート
+
+- [x] AI画像生成: faceless マクロ接写7枚（hero 3枚 + pause 2枚 + work 2枚 + transformation 1枚 + towel 1枚）
+- [x] 実写画像2枚アップロード（salon-arrival-wide, salon-arrival-work）
+- [x] 全画像を manus-upload-file --webdev でストレージにアップロード
+- [x] ScrollAnimatedHero コンポーネント作成（3枚 cross-fade + Ken Burns on scroll, 🔴Lock）
+- [x] SalonArrival セクション作成（実写 wide shot + fade-in + caption）
+- [x] ThePause セクション作成（非対称2画像 + kinetic typography）
+- [x] TheWork セクション作成（pinned circle clip-path reveal + macro photography）
+- [x] Transformation セクション作成（faceless 仕上がり写真 + editorial quote）
+- [x] Lingering セクション作成（CTA + "BOOK YOUR RITUAL" + 3カラム情報）
+- [x] SalonFooter セクション作成（minimal + MDS attribution）
+- [x] SalonDemoPage.tsx 作成（全セクション統合 + DB駆動データ）
+- [x] App.tsx に /s/:slug ルート追加
+- [x] DB seed: Maison Lavèze Ginza デモデータ投入
+- [x] Fraunces フォント追加（Google Fonts CDN）
+- [x] salon-specific CSS variables 追加（index.css）
+- [x] 全セクション表示確認（Hero, Arrival, ThePause, TheWork, Transformation, Lingering, Footer）
+- [x] TypeScript エラーゼロ確認

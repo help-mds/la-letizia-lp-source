@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import DemoPage from "./pages/DemoPage";
+import SalonDemoPage from "./pages/SalonDemoPage";
 import LpInput from "./pages/LpInput";
 
 function Router() {
@@ -13,6 +14,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/r/:slug"} component={DemoPage} />
+      <Route path={"/s/:slug"} component={SalonDemoPage} />
       <Route path={"/lp-input"} component={LpInput} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
