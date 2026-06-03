@@ -87,3 +87,11 @@
 ## Phase 6: Bug Fix — テキスト重複
 
 - [x] CinematicLoaderとHeroOverlayのテキストが重なる問題を修正: loaderActiveがtrueの間はoverlay childrenをopacity:0で非表示にし、ローダー完了後にフェードイン
+
+## Phase 7: Phase B — セクションプレミアム化
+
+- [x] MenuSection: 大きなナンバリング（01, 02...）+ 横幅フルのdivider + hover時にアクセントカラーのアンダーライン + 価格のタイポグラフィ強化
+- [x] GallerySection: マスクreveal付きの画像表示 + カウンター表示（01/04）+ より大きなカード + caption常時表示
+- [x] InfoSection: ダーク背景に切り替え + 大きなstore名 + 地図的装飾 + 営業時間をカード風に
+- [x] CtaSection: ダーク背景 + 大きなイタリック見出し + ボタンのhoverエフェクト強化 + 背景にsubtle pattern
+- [x] FooterSection: ダーク背景 + 横幅フルのgrid + ナビリンク + SNSアイコン的装飾 + 「Designed by MDS」リンク

@@ -1,19 +1,11 @@
-import PhraseTitle from '@/components/text/PhraseTitle';
-
-interface Props {
-  storeName?: string;
-  area?: string;
-  address?: string;
-  hours?: string;
-  phone?: string;
-  reservationUrl?: string;
-  mapsUrl?: string;
-}
-
 /**
- * Premium editorial visit/info section.
- * Asymmetric 2-column grid with hours + address/links.
- * Uses data-reveal for PageTransitions choreography.
+ * Premium editorial visit/info section — Phase B upgrade.
+ * Features:
+ * - Dark background for dramatic contrast after gallery
+ * - Large italic store name as hero element
+ * - Card-style hours and location blocks
+ * - Elegant link styling with hover animations
+ * - data-reveal for PageTransitions
  */
 export default function InfoSection({
   storeName = 'La Letizia',
@@ -23,7 +15,15 @@ export default function InfoSection({
   phone,
   reservationUrl,
   mapsUrl,
-}: Props) {
+}: {
+  storeName?: string;
+  area?: string;
+  address?: string;
+  hours?: string;
+  phone?: string;
+  reservationUrl?: string;
+  mapsUrl?: string;
+}) {
   return (
     <section
       id="info"
@@ -34,55 +34,77 @@ export default function InfoSection({
         paddingBottom: 'var(--space-section)',
         paddingLeft: 'var(--gutter)',
         paddingRight: 'var(--gutter)',
-        backgroundColor: 'var(--bg)',
+        backgroundColor: '#0E0D0C',
+        color: 'var(--overlay-text)',
       }}
     >
       <div className="mx-auto" style={{ maxWidth: 'var(--maxw)' }}>
-        {/* Header */}
-        <header style={{ marginBottom: 'var(--space-section)' }}>
+        {/* Large store name as hero element */}
+        <header style={{ marginBottom: 'calc(var(--space-section) * 0.6)' }}>
           <p
             className="uppercase"
             style={{
-              color: 'var(--accent)',
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--fs-eyebrow)',
               letterSpacing: '0.32em',
-              marginBottom: 'calc(var(--space-block) / 2.5)',
+              color: 'rgba(242, 238, 232, 0.4)',
+              marginBottom: 'calc(var(--space-block) / 2)',
             }}
           >
             Visit
           </p>
-          <PhraseTitle>{storeName}</PhraseTitle>
+          <h2
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              color: 'var(--overlay-text)',
+            }}
+          >
+            {storeName}
+          </h2>
           <p
             style={{
-              color: 'rgba(26, 23, 20, 0.55)',
               fontFamily: 'var(--font-body)',
-              fontSize: 'calc(var(--fs-body) + 4px)',
+              fontSize: 'calc(var(--fs-body) + 2px)',
+              color: 'rgba(242, 238, 232, 0.4)',
               marginTop: 'calc(var(--space-block) / 3)',
+              letterSpacing: '0.04em',
             }}
           >
             {area}
           </p>
         </header>
 
-        {/* Two-column grid */}
+        {/* Info grid — two columns */}
         <div
-          className="grid grid-cols-1 gap-y-12 md:grid-cols-12 md:gap-x-16"
+          className="grid grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-16"
           style={{
-            borderTop: '1px solid rgba(26, 23, 20, 0.08)',
-            paddingTop: 'var(--space-block)',
+            borderTop: '1px solid rgba(242, 238, 232, 0.08)',
+            paddingTop: 'calc(var(--space-block) * 1.5)',
           }}
         >
-          {/* Hours */}
-          <div className="md:col-span-6">
+          {/* Hours card */}
+          <div
+            className="relative"
+            style={{
+              padding: 'clamp(24px, 3vw, 40px)',
+              backgroundColor: 'rgba(242, 238, 232, 0.03)',
+              borderRadius: '4px',
+              border: '1px solid rgba(242, 238, 232, 0.06)',
+            }}
+          >
             <p
               className="uppercase"
               style={{
-                color: 'rgba(26, 23, 20, 0.45)',
                 fontFamily: 'var(--font-body)',
-                fontSize: 'var(--fs-eyebrow)',
-                letterSpacing: '0.32em',
-                marginBottom: 'calc(var(--space-block) / 2)',
+                fontSize: '11px',
+                letterSpacing: '0.3em',
+                color: 'rgba(242, 238, 232, 0.35)',
+                marginBottom: 'clamp(16px, 2vh, 24px)',
               }}
             >
               Hours
@@ -91,9 +113,9 @@ export default function InfoSection({
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'calc(var(--fs-body) + 1px)',
-                  color: 'var(--ink)',
-                  lineHeight: 1.8,
+                  fontSize: 'calc(var(--fs-body) + 2px)',
+                  color: 'rgba(242, 238, 232, 0.85)',
+                  lineHeight: 1.9,
                   whiteSpace: 'pre-line',
                 }}
               >
@@ -104,7 +126,7 @@ export default function InfoSection({
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'calc(var(--fs-body) + 1px)',
-                  color: 'rgba(26, 23, 20, 0.45)',
+                  color: 'rgba(242, 238, 232, 0.35)',
                 }}
               >
                 Hours to be confirmed.
@@ -112,25 +134,36 @@ export default function InfoSection({
             )}
           </div>
 
-          {/* Address + links */}
-          <div className="md:col-span-6">
+          {/* Location card */}
+          <div
+            className="relative"
+            style={{
+              padding: 'clamp(24px, 3vw, 40px)',
+              backgroundColor: 'rgba(242, 238, 232, 0.03)',
+              borderRadius: '4px',
+              border: '1px solid rgba(242, 238, 232, 0.06)',
+            }}
+          >
             <p
               className="uppercase"
               style={{
-                color: 'rgba(26, 23, 20, 0.45)',
                 fontFamily: 'var(--font-body)',
-                fontSize: 'var(--fs-eyebrow)',
-                letterSpacing: '0.32em',
-                marginBottom: 'calc(var(--space-block) / 2)',
+                fontSize: '11px',
+                letterSpacing: '0.3em',
+                color: 'rgba(242, 238, 232, 0.35)',
+                marginBottom: 'clamp(16px, 2vh, 24px)',
               }}
             >
               Location
             </p>
             <p
               style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'calc(var(--fs-body) + 1px)',
-                color: 'var(--ink)',
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)',
+                fontStyle: 'italic',
+                fontWeight: 300,
+                color: 'rgba(242, 238, 232, 0.9)',
+                marginBottom: '8px',
               }}
             >
               {storeName}
@@ -140,10 +173,10 @@ export default function InfoSection({
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'calc(var(--fs-body) + 1px)',
-                  color: 'rgba(26, 23, 20, 0.55)',
-                  marginBottom: 'var(--space-block)',
+                  color: 'rgba(242, 238, 232, 0.5)',
                   lineHeight: 1.7,
                   whiteSpace: 'pre-line',
+                  marginBottom: 'clamp(20px, 3vh, 32px)',
                 }}
               >
                 {address}
@@ -153,8 +186,8 @@ export default function InfoSection({
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 'calc(var(--fs-body) + 1px)',
-                  color: 'rgba(26, 23, 20, 0.55)',
-                  marginBottom: 'var(--space-block)',
+                  color: 'rgba(242, 238, 232, 0.4)',
+                  marginBottom: 'clamp(20px, 3vh, 32px)',
                 }}
               >
                 {area}
@@ -163,42 +196,24 @@ export default function InfoSection({
 
             {/* Links */}
             <div
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-4"
               style={{ fontFamily: 'var(--font-body)' }}
             >
-              {mapsUrl && (
-                <a
-                  href={mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2"
-                  style={{
-                    color: 'var(--accent)',
-                    fontSize: 'calc(var(--fs-body) + 1px)',
-                  }}
-                >
-                  <span className="border-b border-current pb-0.5">View on Map</span>
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-200 group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </a>
-              )}
               {phone && (
                 <a
                   href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
-                  className="group inline-flex items-center gap-2"
+                  className="group inline-flex items-center gap-3"
                   style={{
-                    color: 'var(--accent)',
+                    color: 'rgba(242, 238, 232, 0.7)',
                     fontSize: 'calc(var(--fs-body) + 1px)',
                   }}
                 >
-                  <span className="border-b border-current pb-0.5">{phone}</span>
+                  <span className="border-b border-current/30 pb-0.5 transition-all duration-300 group-hover:border-current group-hover:text-white">
+                    {phone}
+                  </span>
                   <span
                     aria-hidden
-                    className="transition-transform duration-200 group-hover:translate-x-1"
+                    className="transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1.5"
                   >
                     →
                   </span>
@@ -209,16 +224,40 @@ export default function InfoSection({
                   href={reservationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2"
+                  className="group inline-flex items-center gap-3"
                   style={{
-                    color: 'var(--accent)',
+                    color: 'rgba(242, 238, 232, 0.7)',
                     fontSize: 'calc(var(--fs-body) + 1px)',
                   }}
                 >
-                  <span className="border-b border-current pb-0.5">Reserve a Table</span>
+                  <span className="border-b border-current/30 pb-0.5 transition-all duration-300 group-hover:border-current group-hover:text-white">
+                    Reserve a Table
+                  </span>
                   <span
                     aria-hidden
-                    className="transition-transform duration-200 group-hover:translate-x-1"
+                    className="transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1.5"
+                  >
+                    →
+                  </span>
+                </a>
+              )}
+              {mapsUrl && (
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3"
+                  style={{
+                    color: 'rgba(242, 238, 232, 0.7)',
+                    fontSize: 'calc(var(--fs-body) + 1px)',
+                  }}
+                >
+                  <span className="border-b border-current/30 pb-0.5 transition-all duration-300 group-hover:border-current group-hover:text-white">
+                    View on Map
+                  </span>
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1.5"
                   >
                     →
                   </span>
