@@ -51,10 +51,14 @@ export default function TheWork({ images, motionScale = 0.8 }: TheWorkProps) {
       });
 
       // Reveal each panel with expanding circle — slow, deliberate reveals
+      // Reserve 25% of timeline at end as HOLD on last image
+      const holdRatio = 0.25;
+      const animRatio = 1 - holdRatio;
+
       panels.forEach((panel, i) => {
         if (i === 0) return; // First panel is always visible
 
-        const segDuration = 1 / panels.length;
+        const segDuration = animRatio / panels.length;
         const startTime = segDuration * i;
 
         // Circle expands slowly — takes 70% of segment duration
@@ -83,6 +87,9 @@ export default function TheWork({ images, motionScale = 0.8 }: TheWorkProps) {
           );
         }
       });
+
+      // HOLD: After last reveal completes, the remaining 25% of scroll
+      // keeps the last image pinned and visible before section unpins.
 
       // Fade the label in
       const label = section.querySelector<HTMLElement>('.work-label');

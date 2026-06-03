@@ -75,12 +75,14 @@ export default function ScrollAnimatedHero({
       });
 
       // Cross-fade between images with Ken Burns (subtle scale)
-      // Each image gets a long hold time before transitioning — luxurious pacing
-      const segmentDuration = 1 / Math.max(imgEls.length - 1, 1);
+      // Reserve 20% of timeline at the end as a HOLD on the last image
+      const holdRatio = 0.2; // 20% of scroll is just holding the last image
+      const animRatio = 1 - holdRatio; // 80% for actual transitions
+      const segmentDuration = animRatio / Math.max(imgEls.length - 1, 1);
 
       imgEls.forEach((el, i) => {
         if (i === 0) {
-          // First image: long Ken Burns scale up, then slow fade out
+          // First image: Ken Burns scale up, then slow fade out
           tl.to(el, {
             scale: 1.05,
             duration: segmentDuration,
@@ -95,7 +97,7 @@ export default function ScrollAnimatedHero({
             }, segmentDuration * 0.75);
           }
         } else {
-          // Each subsequent image starts fading in later — more hold time on previous
+          // Each subsequent image starts fading in later
           const startTime = segmentDuration * (i - 1) + segmentDuration * 0.65;
           // Slow fade in
           tl.to(el, {
@@ -120,6 +122,10 @@ export default function ScrollAnimatedHero({
           }
         }
       });
+
+      // HOLD: last image stays pinned for the remaining 20% of scroll
+      // This is achieved by the timeline ending at 1.0 but the last image
+      // animation ending at animRatio (0.8) — the remaining scroll just holds.
 
       // Text reveal — immediate, no scroll dependency
       if (textRef.current) {
