@@ -114,3 +114,13 @@
 - [x] カスタムカーソル実装（デフォルト: 小ドット、リンクホバー: 拡大、画像ホバー: "View"テキスト表示）
 - [x] ボタン/リンクのホバーマイクロインタラクション強化（magnetic effect）
 - [x] ページ全体のスクロール体験の最終調整
+
+## Phase 12: LP Factory — テンプレートシステム
+
+- [x] DB schema拡張: gallery_captions, atmosphere_caption, cta_title, cta_subtitle フィールド追加
+- [x] /lp-input パブリックフォーム作成（店名・エリア・業種・ambiance・メニュー・営業時間・写真URL・カラー等）
+- [x] App.tsxに /lp-input ルート追加
+- [x] leads.create mutationのバリデーション拡張（新フィールド対応）
+- [x] DemoPageのハードコードされたテキスト（atmosphere caption, gallery captions, CTA title等）をDB駆動に変更
+- [x] フォーム送信後にLP URLを表示する成功画面
+- [x] テスト: フォーム入力→DB保存→LP表示の一連フロー確認

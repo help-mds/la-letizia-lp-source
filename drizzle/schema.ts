@@ -66,8 +66,16 @@ export const leads = mysqlTable("leads", {
   // Generated content — menu
   menuItems: json("menu_items").$type<Array<{ name: string; desc?: string; price?: string }>>(),
 
+  // Generated content — atmosphere
+  atmosphereCaption: varchar("atmosphere_caption", { length: 500 }),
+
   // Generated content — gallery
   galleryImages: json("gallery_images").$type<string[]>(),
+  galleryCaptions: json("gallery_captions").$type<string[]>(),
+
+  // Generated content — CTA
+  ctaTitle: varchar("cta_title", { length: 500 }),
+  ctaSubtitle: text("cta_subtitle"),
 
   // Generated content — info
   infoAddress: text("info_address"),

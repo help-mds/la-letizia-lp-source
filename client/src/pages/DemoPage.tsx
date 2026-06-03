@@ -84,22 +84,26 @@ export default function DemoPage() {
     { label: 'Reserve', href: '#cta' },
   ];
 
-  // Gallery items
+  // Gallery items — use per-lead captions if available
+  const defaultCaptions = ['The pour', 'The space', 'Morning ritual', 'The craft'];
+  const leadCaptions = lead.galleryCaptions as string[] | null;
   const galleryItems = (lead.galleryImages || []).map((src: string, i: number) => {
     const aspects = ['3/4', '4/3', '4/5', '16/9'] as const;
-    const captions = ['The pour', 'The space', 'Morning ritual', 'The craft'];
     return {
       src,
       aspect: aspects[i % aspects.length],
-      caption: captions[i % captions.length],
+      caption: leadCaptions?.[i] || defaultCaptions[i % defaultCaptions.length],
     };
   });
 
   // Atmosphere image
   const atmosphereImage = lead.galleryImages?.[0] || '';
 
+  // Dynamic accent color from lead data
+  const accentColor = lead.paletteAccent || '#B0552F';
+
   return (
-    <main style={{ backgroundColor: 'var(--bg)' }}>
+    <main style={{ backgroundColor: 'var(--bg)', '--accent-dynamic': accentColor } as React.CSSProperties}>
       {/* === Cinematic Loading Intro (Option B) === */}
       {hasFrames && (
         <PageScrollScrub
@@ -192,7 +196,7 @@ export default function DemoPage() {
       {atmosphereImage && (
         <AtmosphereSection
           imageUrl={atmosphereImage}
-          caption="Where mornings stretch longer."
+          caption={lead.atmosphereCaption || 'Where mornings stretch longer.'}
         />
       )}
 
@@ -218,10 +222,10 @@ export default function DemoPage() {
 
       {/* === CTA Section === */}
       <CtaSection
-        title="Your table is waiting"
-        subtitle={`Experience ${lead.storeName} in person.`}
+        title={lead.ctaTitle || 'Your table is waiting'}
+        subtitle={lead.ctaSubtitle || `Experience ${lead.storeName} in person.`}
         ctas={[
-          { label: 'Make a Reservation', href: '#', variant: 'primary' },
+          { label: 'Make a Reservation', href: lead.infoReservationUrl || '#', variant: 'primary' },
           ...(lead.infoPhone
             ? [{ label: `Call ${lead.infoPhone}`, href: `tel:${lead.infoPhone}`, variant: 'secondary' as const }]
             : []),
