@@ -2,6 +2,11 @@
  * AtmosphereSection — Premium editorial immersive image section.
  * Full-viewport height, parallax image with overlay gradient,
  * editorial caption with large serif typography.
+ *
+ * The image emerges from darkness: uses a dark top-edge gradient
+ * that matches the RestaurantMenuFadeIn bridge's dark background,
+ * creating a seamless cinematic reveal where the image materializes
+ * from the black.
  */
 export default function AtmosphereSection({
   imageUrl,
@@ -12,27 +17,58 @@ export default function AtmosphereSection({
 }) {
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ height: '100vh', minHeight: '600px' }}
+      className="relative w-full"
+      style={{
+        height: '100vh',
+        minHeight: '600px',
+        /* Overlap the dark bridge — image emerges from the darkness */
+        marginTop: '-15vh',
+        position: 'relative',
+        zIndex: 1,
+      }}
     >
-      {/* Parallax image */}
-      <div
-        data-parallax
-        className="absolute inset-0 w-full h-[120%] -top-[10%]"
-      >
-        <img
-          src={imageUrl}
-          alt=""
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-      </div>
-
-      {/* Gradient overlays for depth */}
+      {/* Image container with clip */}
       <div
         className="absolute inset-0"
+        style={{ clipPath: 'inset(0 0 0 0)' }}
+      >
+        {/* Parallax image */}
+        <div
+          data-parallax
+          className="absolute inset-0 w-full h-[120%] -top-[10%]"
+        >
+          <img
+            src={imageUrl}
+            alt=""
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      {/* Top-edge dark mask: image materializes FROM darkness */}
+      <div
+        className="absolute inset-x-0 top-0 pointer-events-none"
         style={{
-          background: 'linear-gradient(to bottom, rgba(26,23,20,0.08) 0%, transparent 40%, rgba(26,23,20,0.45) 100%)',
+          height: '40%',
+          background: `linear-gradient(
+            to bottom,
+            #0E0D0C 0%,
+            rgba(14, 13, 12, 0.85) 25%,
+            rgba(14, 13, 12, 0.5) 50%,
+            rgba(14, 13, 12, 0.15) 75%,
+            transparent 100%
+          )`,
+          zIndex: 2,
+        }}
+      />
+
+      {/* Bottom gradient for depth and text readability */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(26,23,20,0.55) 100%)',
+          zIndex: 2,
         }}
       />
 
@@ -40,7 +76,11 @@ export default function AtmosphereSection({
       <div
         data-reveal
         className="absolute bottom-0 left-0 right-0"
-        style={{ padding: 'var(--gutter)', paddingBottom: 'clamp(48px, 8vh, 96px)' }}
+        style={{
+          padding: 'var(--gutter)',
+          paddingBottom: 'clamp(48px, 8vh, 96px)',
+          zIndex: 3,
+        }}
       >
         <div style={{ maxWidth: 'var(--maxw)', margin: '0 auto' }}>
           <p

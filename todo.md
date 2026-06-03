@@ -66,3 +66,8 @@
 - [x] Micro-interactions: hover states, cursor effects, link underline animations
 - [x] Color transitions between sections (warm→cool→dark)
 - [x] Overall spacing: generous editorial whitespace (120px+ section padding)
+
+## Phase 4: Transition Bridge Fix
+
+- [x] Fix ugly RestaurantMenuFadeIn gradient bridge — redesign to premium cinematic transition between scroll scrub last frame and AtmosphereSection
+- [x] Verify the RestaurantMenuFadeIn → AtmosphereSection transition visually with a successful screenshot/browser capture and confirm there is no visible seam, white band, or layout regression across the transition
