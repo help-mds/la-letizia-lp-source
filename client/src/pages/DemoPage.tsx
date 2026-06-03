@@ -6,16 +6,17 @@ import StoryOverlay from '@/components/overlays/StoryOverlay';
 import SiteMenuOverlay from '@/components/overlays/SiteMenuOverlay';
 import FreezeOverlay from '@/components/overlays/FreezeOverlay';
 import RestaurantMenuFadeIn from '@/components/RestaurantMenuFadeIn';
+import AtmosphereSection from '@/components/sections/AtmosphereSection';
 import MenuSection from '@/components/sections/MenuSection';
 import GallerySection from '@/components/sections/GallerySection';
 import InfoSection from '@/components/sections/InfoSection';
 import CtaSection from '@/components/sections/CtaSection';
+import MdsBadge from '@/components/MdsBadge';
 
 /**
  * Public demo page rendered at /r/:slug.
  * Assembles the full restaurant LP from lead data.
- *
- * Faithfully translated from ZIP: RestaurantTemplate.tsx + app/(public)/r/[slug]/page.tsx
+ * Structure: Hero → Atmosphere → Menu → Gallery → CTA (案A)
  */
 export default function DemoPage() {
   const params = useParams<{ slug: string }>();
@@ -67,12 +68,23 @@ export default function DemoPage() {
   // Navigation links for SiteMenuOverlay
   const navLinks = [
     { label: 'Menu', href: '#menu' },
-    ...(lead.galleryImages && lead.galleryImages.length > 0
-      ? [{ label: 'Gallery', href: '#gallery' }]
-      : []),
     { label: 'Visit', href: '#info' },
     { label: 'Reserve', href: '#cta' },
   ];
+
+  // Gallery items with varied aspect ratios (masonry)
+  const galleryItems = (lead.galleryImages || []).map((src: string, i: number) => {
+    const aspects = ['3/4', '4/3', '4/5', '16/9'] as const;
+    const captions = ['The pour', 'The space', 'Morning ritual', 'The craft'];
+    return {
+      src,
+      aspect: aspects[i % aspects.length],
+      caption: captions[i % captions.length],
+    };
+  });
+
+  // Atmosphere image (first gallery image or dedicated atmosphere image)
+  const atmosphereImage = lead.galleryImages?.[1] || lead.galleryImages?.[0] || '';
 
   return (
     <main style={{ backgroundColor: 'var(--bg)' }}>
@@ -167,18 +179,54 @@ export default function DemoPage() {
         </div>
       )}
 
-      {/* === Gradient Bridge === */}
+      {/* === Gradient Bridge (black → white) === */}
       <RestaurantMenuFadeIn />
 
-      {/* === White Content Sections === */}
+      {/* === Atmosphere Section (full-bleed + Ken Burns) === */}
+      {atmosphereImage && (
+        <AtmosphereSection
+          imageUrl={atmosphereImage}
+          caption="Where mornings stretch longer."
+        />
+      )}
+
+      {/* === Color Transition: Atmosphere → Menu === */}
+      <div
+        className="w-full h-24"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(26,23,20,0.03), var(--bg))',
+        }}
+      />
+
+      {/* === Menu Section === */}
       {lead.menuItems && lead.menuItems.length > 0 && (
         <MenuSection items={lead.menuItems} />
       )}
 
-      {lead.galleryImages && lead.galleryImages.length > 0 && (
-        <GallerySection images={lead.galleryImages} />
+      {/* === Sticky Reveal Transition: Menu → Gallery === */}
+      <div className="w-full" style={{ height: '8vh' }} />
+
+      {/* === Gallery Section (masonry + hover zoom) === */}
+      {galleryItems.length > 0 && (
+        <GallerySection items={galleryItems} />
       )}
 
+      {/* === Pin Scroll Transition: Gallery → CTA === */}
+      <div
+        className="w-full"
+        style={{
+          height: '30vh',
+          background: 'linear-gradient(to bottom, var(--bg), var(--ink))',
+        }}
+      />
+
+      {/* === CTA Section (cinematic credits style) === */}
+      <CtaSection
+        title="Your table is waiting"
+        subtitle={`Experience ${lead.storeName} in person.`}
+      />
+
+      {/* === Info Section === */}
       <InfoSection
         address={lead.infoAddress || undefined}
         hours={lead.infoHours || undefined}
@@ -186,12 +234,7 @@ export default function DemoPage() {
         reservationUrl={lead.infoReservationUrl || undefined}
       />
 
-      <CtaSection
-        title="Your table is waiting"
-        subtitle={`Experience ${lead.storeName} in person.`}
-      />
-
-      {/* Footer */}
+      {/* === Footer === */}
       <footer
         className="w-full py-8"
         style={{
@@ -211,6 +254,9 @@ export default function DemoPage() {
           {lead.storeName} &middot; {lead.area}
         </p>
       </footer>
+
+      {/* === MDS Badge === */}
+      <MdsBadge />
     </main>
   );
 }

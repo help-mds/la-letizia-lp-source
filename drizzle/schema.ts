@@ -52,6 +52,9 @@ export const leads = mysqlTable("leads", {
   ambianceMood: varchar("ambiance_mood", { length: 50 }),
   ambianceTimeOfDay: varchar("ambiance_time_of_day", { length: 50 }),
   paletteAccent: varchar("palette_accent", { length: 20 }),
+  ambianceDensity: varchar("ambiance_density", { length: 50 }),
+  ambianceTextureEmphasis: varchar("ambiance_texture_emphasis", { length: 50 }),
+  ambianceAccentColor: varchar("ambiance_accent_color", { length: 20 }),
 
   // Generated content — hero
   heroTagline: varchar("hero_tagline", { length: 500 }),

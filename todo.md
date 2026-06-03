@@ -32,3 +32,22 @@
 - [x] S3 frames uploaded
 - [x] Integration test: scroll scrub working
 - [x] Vitest tests for leads router
+
+## Phase 2: Hero下セクション強化 + Store-driven + MDSバッジ
+
+- [x] AI画像生成: Atmosphere用フルブリード画像（marble counter + morning light）
+- [x] AI画像生成: Gallery用マソンリー4枚（cafe interior angles）
+- [x] MDSバッジ追加（右下固定、Designed by MDS、プレースホルダーURL）
+- [x] AtmosphereSection新規作成（フルブリード + Ken Burns + 1行コピー）
+- [x] GallerySection強化（マソンリー4枚、hover zoom + caption、reveal animation）
+- [x] CTA映画クレジット風（黒バック + 大判serif + fade out）
+- [x] 遷移演出: Atmosphere→Menu color transition
+- [x] 遷移演出: Menu→Gallery sticky reveal
+- [x] 遷移演出: Gallery→CTA pin scroll + black fade
+- [x] DemoPage.tsx更新: Hero → Atmosphere → Menu → Gallery → CTA
+- [x] inferAmbianceFromStoreData: 方法A（キーワードマッチング）
+- [x] inferAmbianceFromStoreData: 方法B（LLM Vision分析）
+- [x] AmbianceProfile拡張（accentColor, density, textureEmphasis）
+- [x] Drizzleスキーマ拡張 + migration（shared/ambiance.ts型定義完了）
+- [x] テスト店舗: Noor（夜の創作和食）でambiance出力確認
+- [x] テスト店舗: Sahara Brew（北アフリカ系カフェ）でambiance出力確認

@@ -2,14 +2,16 @@
  * Video generation pipeline orchestrator.
  *
  * Faithfully translated from ZIP: lib/generators/pipeline.ts
+ * Updated to use ambianceFor() resolver (Method A + B inference).
  *
  * Flow:
  * 1. Load lead from DB
- * 2. Build video prompt from ambiance + camera work
- * 3. Generate video via Atlas Cloud Seedance 2.0
- * 4. Extract frames via ffmpeg → WebP
- * 5. Upload frames to S3
- * 6. Update lead with frame URLs
+ * 2. Resolve ambiance (explicit → inferred → template default)
+ * 3. Build video prompt from ambiance + camera work
+ * 4. Generate video via Atlas Cloud Seedance 2.0
+ * 5. Extract frames via ffmpeg → WebP
+ * 6. Upload frames to S3
+ * 7. Update lead with frame URLs
  */
 
 import { eq } from 'drizzle-orm';
@@ -18,7 +20,8 @@ import { leads } from '../../drizzle/schema';
 import { generateVideo } from './video';
 import { extractFramesAndUpload } from './frames';
 import { buildCameraWork } from './prompts/cameraWork';
-import { buildAmbiancePhrases, type AmbianceConfig } from './prompts/ambiance';
+import { ambiancePhrases } from './prompts/ambiance';
+import { ambianceFor } from './prompts/defaultAmbiance';
 
 export async function runPipeline(leadId: number): Promise<void> {
   const db = await getDb();
@@ -32,25 +35,38 @@ export async function runPipeline(leadId: number): Promise<void> {
   await db.update(leads).set({ status: 'GENERATING_VIDEO' }).where(eq(leads.id, leadId));
 
   try {
-    // 2. Build prompt
-    const ambianceConfig: AmbianceConfig = {
-      lighting: lead.ambianceLighting || 'cool_neutral',
-      surfaces: lead.ambianceSurfaces || 'marble',
-      colorPalette: lead.ambianceColorPalette || 'cool_neutral',
-      mood: lead.ambianceMood || 'refined',
-      timeOfDay: lead.ambianceTimeOfDay || 'midday',
-    };
+    // 2. Resolve ambiance (explicit → inferred → template default)
+    const resolvedAmbiance = await ambianceFor({
+      ambiance_lighting: lead.ambianceLighting,
+      ambiance_surfaces: lead.ambianceSurfaces,
+      ambiance_colorPalette: lead.ambianceColorPalette,
+      ambiance_mood: lead.ambianceMood,
+      ambiance_timeOfDay: lead.ambianceTimeOfDay,
+      palette_accent: lead.paletteAccent,
+      template: lead.template,
+      business_subtype: lead.businessSubtype,
+      business_type: lead.businessType,
+      source_photos: lead.sourcePhotos,
+      photo_urls: lead.photoUrls,
+      notes: lead.notes,
+      area: lead.area,
+    });
 
-    const ambiancePhrases = buildAmbiancePhrases(ambianceConfig);
+    console.log(`[pipeline] lead=${leadId} resolved ambiance:`, resolvedAmbiance);
+
+    // 3. Build prompt
+    const phrases = ambiancePhrases(resolvedAmbiance);
     const cameraWork = buildCameraWork({
       businessType: lead.businessType,
       businessSubtype: lead.businessSubtype || undefined,
-      ambiancePhrases,
+      ambiancePhrases: phrases.combined,
     });
 
-    const prompt = `${cameraWork} ${ambiancePhrases} Interior of a modern cafe space. Photorealistic, cinematic quality, 24fps film look.`;
+    const prompt = `${cameraWork} ${phrases.combined} Interior of a modern ${lead.businessSubtype || lead.businessType} space. Photorealistic, cinematic quality, 24fps film look.`;
 
-    // 3. Generate video
+    console.log(`[pipeline] lead=${leadId} prompt: ${prompt.slice(0, 200)}...`);
+
+    // 4. Generate video
     const videoResult = await generateVideo({
       prompt,
       duration: 8,
@@ -69,7 +85,7 @@ export async function runPipeline(leadId: number): Promise<void> {
       videoCostUsd: String(videoResult.cost_usd),
     }).where(eq(leads.id, leadId));
 
-    // 4. Extract frames and upload
+    // 5. Extract frames and upload
     const framesResult = await extractFramesAndUpload({
       videoSource: videoResult.videoUrl,
       slug: lead.slug,
@@ -79,12 +95,14 @@ export async function runPipeline(leadId: number): Promise<void> {
       pathSuffix: 'landscape',
     });
 
-    // 5. Update lead with frame URLs
+    // 6. Update lead with frame URLs
     await db.update(leads).set({
       status: 'READY',
       frameCountLandscape: framesResult.frameCount,
       frameUrlsLandscape: framesResult.frameUrls,
     }).where(eq(leads.id, leadId));
+
+    console.log(`[pipeline] lead=${leadId} complete: ${framesResult.frameCount} frames`);
 
   } catch (err) {
     console.error(`[pipeline] lead=${leadId} failed:`, err);
