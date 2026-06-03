@@ -12,14 +12,10 @@ interface Props {
 }
 
 /**
- * Premium horizontal-scroll gallery — Phase B upgrade.
- * Features:
- * - Larger cards with staggered heights
- * - Counter display (01 / 04) on each card
- * - Always-visible caption below each image
- * - Smooth hover zoom with clip-path mask
- * - data-horizontal-scroll for GSAP pin + scrub
- * - Dark section background for dramatic contrast
+ * Premium gallery — large centered cards with horizontal scroll.
+ * Each image is 55-65vw wide so the photo is clearly visible.
+ * Smooth GSAP horizontal scroll via data-horizontal-scroll.
+ * Dark background, editorial typography, generous whitespace.
  */
 export default function GallerySection({ items, eyebrow = 'Gallery' }: Props) {
   if (items.length === 0) return null;
@@ -40,7 +36,7 @@ export default function GallerySection({ items, eyebrow = 'Gallery' }: Props) {
         data-reveal
         className="flex items-end justify-between"
         style={{
-          padding: 'var(--space-section) var(--gutter) calc(var(--space-block) * 2)',
+          padding: 'clamp(80px, 12vh, 140px) var(--gutter) clamp(48px, 6vh, 80px)',
           maxWidth: 'var(--maxw)',
           margin: '0 auto',
         }}
@@ -52,7 +48,7 @@ export default function GallerySection({ items, eyebrow = 'Gallery' }: Props) {
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--fs-eyebrow)',
               letterSpacing: '0.32em',
-              color: 'rgba(242, 238, 232, 0.5)',
+              color: 'rgba(242, 238, 232, 0.4)',
               marginBottom: 'calc(var(--space-block) / 3)',
             }}
           >
@@ -72,33 +68,32 @@ export default function GallerySection({ items, eyebrow = 'Gallery' }: Props) {
             Moments captured
           </p>
         </div>
-        {/* Total count */}
         <p
           className="hidden md:block"
           style={{
             fontFamily: 'var(--font-body)',
             fontSize: '13px',
             letterSpacing: '0.2em',
-            color: 'rgba(242, 238, 232, 0.35)',
+            color: 'rgba(242, 238, 232, 0.3)',
           }}
         >
           {totalCount} images
         </p>
       </div>
 
-      {/* Horizontal scroll container */}
+      {/* Horizontal scroll container — large cards */}
       <div
         data-horizontal-scroll
         className="relative w-full overflow-hidden"
-        style={{ height: '80vh', minHeight: '550px' }}
+        style={{ height: '75vh', minHeight: '500px' }}
       >
         <div
           data-horizontal-inner
-          className="flex items-end gap-5 md:gap-7 h-full will-change-transform"
+          className="flex items-center h-full will-change-transform"
           style={{
-            paddingLeft: 'var(--gutter)',
-            paddingRight: 'var(--gutter)',
-            paddingBottom: 'clamp(32px, 5vh, 64px)',
+            gap: 'clamp(32px, 4vw, 64px)',
+            paddingLeft: 'clamp(48px, 8vw, 120px)',
+            paddingRight: 'clamp(48px, 8vw, 120px)',
             width: 'max-content',
           }}
         >
@@ -110,18 +105,10 @@ export default function GallerySection({ items, eyebrow = 'Gallery' }: Props) {
               total={items.length}
             />
           ))}
-          {/* End spacer */}
-          <div className="shrink-0 w-[15vw]" />
+          {/* End spacer for smooth exit */}
+          <div className="shrink-0 w-[20vw]" />
         </div>
       </div>
-
-      {/* Bottom fade gradient */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to top, #0E0D0C 0%, transparent 100%)',
-        }}
-      />
     </section>
   );
 }
@@ -137,76 +124,96 @@ function GalleryCard({
 }) {
   const [hovered, setHovered] = useState(false);
 
-  // Staggered heights for visual rhythm
-  const heights = ['65vh', '52vh', '70vh', '58vh'];
-  const height = heights[index % heights.length];
-  const counter = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+  const counter = `${String(index + 1).padStart(2, '0')}`;
+
+  // Aspect ratio determines width/height relationship
+  // All cards are tall (60vh) with width determined by aspect
+  const aspectWidths: Record<string, string> = {
+    '3/4': 'clamp(340px, 50vw, 700px)',
+    '4/3': 'clamp(420px, 60vw, 850px)',
+    '4/5': 'clamp(320px, 45vw, 640px)',
+    '16/9': 'clamp(480px, 65vw, 920px)',
+  };
+
+  const cardWidth = aspectWidths[item.aspect] || 'clamp(400px, 55vw, 780px)';
 
   return (
     <div
       className="relative shrink-0 flex flex-col"
-      style={{ height }}
+      style={{ width: cardWidth, height: '62vh', minHeight: '400px' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Image container with overflow hidden for zoom */}
+      {/* Image container */}
       <div
         className="relative flex-1 overflow-hidden cursor-pointer"
-        style={{
-          borderRadius: '2px',
-        }}
+        style={{ borderRadius: '3px' }}
       >
         <img
           src={item.src}
           alt={item.caption || ''}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[900ms]"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms]"
           style={{
-            transform: hovered ? 'scale(1.08)' : 'scale(1)',
+            transform: hovered ? 'scale(1.05)' : 'scale(1)',
             transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)',
           }}
           loading="lazy"
         />
 
-        {/* Subtle vignette overlay */}
+        {/* Subtle bottom gradient for text readability */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.3) 100%)',
+            height: '40%',
+            background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%)',
           }}
         />
 
-        {/* Counter badge */}
+        {/* Counter — top left, minimal */}
         <div
-          className="absolute top-4 right-4"
+          className="absolute top-5 left-5"
           style={{
             fontFamily: 'var(--font-body)',
             fontSize: '11px',
-            letterSpacing: '0.15em',
-            color: 'rgba(255,255,255,0.6)',
-            backgroundColor: 'rgba(0,0,0,0.3)',
-            backdropFilter: 'blur(8px)',
-            padding: '6px 12px',
-            borderRadius: '2px',
+            letterSpacing: '0.2em',
+            color: 'rgba(255,255,255,0.5)',
           }}
         >
           {counter}
         </div>
       </div>
 
-      {/* Caption — always visible below image */}
+      {/* Caption — below image, elegant */}
       {item.caption && (
-        <p
-          className="mt-4"
+        <div
+          className="flex items-center justify-between mt-5"
           style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '12px',
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'rgba(242, 238, 232, 0.45)',
+            paddingBottom: '4px',
           }}
         >
-          {item.caption}
-        </p>
+          <p
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'clamp(14px, 1.2vw, 18px)',
+              fontStyle: 'italic',
+              fontWeight: 300,
+              color: 'rgba(242, 238, 232, 0.6)',
+              letterSpacing: '0.01em',
+            }}
+          >
+            {item.caption}
+          </p>
+          <span
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '11px',
+              letterSpacing: '0.15em',
+              color: 'rgba(242, 238, 232, 0.25)',
+            }}
+          >
+            {counter} / {String(total).padStart(2, '0')}
+          </span>
+        </div>
       )}
     </div>
   );

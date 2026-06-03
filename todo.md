@@ -103,3 +103,7 @@
 ## Phase 9: Bug Fix — Gallery画像ジャンプ
 
 - [x] GallerySectionの横スクロール完了後、InfoSectionに入る際に画像が左から右に瞬間移動する問題を修正 — GSAP pinの解除時にレイアウトシフトが発生している
+
+## Phase 10: Gallery リデザイン
+
+- [x] GallerySection再設計: 画像幅を60-70vw程度の大きめカードに変更、1枚ずつ中央に見せる横スクロール、画像が何の写真か認識できるサイズ感
