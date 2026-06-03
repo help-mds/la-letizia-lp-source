@@ -83,3 +83,7 @@
 - [x] グレインoverlay: 全体にSVG noiseフィルター（opacity 0.035、fixed div z-9998）
 - [x] Visual verification: Bridge → Atmosphere → Menu のフロー確認
 - [x] Loading演出確認: DOM検査でloaderが正常にマウント→exit→unmount済み、grain overlayが正常に残存、Heroが正常に表示されていることを確認（フレームがキャッシュ済みのため高速完了、初回訪問時はアニメーションが見える）
+
+## Phase 6: Bug Fix — テキスト重複
+
+- [x] CinematicLoaderとHeroOverlayのテキストが重なる問題を修正: loaderActiveがtrueの間はoverlay childrenをopacity:0で非表示にし、ローダー完了後にフェードイン

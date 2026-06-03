@@ -1,0 +1,5 @@
+Based on the video, here is a description of the overlapping visual elements:
+
+*   **Timeframe:** The issue occurs between **00:04 and 00:05**.
+*   **What is overlapping:** During this time, the background transitions to black. The text elements in the center of the screen—specifically the main heading "**Marina Daylight, Slow Coffee**", the smaller text above it ("LA LETICIA"), and the paragraph below it—are overlapping.
+*   **Exactly what's wrong:** It appears that two identical (or very similar) layers of text are being displayed on top of each other with a slight offset. This creates a "double vision" or messy shadow effect, making the text blurry and difficult to read. It seems like a rendering or transition bug where the text from one section is failing to clear or hide properly when the next section is displayed.

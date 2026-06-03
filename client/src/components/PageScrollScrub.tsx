@@ -18,6 +18,8 @@ interface Props {
   children?: ReactNode;
   /** Optional render prop for a custom loading overlay. Receives (progress, ready). */
   renderLoader?: (progress: number, ready: boolean) => ReactNode;
+  /** When true, overlay children are hidden (loader is still active). */
+  loaderActive?: boolean;
 }
 
 /**
@@ -42,6 +44,7 @@ export default function PageScrollScrub({
   frameCountPortrait,
   children,
   renderLoader,
+  loaderActive,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -199,8 +202,10 @@ export default function PageScrollScrub({
           )}
       </div>
 
-      {/* Overlay children */}
-      {children}
+      {/* Overlay children — hidden while loader is active */}
+      <div style={{ opacity: loaderActive ? 0 : 1, transition: 'opacity 0.3s ease' }}>
+        {children}
+      </div>
     </div>
   );
 }

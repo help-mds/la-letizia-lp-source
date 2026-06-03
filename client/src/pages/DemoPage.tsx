@@ -107,6 +107,7 @@ export default function DemoPage() {
           framesPathPortrait={lead.framesPathPortrait || undefined}
           frameUrlsPortrait={lead.frameUrlsPortrait || undefined}
           frameCountPortrait={lead.frameCountPortrait || undefined}
+          loaderActive={!loaderDismissed}
           renderLoader={(progress, ready) => (
             !loaderDismissed ? (
               <CinematicLoader
