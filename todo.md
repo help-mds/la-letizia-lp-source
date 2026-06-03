@@ -1,0 +1,34 @@
+# Project TODO
+
+- [x] Drizzle schema: leads table with all fields from ZIP types
+- [x] DB migration applied
+- [x] globals.css: design tokens from ZIP (--bg, --ink, --accent, --overlay-*, --fs-*, --space-*, --gutter, --maxw)
+- [x] Google Fonts: Cormorant Garamond + Inter (from ZIP tones.ts restaurant-luxury)
+- [x] useFrameLoader hook translated from ZIP
+- [x] PageScrollScrub component translated from ZIP (800svh, RAF coalesce, DPR canvas, orientation switch, stride=2 mobile, reduced-motion)
+- [x] ScrubOverlay component translated from ZIP
+- [x] HeroOverlay component translated from ZIP (La Letizia R5 copy)
+- [x] StoryOverlay component translated from ZIP
+- [x] SiteMenuOverlay component translated from ZIP
+- [x] FreezeOverlay component translated from ZIP
+- [x] PhraseTitle component translated from ZIP
+- [x] PageTransitions (RevealSection) component translated from ZIP
+- [x] RestaurantMenuFadeIn component translated from ZIP
+- [x] MenuSection component translated from ZIP
+- [x] GallerySection component translated from ZIP
+- [x] InfoSection component translated from ZIP
+- [x] CtaSection component translated from ZIP
+- [x] tRPC router: leads CRUD (publicProcedure)
+- [x] tRPC router: pipeline trigger
+- [x] server/pipeline/video.ts: Atlas Cloud Seedance 2.0 integration
+- [x] server/pipeline/frames.ts: ffmpeg WebP extraction + S3 upload
+- [x] server/pipeline/prompts/cameraWork.ts translated from ZIP
+- [x] server/pipeline/prompts/ambiance.ts translated from ZIP
+- [x] server/pipeline/prompts/defaultAmbiance.ts translated from ZIP
+- [x] Demo page: /r/:slug route (public, no auth)
+- [x] Demo data seed: La Letizia R5 (store_name, area, ambiance, copy)
+- [x] Atlas Cloud video generation executed
+- [x] ffmpeg frame extraction executed
+- [x] S3 frames uploaded
+- [x] Integration test: scroll scrub working
+- [x] Vitest tests for leads router
