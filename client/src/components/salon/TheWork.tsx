@@ -1,8 +1,4 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef, useCallback } from 'react';
 
 interface TheWorkProps {
   images: string[]; // 3-4 macro close-ups (faceless)
@@ -12,154 +8,168 @@ interface TheWorkProps {
 /**
  * The Work — The main event. Macro close-ups revealed one by one.
  * Each image appears through a circle clip-path that expands from center.
- * Pinned section with scrubbed reveals. Faceless, texture-focused.
+ *
+ * Architecture (same as ScrollAnimatedHero):
+ * - Outer div: tall container (height = panels * 200vh)
+ * - Inner sticky div: 100svh viewport
+ * - Scroll progress drives circle clip-path expansion
+ * - Last image holds for 25% of total scroll before section ends
+ *
+ * No GSAP pin — uses CSS sticky for reliable timing with Lenis.
  */
 export default function TheWork({ images, motionScale = 0.8 }: TheWorkProps) {
-  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const panelsRef = useRef<HTMLDivElement[]>([]);
+  const labelRef = useRef<HTMLDivElement>(null);
+  const rafId = useRef<number | null>(null);
 
+  // Total scroll runway — generous for slow reveals
+  const vhPerPanel = 200;
+  const totalScrollVh = images.length * vhPerPanel;
+
+  const updatePanels = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const scrollableHeight = container.scrollHeight - window.innerHeight;
+    const scrolled = -rect.top;
+    const progress = Math.max(0, Math.min(1, scrolled / scrollableHeight));
+
+    const panels = panelsRef.current.filter(Boolean);
+    if (panels.length === 0) return;
+
+    // Reserve 25% at end as HOLD on last image
+    const holdRatio = 0.25;
+    const animRange = 1 - holdRatio;
+
+    // Each panel (except first) gets a reveal zone
+    const numReveals = panels.length - 1;
+    if (numReveals <= 0) return;
+
+    const revealSlice = animRange / numReveals;
+
+    panels.forEach((panel, i) => {
+      if (i === 0) {
+        // First panel is always fully visible
+        panel.style.clipPath = 'circle(100% at 50% 50%)';
+        return;
+      }
+
+      // Each subsequent panel reveals during its slice
+      const revealStart = revealSlice * (i - 1);
+      const revealEnd = revealStart + revealSlice * 0.75; // 75% of slice for reveal
+
+      let clipPercent: number;
+      if (progress <= revealStart) {
+        clipPercent = 0;
+      } else if (progress >= revealEnd) {
+        clipPercent = 80;
+      } else {
+        const revealProgress = (progress - revealStart) / (revealEnd - revealStart);
+        // Ease in-out for smooth reveal
+        const eased = revealProgress < 0.5
+          ? 2 * revealProgress * revealProgress
+          : 1 - Math.pow(-2 * revealProgress + 2, 2) / 2;
+        clipPercent = eased * 80;
+      }
+
+      panel.style.clipPath = `circle(${clipPercent}% at 50% 50%)`;
+
+      // Subtle zoom on the image inside
+      const img = panel.querySelector('img') as HTMLElement;
+      if (img) {
+        const zoomProgress = Math.max(0, Math.min(1, (progress - revealStart) / revealSlice));
+        const scale = 1.06 - zoomProgress * 0.06; // 1.06 → 1.0
+        img.style.transform = `scale(${scale})`;
+      }
+    });
+
+    // Label fade in when scrolled past 10%
+    if (labelRef.current) {
+      const labelOpacity = progress > 0.1 ? 1 : 0;
+      labelRef.current.style.opacity = String(labelOpacity);
+    }
+  }, []);
+
+  // Scroll listener
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const ctx = gsap.context(() => {
-      const panels = section.querySelectorAll<HTMLElement>('.work-panel');
-      if (panels.length === 0) return;
-
-      // Pin the section for the duration of all reveals — generous scroll room
-      const totalHeight = panels.length * 180; // vh per panel (much more scroll room for slower pace)
-
-      // Set initial clip-path on all panels (hidden)
-      panels.forEach((panel, i) => {
-        if (i > 0) {
-          gsap.set(panel, {
-            clipPath: 'circle(0% at 50% 50%)',
-            opacity: 1,
-          });
-        }
+    const handleScroll = () => {
+      if (rafId.current !== null) return;
+      rafId.current = requestAnimationFrame(() => {
+        rafId.current = null;
+        updatePanels();
       });
+    };
 
-      // Create scrubbed timeline — higher scrub value = smoother/slower feel
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: `+=${totalHeight}vh`,
-          scrub: 2.0 * motionScale,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
+    // Initial render
+    updatePanels();
 
-      // Reveal each panel with expanding circle — slow, deliberate reveals
-      // Reserve 25% of timeline at end as HOLD on last image
-      const holdRatio = 0.25;
-      const animRatio = 1 - holdRatio;
-
-      panels.forEach((panel, i) => {
-        if (i === 0) return; // First panel is always visible
-
-        const segDuration = animRatio / panels.length;
-        const startTime = segDuration * i;
-
-        // Circle expands slowly — takes 70% of segment duration
-        tl.to(
-          panel,
-          {
-            clipPath: 'circle(80% at 50% 50%)',
-            duration: segDuration * 0.7,
-            ease: 'power2.inOut',
-          },
-          startTime + segDuration * 0.15, // small delay before reveal starts
-        );
-
-        // Subtle zoom on the image inside
-        const img = panel.querySelector('img');
-        if (img) {
-          tl.fromTo(
-            img,
-            { scale: 1.06 },
-            {
-              scale: 1,
-              duration: segDuration,
-              ease: 'none',
-            },
-            startTime,
-          );
-        }
-      });
-
-      // HOLD: Force timeline to span full duration by adding a dummy tween
-      // at position animRatio. Without this, GSAP ends the timeline early.
-      const lastPanel = panels[panels.length - 1];
-      if (lastPanel) {
-        const lastImg = lastPanel.querySelector('img');
-        tl.to(lastImg || lastPanel, {
-          scale: 0.99, // barely perceptible zoom-out during hold
-          duration: holdRatio,
-          ease: 'none',
-        }, animRatio);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current);
       }
-
-      // Fade the label in
-      const label = section.querySelector<HTMLElement>('.work-label');
-      if (label) {
-        gsap.fromTo(label, { opacity: 0 }, {
-          opacity: 1,
-          duration: 0.8,
-          delay: 0.3,
-          ease: 'power2.out',
-        });
-      }
-    }, section);
-
-    return () => ctx.revert();
-  }, [images, motionScale]);
+    };
+  }, [updatePanels]);
 
   return (
     <section
-      ref={sectionRef}
-      className="relative w-full h-[100svh] overflow-hidden"
-      style={{ backgroundColor: '#111110' }}
+      ref={containerRef}
+      className="relative w-full"
+      style={{ height: `${totalScrollVh}svh` }}
     >
-      {/* Stacked panels */}
-      {images.map((src, i) => (
-        <div
-          key={i}
-          className="work-panel absolute inset-0 w-full h-full"
-          style={{ zIndex: i + 1 }}
-        >
-          <img
-            src={src}
-            alt=""
-            className="w-full h-full object-cover"
-            loading={i === 0 ? 'eager' : 'lazy'}
-          />
-          {/* Subtle vignette */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.35) 100%)',
-            }}
-          />
-        </div>
-      ))}
-
-      {/* Section label */}
+      {/* Sticky viewport */}
       <div
-        className="work-label absolute bottom-10 left-[var(--gutter)] z-20 pointer-events-none"
-        style={{ opacity: 0 }}
+        className="sticky top-0 w-full h-[100svh] overflow-hidden"
+        style={{ backgroundColor: '#111110' }}
       >
-        <p
-          className="uppercase"
-          style={{
-            fontFamily: 'var(--font-body, Inter, sans-serif)',
-            fontSize: 'var(--fs-eyebrow)',
-            letterSpacing: '0.3em',
-            color: 'rgba(255,255,255,0.45)',
-          }}
+        {/* Stacked panels */}
+        {images.map((src, i) => (
+          <div
+            key={i}
+            ref={(el) => { if (el) panelsRef.current[i] = el; }}
+            className="absolute inset-0 w-full h-full"
+            style={{
+              zIndex: i + 1,
+              clipPath: i === 0 ? 'circle(100% at 50% 50%)' : 'circle(0% at 50% 50%)',
+            }}
+          >
+            <img
+              src={src}
+              alt=""
+              className="w-full h-full object-cover"
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+            {/* Subtle vignette */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.35) 100%)',
+              }}
+            />
+          </div>
+        ))}
+
+        {/* Section label */}
+        <div
+          ref={labelRef}
+          className="absolute bottom-10 left-[var(--gutter)] z-20 pointer-events-none"
+          style={{ opacity: 0, transition: 'opacity 0.8s ease' }}
         >
-          The Work
-        </p>
+          <p
+            className="uppercase"
+            style={{
+              fontFamily: 'var(--font-body, Inter, sans-serif)',
+              fontSize: 'var(--fs-eyebrow)',
+              letterSpacing: '0.3em',
+              color: 'rgba(255,255,255,0.45)',
+            }}
+          >
+            The Work
+          </p>
+        </div>
       </div>
     </section>
   );

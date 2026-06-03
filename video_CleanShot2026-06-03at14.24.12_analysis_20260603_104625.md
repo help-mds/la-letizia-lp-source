@@ -1,0 +1,6 @@
+Based on the video provided, here is a description of the scrolling behavior addressing your specific points:
+
+1.  **How many images are shown:** Essentially, only **one** main image (hands holding hair) is shown in the pinned hero section, but its display is interrupted. It starts with the image, cuts to a black screen with text, and then cuts back to the image.
+2.  **Do the images cross-fade:** **No**. There are no smooth cross-fades. The transition from the initial image to the black screen, and from the black screen back to the image, are both abrupt hard cuts.
+3.  **Behavior after the last image:** The final image **does not hold**. As soon as it abruptly reappears after the black screen, the hero section immediately unpins and scrolls up, revealing the next section of the website.
+4.  **Jarring fast transition:** **Yes**. The sudden cut to the black screen at 0:04 and the equally sudden cut back to the image at 0:10 are both very jarring and fast transitions. The sequence does not feel smooth or intentional.

@@ -1,0 +1,5 @@
+Based on the video provided, here is a description of what happens during scrolling, addressing your specific points:
+
+1.  **How many images are shown in the hero section:** The video does not show a traditional "hero section" with multiple images transitioning. Instead, as the user scrolls down past the initial text and menu, a single large image (a close-up of a bowl of cream) comes into view.
+2.  **Does the last image stay visible for a while before the next section appears, or does it immediately transition?** Since there is only one large image in that section, it does not stay visible or pinned to the screen. As the user continues to scroll downwards, the image of the cream immediately moves up and out of view, revealing the next section (an image of a person's hair from behind).
+3.  **Is the transition between images too fast?** Because there are no transitions between multiple images in that section, this cannot be evaluated. The page simply scrolls continuously from one static section to the next.
