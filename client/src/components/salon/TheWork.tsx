@@ -25,8 +25,8 @@ export default function TheWork({ images, motionScale = 0.8 }: TheWorkProps) {
       const panels = section.querySelectorAll<HTMLElement>('.work-panel');
       if (panels.length === 0) return;
 
-      // Pin the section for the duration of all reveals
-      const totalHeight = panels.length * 120; // vh per panel (more scroll room)
+      // Pin the section for the duration of all reveals — generous scroll room
+      const totalHeight = panels.length * 180; // vh per panel (much more scroll room for slower pace)
 
       // Set initial clip-path on all panels (hidden)
       panels.forEach((panel, i) => {
@@ -38,33 +38,34 @@ export default function TheWork({ images, motionScale = 0.8 }: TheWorkProps) {
         }
       });
 
-      // Create scrubbed timeline
+      // Create scrubbed timeline — higher scrub value = smoother/slower feel
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top top',
           end: `+=${totalHeight}vh`,
-          scrub: 1.2 * motionScale,
+          scrub: 2.0 * motionScale,
           pin: true,
           anticipatePin: 1,
         },
       });
 
-      // Reveal each panel with expanding circle
+      // Reveal each panel with expanding circle — slow, deliberate reveals
       panels.forEach((panel, i) => {
         if (i === 0) return; // First panel is always visible
 
         const segDuration = 1 / panels.length;
         const startTime = segDuration * i;
 
+        // Circle expands slowly — takes 70% of segment duration
         tl.to(
           panel,
           {
             clipPath: 'circle(80% at 50% 50%)',
-            duration: segDuration * 0.85,
+            duration: segDuration * 0.7,
             ease: 'power2.inOut',
           },
-          startTime,
+          startTime + segDuration * 0.15, // small delay before reveal starts
         );
 
         // Subtle zoom on the image inside
@@ -72,7 +73,7 @@ export default function TheWork({ images, motionScale = 0.8 }: TheWorkProps) {
         if (img) {
           tl.fromTo(
             img,
-            { scale: 1.08 },
+            { scale: 1.06 },
             {
               scale: 1,
               duration: segDuration,

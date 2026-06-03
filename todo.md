@@ -144,3 +144,9 @@
 - [x] salon-specific CSS variables 追加（index.css）
 - [x] 全セクション表示確認（Hero, Arrival, ThePause, TheWork, Transformation, Lingering, Footer）
 - [x] TypeScript エラーゼロ確認
+
+## Phase 14: Salon テンプレート修正
+
+- [x] Hero + TheWork のクロスフェード速度をもっとゆっくりに（早すぎる問題）
+- [x] CinematicLoader をサロンテンプレートに追加（黒画面問題の解消）
+- [x] メニューセクションをサロンテンプレートに追加

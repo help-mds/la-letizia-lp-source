@@ -9,6 +9,7 @@ interface ScrollAnimatedHeroProps {
   storeName: string;
   subtitle?: string;
   motionScale?: number; // luxury: 0.8, casual: 1.2
+  onImagesLoaded?: () => void;
 }
 
 /**
@@ -23,6 +24,7 @@ export default function ScrollAnimatedHero({
   storeName,
   subtitle,
   motionScale = 0.8,
+  onImagesLoaded,
 }: ScrollAnimatedHeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imagesRef = useRef<HTMLDivElement[]>([]);
@@ -37,7 +39,10 @@ export default function ScrollAnimatedHero({
       const img = new Image();
       img.onload = img.onerror = () => {
         loaded++;
-        if (loaded >= images.length) setImagesLoaded(true);
+        if (loaded >= images.length) {
+          setImagesLoaded(true);
+          onImagesLoaded?.();
+        }
       };
       img.src = src;
     });
@@ -57,58 +62,61 @@ export default function ScrollAnimatedHero({
         gsap.set(el, { opacity: 0, scale: 1.05 });
       });
 
-      // Create a timeline scrubbed by scroll — longer scroll = smoother
+      // Create a timeline scrubbed by scroll — longer scroll = much smoother pace
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
           start: 'top top',
-          end: '+=400vh',
-          scrub: 1.5 * motionScale,
+          end: '+=600vh',
+          scrub: 2.5 * motionScale,
           pin: true,
           anticipatePin: 1,
         },
       });
 
       // Cross-fade between images with Ken Burns (subtle scale)
+      // Each image gets a long hold time before transitioning — luxurious pacing
       const segmentDuration = 1 / Math.max(imgEls.length - 1, 1);
 
       imgEls.forEach((el, i) => {
         if (i === 0) {
-          // First image: Ken Burns scale up, then fade out
+          // First image: long Ken Burns scale up, then slow fade out
           tl.to(el, {
-            scale: 1.06,
+            scale: 1.05,
             duration: segmentDuration,
             ease: 'none',
           }, 0);
           if (imgEls.length > 1) {
+            // Hold longer before fading — fade starts at 75% of segment
             tl.to(el, {
               opacity: 0,
-              duration: segmentDuration * 0.35,
-              ease: 'power1.inOut',
-            }, segmentDuration * 0.65);
+              duration: segmentDuration * 0.25,
+              ease: 'power2.inOut',
+            }, segmentDuration * 0.75);
           }
         } else {
-          const startTime = segmentDuration * (i - 1) + segmentDuration * 0.55;
-          // Fade in
+          // Each subsequent image starts fading in later — more hold time on previous
+          const startTime = segmentDuration * (i - 1) + segmentDuration * 0.65;
+          // Slow fade in
           tl.to(el, {
             opacity: 1,
             scale: 1,
-            duration: segmentDuration * 0.45,
-            ease: 'power1.inOut',
+            duration: segmentDuration * 0.35,
+            ease: 'power2.inOut',
           }, startTime);
           // Ken Burns on this image
           tl.to(el, {
-            scale: 1.06,
+            scale: 1.05,
             duration: segmentDuration,
             ease: 'none',
           }, startTime);
-          // Fade out (except last)
+          // Fade out (except last) — hold longer
           if (i < imgEls.length - 1) {
             tl.to(el, {
               opacity: 0,
-              duration: segmentDuration * 0.35,
-              ease: 'power1.inOut',
-            }, startTime + segmentDuration * 0.65);
+              duration: segmentDuration * 0.25,
+              ease: 'power2.inOut',
+            }, startTime + segmentDuration * 0.75);
           }
         }
       });
