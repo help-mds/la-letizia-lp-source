@@ -1,5 +1,4 @@
 import PhraseTitle from '@/components/text/PhraseTitle';
-import { RevealSection } from '@/components/PageTransitions';
 
 interface MenuItem {
   name: string;
@@ -14,9 +13,9 @@ interface Props {
 }
 
 /**
- * White-base menu section with eyebrow, title, and item list.
- *
- * Faithfully translated from ZIP: components/sections/MenuSection.tsx
+ * Premium editorial menu section.
+ * White base, generous whitespace, hairline dividers, stagger-list animation.
+ * Uses data-reveal and data-stagger-list for PageTransitions choreography.
  */
 export default function MenuSection({
   title = 'Menu',
@@ -28,15 +27,19 @@ export default function MenuSection({
   return (
     <section
       id="menu"
-      className="w-full"
+      className="relative w-full"
       style={{
         backgroundColor: 'var(--bg)',
         color: 'var(--ink)',
-        padding: 'var(--space-section) var(--gutter)',
+        paddingTop: 'var(--space-section)',
+        paddingBottom: 'var(--space-section)',
+        paddingLeft: 'var(--gutter)',
+        paddingRight: 'var(--gutter)',
       }}
     >
       <div style={{ maxWidth: 'var(--maxw)', margin: '0 auto' }}>
-        <RevealSection>
+        {/* Header */}
+        <header data-reveal style={{ marginBottom: 'var(--space-section)' }}>
           <p
             className="uppercase"
             style={{
@@ -44,65 +47,76 @@ export default function MenuSection({
               fontSize: 'var(--fs-eyebrow)',
               letterSpacing: '0.32em',
               color: 'var(--accent)',
-              marginBottom: 'calc(var(--space-block) / 3)',
+              marginBottom: 'calc(var(--space-block) / 2.5)',
             }}
           >
             {eyebrow}
           </p>
           <PhraseTitle>{title}</PhraseTitle>
-        </RevealSection>
+        </header>
 
+        {/* Menu items — stagger list */}
         <div
-          className="mt-12 md:mt-16 flex flex-col"
-          style={{ gap: 0 }}
+          data-stagger-list
+          className="flex flex-col"
+          style={{
+            borderTop: '1px solid rgba(26, 23, 20, 0.08)',
+          }}
         >
           {items.map((item, i) => (
-            <RevealSection key={i} delay={i * 0.05}>
-              <div
-                className="flex items-baseline justify-between py-5 md:py-6"
-                style={{
-                  borderBottom: '1px solid rgba(26, 23, 20, 0.08)',
-                }}
-              >
-                <div className="flex flex-col gap-1">
+            <div
+              key={i}
+              className="group grid grid-cols-[1fr_auto] items-baseline gap-8 transition-all duration-300"
+              style={{
+                padding: 'clamp(20px, 3vh, 32px) 0',
+                borderBottom: '1px solid rgba(26, 23, 20, 0.08)',
+              }}
+            >
+              {/* Left: name + description */}
+              <div className="flex flex-col gap-2">
+                <span
+                  className="transition-transform duration-300 group-hover:translate-x-2"
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                    fontWeight: 400,
+                    fontStyle: 'italic',
+                    letterSpacing: '-0.01em',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {item.name}
+                </span>
+                {item.desc && (
                   <span
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'var(--fs-h3)',
-                      fontWeight: 400,
-                      fontStyle: 'italic',
-                      letterSpacing: '-0.01em',
-                    }}
-                  >
-                    {item.name}
-                  </span>
-                  {item.desc && (
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: 'var(--fs-body)',
-                        color: 'rgba(26, 23, 20, 0.6)',
-                      }}
-                    >
-                      {item.desc}
-                    </span>
-                  )}
-                </div>
-                {item.price && (
-                  <span
-                    className="ml-4 shrink-0"
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: 'var(--fs-body)',
-                      color: 'rgba(26, 23, 20, 0.7)',
-                      letterSpacing: '0.02em',
+                      color: 'rgba(26, 23, 20, 0.55)',
+                      lineHeight: 1.6,
+                      maxWidth: '48ch',
                     }}
                   >
-                    {item.price}
+                    {item.desc}
                   </span>
                 )}
               </div>
-            </RevealSection>
+
+              {/* Right: price */}
+              {item.price && (
+                <span
+                  className="shrink-0 tabular-nums"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'calc(var(--fs-body) + 1px)',
+                    color: 'rgba(26, 23, 20, 0.65)',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  {item.price}
+                </span>
+              )}
+            </div>
           ))}
         </div>
       </div>

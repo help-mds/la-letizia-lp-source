@@ -51,3 +51,18 @@
 - [x] Drizzleスキーマ拡張 + migration（shared/ambiance.ts型定義完了）
 - [x] テスト店舗: Noor（夜の創作和食）でambiance出力確認
 - [x] テスト店舗: Sahara Brew（北アフリカ系カフェ）でambiance出力確認
+
+## Phase 3: スクロールスクラブ後セクション全面リデザイン（数百万円クオリティ）
+
+- [x] RestaurantMenuFadeIn: 黒→白グラデーションブリッジ強化（cinematic transition）
+- [x] AtmosphereSection: editorial layout + parallax + split-screen + typography hierarchy
+- [x] MenuSection: 高級レストランLP水準（大判余白、hover line animation、staggered reveal）
+- [x] GallerySection: horizontal scroll + parallax depth + cursor-follow effect
+- [x] CtaSection: full-viewport cinematic + text reveal animation + ambient gradient
+- [x] InfoSection: asymmetric 2-column + map placeholder + micro-interactions
+- [x] Footer: minimal editorial + subtle divider + brand mark
+- [x] Typography: fluid type scale + letter-spacing + line-height refinement
+- [x] Animations: GSAP ScrollTrigger for all sections + staggered reveals + parallax layers
+- [x] Micro-interactions: hover states, cursor effects, link underline animations
+- [x] Color transitions between sections (warm→cool→dark)
+- [x] Overall spacing: generous editorial whitespace (120px+ section padding)

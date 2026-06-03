@@ -1,159 +1,231 @@
 import PhraseTitle from '@/components/text/PhraseTitle';
-import { RevealSection } from '@/components/PageTransitions';
 
 interface Props {
+  storeName?: string;
+  area?: string;
   address?: string;
   hours?: string;
   phone?: string;
   reservationUrl?: string;
-  eyebrow?: string;
-  title?: string;
+  mapsUrl?: string;
 }
 
 /**
- * Info / contact section with address, hours, phone.
- *
- * Faithfully translated from ZIP: components/sections/InfoSection.tsx
+ * Premium editorial visit/info section.
+ * Asymmetric 2-column grid with hours + address/links.
+ * Uses data-reveal for PageTransitions choreography.
  */
 export default function InfoSection({
+  storeName = 'La Letizia',
+  area = 'Dubai Marina',
   address,
   hours,
   phone,
   reservationUrl,
-  eyebrow = 'Visit',
-  title = 'Find Us',
+  mapsUrl,
 }: Props) {
   return (
     <section
       id="info"
-      className="w-full"
+      data-reveal
+      className="relative w-full"
       style={{
+        paddingTop: 'var(--space-section)',
+        paddingBottom: 'var(--space-section)',
+        paddingLeft: 'var(--gutter)',
+        paddingRight: 'var(--gutter)',
         backgroundColor: 'var(--bg)',
-        color: 'var(--ink)',
-        padding: 'var(--space-section) var(--gutter)',
       }}
     >
-      <div style={{ maxWidth: 'var(--maxw)', margin: '0 auto' }}>
-        <RevealSection>
+      <div className="mx-auto" style={{ maxWidth: 'var(--maxw)' }}>
+        {/* Header */}
+        <header style={{ marginBottom: 'var(--space-section)' }}>
           <p
             className="uppercase"
             style={{
+              color: 'var(--accent)',
               fontFamily: 'var(--font-body)',
               fontSize: 'var(--fs-eyebrow)',
               letterSpacing: '0.32em',
-              color: 'var(--accent)',
-              marginBottom: 'calc(var(--space-block) / 3)',
+              marginBottom: 'calc(var(--space-block) / 2.5)',
             }}
           >
-            {eyebrow}
+            Visit
           </p>
-          <PhraseTitle>{title}</PhraseTitle>
-        </RevealSection>
+          <PhraseTitle>{storeName}</PhraseTitle>
+          <p
+            style={{
+              color: 'rgba(26, 23, 20, 0.55)',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'calc(var(--fs-body) + 4px)',
+              marginTop: 'calc(var(--space-block) / 3)',
+            }}
+          >
+            {area}
+          </p>
+        </header>
 
-        <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
-          <RevealSection delay={0.1}>
-            <div className="flex flex-col gap-6">
-              {address && (
-                <div>
-                  <p
-                    className="uppercase mb-2"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-eyebrow)',
-                      letterSpacing: '0.2em',
-                      color: 'rgba(26, 23, 20, 0.5)',
-                    }}
+        {/* Two-column grid */}
+        <div
+          className="grid grid-cols-1 gap-y-12 md:grid-cols-12 md:gap-x-16"
+          style={{
+            borderTop: '1px solid rgba(26, 23, 20, 0.08)',
+            paddingTop: 'var(--space-block)',
+          }}
+        >
+          {/* Hours */}
+          <div className="md:col-span-6">
+            <p
+              className="uppercase"
+              style={{
+                color: 'rgba(26, 23, 20, 0.45)',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-eyebrow)',
+                letterSpacing: '0.32em',
+                marginBottom: 'calc(var(--space-block) / 2)',
+              }}
+            >
+              Hours
+            </p>
+            {hours ? (
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'calc(var(--fs-body) + 1px)',
+                  color: 'var(--ink)',
+                  lineHeight: 1.8,
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {hours}
+              </p>
+            ) : (
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'calc(var(--fs-body) + 1px)',
+                  color: 'rgba(26, 23, 20, 0.45)',
+                }}
+              >
+                Hours to be confirmed.
+              </p>
+            )}
+          </div>
+
+          {/* Address + links */}
+          <div className="md:col-span-6">
+            <p
+              className="uppercase"
+              style={{
+                color: 'rgba(26, 23, 20, 0.45)',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'var(--fs-eyebrow)',
+                letterSpacing: '0.32em',
+                marginBottom: 'calc(var(--space-block) / 2)',
+              }}
+            >
+              Location
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'calc(var(--fs-body) + 1px)',
+                color: 'var(--ink)',
+              }}
+            >
+              {storeName}
+            </p>
+            {address ? (
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'calc(var(--fs-body) + 1px)',
+                  color: 'rgba(26, 23, 20, 0.55)',
+                  marginBottom: 'var(--space-block)',
+                  lineHeight: 1.7,
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {address}
+              </p>
+            ) : (
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'calc(var(--fs-body) + 1px)',
+                  color: 'rgba(26, 23, 20, 0.55)',
+                  marginBottom: 'var(--space-block)',
+                }}
+              >
+                {area}
+              </p>
+            )}
+
+            {/* Links */}
+            <div
+              className="flex flex-col gap-3"
+              style={{ fontFamily: 'var(--font-body)' }}
+            >
+              {mapsUrl && (
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2"
+                  style={{
+                    color: 'var(--accent)',
+                    fontSize: 'calc(var(--fs-body) + 1px)',
+                  }}
+                >
+                  <span className="border-b border-current pb-0.5">View on Map</span>
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-200 group-hover:translate-x-1"
                   >
-                    Address
-                  </p>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-body)',
-                      lineHeight: 1.7,
-                      whiteSpace: 'pre-line',
-                    }}
-                  >
-                    {address}
-                  </p>
-                </div>
+                    →
+                  </span>
+                </a>
               )}
               {phone && (
-                <div>
-                  <p
-                    className="uppercase mb-2"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-eyebrow)',
-                      letterSpacing: '0.2em',
-                      color: 'rgba(26, 23, 20, 0.5)',
-                    }}
+                <a
+                  href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
+                  className="group inline-flex items-center gap-2"
+                  style={{
+                    color: 'var(--accent)',
+                    fontSize: 'calc(var(--fs-body) + 1px)',
+                  }}
+                >
+                  <span className="border-b border-current pb-0.5">{phone}</span>
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-200 group-hover:translate-x-1"
                   >
-                    Phone
-                  </p>
-                  <a
-                    href={`tel:${phone}`}
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-body)',
-                      color: 'var(--ink)',
-                    }}
-                  >
-                    {phone}
-                  </a>
-                </div>
-              )}
-            </div>
-          </RevealSection>
-
-          <RevealSection delay={0.2}>
-            <div className="flex flex-col gap-6">
-              {hours && (
-                <div>
-                  <p
-                    className="uppercase mb-2"
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-eyebrow)',
-                      letterSpacing: '0.2em',
-                      color: 'rgba(26, 23, 20, 0.5)',
-                    }}
-                  >
-                    Hours
-                  </p>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'var(--fs-body)',
-                      lineHeight: 1.7,
-                      whiteSpace: 'pre-line',
-                    }}
-                  >
-                    {hours}
-                  </p>
-                </div>
+                    →
+                  </span>
+                </a>
               )}
               {reservationUrl && (
                 <a
                   href={reservationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-4"
+                  className="group inline-flex items-center gap-2"
                   style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--fs-eyebrow)',
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
                     color: 'var(--accent)',
-                    borderBottom: '1px solid var(--accent)',
-                    paddingBottom: '2px',
+                    fontSize: 'calc(var(--fs-body) + 1px)',
                   }}
                 >
-                  Reserve a Table
+                  <span className="border-b border-current pb-0.5">Reserve a Table</span>
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-200 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
                 </a>
               )}
             </div>
-          </RevealSection>
+          </div>
         </div>
       </div>
     </section>

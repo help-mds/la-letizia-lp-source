@@ -1,71 +1,74 @@
-import { useEffect, useRef } from "react";
-
-interface AtmosphereSectionProps {
+/**
+ * AtmosphereSection — Premium editorial immersive image section.
+ * Full-viewport height, parallax image with overlay gradient,
+ * editorial caption with large serif typography.
+ */
+export default function AtmosphereSection({
+  imageUrl,
+  caption,
+}: {
   imageUrl: string;
   caption: string;
-}
-
-/**
- * Full-bleed immersive image section with Ken Burns slow zoom
- * and parallax scrolling. Transitions from the dark scrub world
- * into the white content sections below.
- */
-export default function AtmosphereSection({ imageUrl, caption }: AtmosphereSectionProps) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const img = imgRef.current;
-    if (!section || !img) return;
-
-    let ticking = false;
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const rect = section.getBoundingClientRect();
-        const vh = window.innerHeight;
-        // progress: 0 when section enters viewport, 1 when it leaves
-        const progress = Math.max(0, Math.min(1, 1 - (rect.bottom / (vh + rect.height))));
-        // Ken Burns: scale from 1.0 to 1.12
-        const scale = 1 + progress * 0.12;
-        // Parallax: slight upward shift
-        const translateY = progress * -30;
-        img.style.transform = `scale(${scale}) translateY(${translateY}px)`;
-        ticking = false;
-      });
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+}) {
   return (
     <section
-      ref={sectionRef}
       className="relative w-full overflow-hidden"
-      style={{ height: "70vh" }}
+      style={{ height: '100vh', minHeight: '600px' }}
     >
-      <img
-        ref={imgRef}
-        src={imageUrl}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover will-change-transform"
-        style={{ transform: "scale(1)", transition: "transform 0.1s linear" }}
+      {/* Parallax image */}
+      <div
+        data-parallax
+        className="absolute inset-0 w-full h-[120%] -top-[10%]"
+      >
+        <img
+          src={imageUrl}
+          alt=""
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+
+      {/* Gradient overlays for depth */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(26,23,20,0.08) 0%, transparent 40%, rgba(26,23,20,0.45) 100%)',
+        }}
       />
-      {/* Gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-      {/* Caption */}
-      <div className="absolute bottom-0 left-0 right-0 p-[var(--gutter)] pb-12">
-        <p
-          className="font-serif text-white/90 text-lg md:text-xl tracking-wide max-w-[600px]"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          {caption}
-        </p>
+
+      {/* Caption — bottom-left editorial placement */}
+      <div
+        data-reveal
+        className="absolute bottom-0 left-0 right-0"
+        style={{ padding: 'var(--gutter)', paddingBottom: 'clamp(48px, 8vh, 96px)' }}
+      >
+        <div style={{ maxWidth: 'var(--maxw)', margin: '0 auto' }}>
+          <p
+            className="uppercase"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 'var(--fs-eyebrow)',
+              letterSpacing: '0.32em',
+              color: 'rgba(255,255,255,0.6)',
+              marginBottom: '16px',
+            }}
+          >
+            Atmosphere
+          </p>
+          <p
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
+              fontWeight: 300,
+              fontStyle: 'italic',
+              lineHeight: 1.1,
+              color: 'rgba(255,255,255,0.92)',
+              maxWidth: '18ch',
+            }}
+          >
+            {caption}
+          </p>
+        </div>
       </div>
     </section>
   );
