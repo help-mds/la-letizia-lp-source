@@ -139,7 +139,8 @@ function GalleryCard({
 
   return (
     <div
-      className="relative shrink-0 flex flex-col"
+      className="gallery-card relative shrink-0 flex flex-col"
+      data-cursor-view
       style={{ width: cardWidth, height: '62vh', minHeight: '400px' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

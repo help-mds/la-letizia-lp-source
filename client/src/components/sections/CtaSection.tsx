@@ -1,3 +1,5 @@
+import { MagneticButton } from '@/components/MagneticButton';
+
 /**
  * Premium editorial CTA section — Phase B upgrade.
  * Features:
@@ -112,28 +114,29 @@ export default function CtaSection({
           style={{ marginTop: 'calc(var(--space-block) * 2)' }}
         >
           {primaryCtas.map((c, i) => (
-            <a
-              key={i}
-              href={c.href}
-              target={c.href.startsWith('http') ? '_blank' : undefined}
-              rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center rounded-full px-12 py-5 text-sm md:text-base font-medium overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
-              style={{
-                backgroundColor: 'rgba(242, 238, 232, 0.95)',
-                color: '#0E0D0C',
-                fontFamily: 'var(--font-body)',
-                letterSpacing: '0.06em',
-              }}
-            >
-              {/* Hover glow */}
-              <span
-                className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            <MagneticButton key={i} strength={0.15}>
+              <a
+                href={c.href}
+                target={c.href.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                className="group relative inline-flex items-center justify-center rounded-full px-12 py-5 text-sm md:text-base font-medium overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
                 style={{
-                  background: 'radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%)',
+                  backgroundColor: 'rgba(242, 238, 232, 0.95)',
+                  color: '#0E0D0C',
+                  fontFamily: 'var(--font-body)',
+                  letterSpacing: '0.06em',
                 }}
-              />
-              <span className="relative">{c.label}</span>
-            </a>
+              >
+                {/* Hover glow */}
+                <span
+                  className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background: 'radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%)',
+                  }}
+                />
+                <span className="relative">{c.label}</span>
+              </a>
+            </MagneticButton>
           ))}
         </div>
 

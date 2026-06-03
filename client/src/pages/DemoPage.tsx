@@ -15,6 +15,8 @@ import InfoSection from '@/components/sections/InfoSection';
 import CtaSection from '@/components/sections/CtaSection';
 import FooterSection from '@/components/sections/FooterSection';
 import { PageTransitions } from '@/components/PageTransitions';
+import SmoothScroll from '@/components/SmoothScroll';
+import CustomCursor from '@/components/CustomCursor';
 import MdsBadge from '@/components/MdsBadge';
 
 /**
@@ -231,6 +233,12 @@ export default function DemoPage() {
 
       {/* === Page-level scroll choreography === */}
       <PageTransitions />
+
+      {/* === Smooth scroll (Lenis + GSAP) === */}
+      <SmoothScroll />
+
+      {/* === Custom cursor === */}
+      <CustomCursor />
 
       {/* === Global grain overlay === */}
       <div

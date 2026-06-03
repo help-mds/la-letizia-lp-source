@@ -1,3 +1,5 @@
+import { MagneticButton } from '@/components/MagneticButton';
+
 /**
  * Premium minimal footer — Phase B upgrade.
  * Features:
@@ -59,19 +61,20 @@ export default function FooterSection({
           <div className="md:col-span-4">
             <nav className="flex flex-wrap gap-x-8 gap-y-3">
               {links.map((link, i) => (
-                <a
-                  key={i}
-                  href={link.href}
-                  className="transition-colors duration-200 hover:text-white"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '13px',
-                    letterSpacing: '0.08em',
-                    color: 'rgba(242, 238, 232, 0.4)',
-                  }}
-                >
-                  {link.label}
-                </a>
+                <MagneticButton key={i} strength={0.2}>
+                  <a
+                    href={link.href}
+                    className="transition-colors duration-200 hover:text-white"
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '13px',
+                      letterSpacing: '0.08em',
+                      color: 'rgba(242, 238, 232, 0.4)',
+                    }}
+                  >
+                    {link.label}
+                  </a>
+                </MagneticButton>
               ))}
             </nav>
           </div>

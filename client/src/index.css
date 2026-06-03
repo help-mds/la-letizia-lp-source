@@ -122,6 +122,30 @@
     @apply bg-background text-foreground;
     font-family: var(--font-body);
   }
+}
+
+/* Custom cursor — hide native cursor on desktop */
+@media (hover: hover) and (pointer: fine) {
+  html, body, *, a, button, [role="button"], img, .cursor-pointer, .gallery-card {
+    cursor: none !important;
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@layer base {
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
