@@ -104,8 +104,8 @@ export default function AtmosphereSection({
     const textTl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top -30%',
-        end: 'top -60%',
+        start: 'top -20%',
+        end: 'top -45%',
         scrub: 0.4,
       },
     });
@@ -138,14 +138,15 @@ export default function AtmosphereSection({
     if (textTl.scrollTrigger) triggers.push(textTl.scrollTrigger);
 
     // Text scrolls up and fades out as user continues scrolling
+    // Increased gap between text-in and text-out so text stays visible longer
     const textExitTween = gsap.to(textBlock, {
-      y: '-60vh',
+      y: '-40vh',
       opacity: 0,
       ease: 'none',
       scrollTrigger: {
         trigger: section,
-        start: 'top -80%',
-        end: 'top -140%',
+        start: 'top -120%',
+        end: 'top -180%',
         scrub: 0.5,
       },
     });
@@ -168,7 +169,7 @@ export default function AtmosphereSection({
       className="relative w-full"
       style={{
         /* Tall section provides scroll runway for all animations */
-        height: '250vh',
+        height: '320vh',
         /* Overlap the dark bridge */
         marginTop: '-15vh',
         zIndex: 1,

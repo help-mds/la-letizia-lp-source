@@ -95,3 +95,7 @@
 - [x] InfoSection: ダーク背景に切り替え + 大きなstore名 + 地図的装飾 + 営業時間をカード風に
 - [x] CtaSection: ダーク背景 + 大きなイタリック見出し + ボタンのhoverエフェクト強化 + 背景にsubtle pattern
 - [x] FooterSection: ダーク背景 + 横幅フルのgrid + ナビリンク + SNSアイコン的装飾 + 「Designed by MDS」リンク
+
+## Phase 8: Bug Fix — Atmosphereテキスト滞在時間
+
+- [x] AtmosphereSectionのテキスト（Where mornings stretch longer.）がスクロールで一瞬で消える問題を修正 — テキストの表示時間を長くし、もっとゆっくり消えるようにする
