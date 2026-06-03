@@ -16,6 +16,8 @@ interface Props {
   frameCountPortrait?: number;
   /** Overlay children positioned absolutely within the scroll container. */
   children?: ReactNode;
+  /** Optional render prop for a custom loading overlay. Receives (progress, ready). */
+  renderLoader?: (progress: number, ready: boolean) => ReactNode;
 }
 
 /**
@@ -39,6 +41,7 @@ export default function PageScrollScrub({
   frameUrlsPortrait,
   frameCountPortrait,
   children,
+  renderLoader,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -173,25 +176,27 @@ export default function PageScrollScrub({
           style={{ display: 'block' }}
         />
 
-        {/* Loading indicator */}
-        {!ready && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[var(--ink)]">
-            <div className="text-center">
-              <div className="w-48 h-[2px] bg-white/20 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-white/80 transition-[width] duration-300 ease-out"
-                  style={{ width: `${Math.round(loadProgress * 100)}%` }}
-                />
+        {/* Loading indicator — custom or default */}
+        {renderLoader
+          ? renderLoader(loadProgress, ready)
+          : !ready && (
+            <div className="absolute inset-0 flex items-center justify-center bg-[var(--ink)]">
+              <div className="text-center">
+                <div className="w-48 h-[2px] bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-white/80 transition-[width] duration-300 ease-out"
+                    style={{ width: `${Math.round(loadProgress * 100)}%` }}
+                  />
+                </div>
+                <p
+                  className="mt-3 text-white/60 text-xs tracking-[0.2em] uppercase"
+                  style={{ fontFamily: 'var(--font-body)' }}
+                >
+                  {Math.round(loadProgress * 100)}%
+                </p>
               </div>
-              <p
-                className="mt-3 text-white/60 text-xs tracking-[0.2em] uppercase"
-                style={{ fontFamily: 'var(--font-body)' }}
-              >
-                {Math.round(loadProgress * 100)}%
-              </p>
             </div>
-          </div>
-        )}
+          )}
       </div>
 
       {/* Overlay children */}

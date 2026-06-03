@@ -1,5 +1,7 @@
+import { useState, useCallback } from 'react';
 import { useParams } from 'wouter';
 import { trpc } from '@/lib/trpc';
+import CinematicLoader from '@/components/CinematicLoader';
 import PageScrollScrub from '@/components/PageScrollScrub';
 import HeroOverlay from '@/components/overlays/HeroOverlay';
 import StoryOverlay from '@/components/overlays/StoryOverlay';
@@ -18,25 +20,31 @@ import MdsBadge from '@/components/MdsBadge';
 /**
  * Public demo page rendered at /r/:slug.
  * Assembles the full restaurant LP from lead data.
- * Structure: Hero Scrub → Gradient Bridge → Atmosphere → Menu → Gallery → CTA → Info → Footer
+ * Structure: CinematicLoader → Hero Scrub → Bridge → Atmosphere → Menu → Gallery → CTA → Info → Footer
  */
 export default function DemoPage() {
   const params = useParams<{ slug: string }>();
   const slug = params.slug || '';
+  const [loaderDismissed, setLoaderDismissed] = useState(false);
 
   const { data: lead, isLoading, error } = trpc.leads.getBySlug.useQuery(
     { slug },
     { enabled: !!slug },
   );
 
+  const handleLoaderComplete = useCallback(() => {
+    setLoaderDismissed(true);
+  }, []);
+
+  // Data still loading from API
   if (isLoading) {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: 'var(--ink)' }}
+        style={{ backgroundColor: '#0E0D0C' }}
       >
         <p
-          className="text-white/60 text-xs tracking-[0.2em] uppercase"
+          className="text-white/40 text-xs tracking-[0.3em] uppercase"
           style={{ fontFamily: 'var(--font-body)' }}
         >
           Loading...
@@ -90,8 +98,8 @@ export default function DemoPage() {
 
   return (
     <main style={{ backgroundColor: 'var(--bg)' }}>
-      {/* === Scroll Scrub Hero (800svh) === */}
-      {hasFrames ? (
+      {/* === Cinematic Loading Intro (Option B) === */}
+      {hasFrames && (
         <PageScrollScrub
           framesPath={hasFrameUrls ? undefined : (lead.framesPathLandscape || undefined)}
           frameUrls={hasFrameUrls ? lead.frameUrlsLandscape! : undefined}
@@ -99,6 +107,16 @@ export default function DemoPage() {
           framesPathPortrait={lead.framesPathPortrait || undefined}
           frameUrlsPortrait={lead.frameUrlsPortrait || undefined}
           frameCountPortrait={lead.frameCountPortrait || undefined}
+          renderLoader={(progress, ready) => (
+            !loaderDismissed ? (
+              <CinematicLoader
+                progress={progress}
+                ready={ready}
+                storeName={lead.storeName}
+                onComplete={handleLoaderComplete}
+              />
+            ) : null
+          )}
         >
           <HeroOverlay
             topSvh={0}
@@ -128,7 +146,10 @@ export default function DemoPage() {
             eyebrow="A taste of what awaits"
           />
         </PageScrollScrub>
-      ) : (
+      )}
+
+      {/* Fallback when no frames */}
+      {!hasFrames && (
         <div
           className="h-[100svh] flex items-center justify-center"
           style={{ backgroundColor: 'var(--ink)' }}
@@ -161,10 +182,10 @@ export default function DemoPage() {
         </div>
       )}
 
-      {/* === Gradient Bridge (black → white) === */}
+      {/* === Gradient Bridge (dark → dark) === */}
       <RestaurantMenuFadeIn />
 
-      {/* === Atmosphere Section === */}
+      {/* === Atmosphere Section (pin scroll + reveal mask + kinetic text) === */}
       {atmosphereImage && (
         <AtmosphereSection
           imageUrl={atmosphereImage}
@@ -209,6 +230,18 @@ export default function DemoPage() {
 
       {/* === Page-level scroll choreography === */}
       <PageTransitions />
+
+      {/* === Global grain overlay === */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0"
+        style={{
+          zIndex: 9998,
+          opacity: 0.035,
+          mixBlendMode: 'overlay',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E")`,
+        }}
+      />
 
       {/* === MDS Badge === */}
       <MdsBadge />

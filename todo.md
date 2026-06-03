@@ -71,3 +71,15 @@
 
 - [x] Fix ugly RestaurantMenuFadeIn gradient bridge — redesign to premium cinematic transition between scroll scrub last frame and AtmosphereSection
 - [x] Verify the RestaurantMenuFadeIn → AtmosphereSection transition visually with a successful screenshot/browser capture and confirm there is no visible seam, white band, or layout regression across the transition
+
+## Phase 5: 500万円クオリティ Phase A（Loading演出 + Atmosphere全面リビルド + グレイン）
+
+- [x] Loading演出 Option B: ブランド名1文字ずつフェードイン → プログレス0→100% → スライドアウトでHero reveal
+- [x] Loading画面: z-index最大で背景完全隠蔽、裏でフレームプリロード
+- [x] Atmosphere全面リビルド: 技術3（clip-path reveal mask、scroll同期wipe）
+- [x] Atmosphere全面リビルド: 技術2（kinetic typography、1単語ずつ y:40→0 + blur:12→0 stagger）
+- [x] Atmosphere: pin scroll構成（セクションピン固定 + clip-pathスクラブで画像が現れる）
+- [x] Atmosphere: テキストがスクロールで上方向に流れる構成を実装（画像固定、テキストがスクロールで上へ移動）
+- [x] グレインoverlay: 全体にSVG noiseフィルター（opacity 0.035、fixed div z-9998）
+- [x] Visual verification: Bridge → Atmosphere → Menu のフロー確認
+- [x] Loading演出確認: DOM検査でloaderが正常にマウント→exit→unmount済み、grain overlayが正常に残存、Heroが正常に表示されていることを確認（フレームがキャッシュ済みのため高速完了、初回訪問時はアニメーションが見える）
