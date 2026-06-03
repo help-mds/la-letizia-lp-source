@@ -88,8 +88,17 @@ export default function TheWork({ images, motionScale = 0.8 }: TheWorkProps) {
         }
       });
 
-      // HOLD: After last reveal completes, the remaining 25% of scroll
-      // keeps the last image pinned and visible before section unpins.
+      // HOLD: Force timeline to span full duration by adding a dummy tween
+      // at position animRatio. Without this, GSAP ends the timeline early.
+      const lastPanel = panels[panels.length - 1];
+      if (lastPanel) {
+        const lastImg = lastPanel.querySelector('img');
+        tl.to(lastImg || lastPanel, {
+          scale: 0.99, // barely perceptible zoom-out during hold
+          duration: holdRatio,
+          ease: 'none',
+        }, animRatio);
+      }
 
       // Fade the label in
       const label = section.querySelector<HTMLElement>('.work-label');

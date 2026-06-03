@@ -123,9 +123,14 @@ export default function ScrollAnimatedHero({
         }
       });
 
-      // HOLD: last image stays pinned for the remaining 20% of scroll
-      // This is achieved by the timeline ending at 1.0 but the last image
-      // animation ending at animRatio (0.8) — the remaining scroll just holds.
+      // HOLD: Force timeline to span the full normalized duration (1.0)
+      // by adding a dummy tween at position 1.0. Without this, GSAP's timeline
+      // total duration ends at the last real tween, causing early unpin.
+      tl.to(imgEls[imgEls.length - 1], {
+        scale: 1.06, // barely perceptible continued Ken Burns during hold
+        duration: holdRatio,
+        ease: 'none',
+      }, animRatio);
 
       // Text reveal — immediate, no scroll dependency
       if (textRef.current) {
