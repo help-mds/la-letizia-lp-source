@@ -142,13 +142,15 @@ export function PageTransitions() {
       const inner = section.querySelector('[data-horizontal-inner]') as HTMLElement;
       if (!inner) return;
       const scrollWidth = inner.scrollWidth - section.clientWidth;
+      // Add extra scroll distance for fade-out at the end
+      const totalDistance = scrollWidth + section.clientWidth * 0.3;
       const tw = gsap.to(inner, {
         x: -scrollWidth,
         ease: 'none',
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: () => `+=${scrollWidth}`,
+          end: () => `+=${totalDistance}`,
           scrub: 0.5,
           pin: true,
           anticipatePin: 1,
@@ -156,6 +158,20 @@ export function PageTransitions() {
       });
       tweens.push(tw);
       if (tw.scrollTrigger) triggers.push(tw.scrollTrigger);
+
+      // Fade out the gallery content near the end of the pin
+      const fadeTw = gsap.to(inner, {
+        opacity: 0,
+        ease: 'power2.in',
+        scrollTrigger: {
+          trigger: section,
+          start: () => `top+=${scrollWidth * 0.85} top`,
+          end: () => `top+=${totalDistance} top`,
+          scrub: 0.3,
+        },
+      });
+      tweens.push(fadeTw);
+      if (fadeTw.scrollTrigger) triggers.push(fadeTw.scrollTrigger);
     });
 
     return () => {

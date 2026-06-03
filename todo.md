@@ -99,3 +99,7 @@
 ## Phase 8: Bug Fix — Atmosphereテキスト滞在時間
 
 - [x] AtmosphereSectionのテキスト（Where mornings stretch longer.）がスクロールで一瞬で消える問題を修正 — テキストの表示時間を長くし、もっとゆっくり消えるようにする
+
+## Phase 9: Bug Fix — Gallery画像ジャンプ
+
+- [x] GallerySectionの横スクロール完了後、InfoSectionに入る際に画像が左から右に瞬間移動する問題を修正 — GSAP pinの解除時にレイアウトシフトが発生している
