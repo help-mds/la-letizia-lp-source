@@ -286,3 +286,8 @@
 - [x] UI要素のガラス感をApple Vision Pro風に強化（blur16px, saturate180%, inset shadow, 外側shadow）
 - [x] 対象: ドットナビ、↑↓矢印、共有アイコン、×ボタン、MDSバッジ
 - [x] 触らない: RESERVEボタン（ゴールド）、ポップアップ本体（黒カード）
+
+## ポップアップボーダー + シーン遷移ブラー
+
+- [x] ポップアップ本体に薄いガラスボーダー追加（0.5px rgba(255,255,255,0.18) + inset shadow + saturate）で統一感
+- [x] シーン切り替え時にblur(6px)+brightness(0.6)+scale(1.04)のトランジション（映画的演出）

@@ -201,6 +201,7 @@ export default function InteractiveLpPage() {
   // Scene mode state
   const [sceneMode, setSceneMode] = useState(false);
   const [currentScene, setCurrentScene] = useState(0);
+  const [prevScene, setPrevScene] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionEyebrow, setTransitionEyebrow] = useState('');
   const [transitionTitle, setTransitionTitle] = useState('');
@@ -240,6 +241,7 @@ export default function InteractiveLpPage() {
         return;
       }
 
+      setPrevScene(currentScene);
       setIsTransitioning(true);
       setTransitionEyebrow(SCENE_DEFS[index].eyebrow);
       setTransitionTitle(SCENE_DEFS[index].title);
@@ -252,6 +254,7 @@ export default function InteractiveLpPage() {
       // After title card shows, remove curtain
       setTimeout(() => {
         setIsTransitioning(false);
+        setPrevScene(null);
       }, 1600);
     },
     [currentScene, isTransitioning, exitSceneMode],
@@ -513,12 +516,13 @@ export default function InteractiveLpPage() {
           {SCENE_DEFS.slice(1).map((scene, i) => {
             const sceneIndex = i + 1;
             const isActive = currentScene === sceneIndex;
+            const isExiting = prevScene === sceneIndex && isTransitioning;
 
             if (scene.id === 'access') {
               return (
                 <div
                   key={scene.id}
-                  className={`scene-container ${isActive ? 'active' : ''}`}
+                  className={`scene-container ${isActive ? 'active' : ''} ${isExiting ? 'exiting' : ''}`}
                 >
                   <AccessScene
                     address={lead.infoAddress || 'Dubai Marina Walk\nTower 3, Ground Floor\nDubai, UAE'}
@@ -535,7 +539,7 @@ export default function InteractiveLpPage() {
               return (
                 <div
                   key={scene.id}
-                  className={`scene-container ${isActive ? 'active' : ''}`}
+                  className={`scene-container ${isActive ? 'active' : ''} ${isExiting ? 'exiting' : ''}`}
                 >
                   <ReservationScene
                     storeName={lead.storeName || 'La Letizia'}
@@ -549,7 +553,7 @@ export default function InteractiveLpPage() {
             return (
               <div
                 key={scene.id}
-                className={`scene-container ${isActive ? 'active' : ''}`}
+                className={`scene-container ${isActive ? 'active' : ''} ${isExiting ? 'exiting' : ''}`}
               >
                 <InteractiveScene
                   imageUrl={sceneImages[scene.id as keyof typeof sceneImages] || ''}
