@@ -29,7 +29,6 @@
 .hotspot-btn:hover {
   background: rgba(255, 255, 255, 0.35);
   border-color: rgba(255, 255, 255, 0.8);
-  transform: translate(-50%, -50%) scale(1.12);
 }
 .hotspot-btn:active {
   transform: translate(-50%, -50%) scale(0.95);
@@ -72,10 +71,10 @@
   animation: tooltipIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .hotspot-tooltip--right {
-  left: calc(100% + 16px);
+  left: calc(100% + 24px);
 }
 .hotspot-tooltip--left {
-  right: calc(100% + 16px);
+  right: calc(100% + 24px);
 }
 @keyframes tooltipIn {
   from { opacity: 0; transform: translateY(-50%) scale(0.95); }
