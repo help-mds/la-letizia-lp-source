@@ -359,3 +359,17 @@
 - [x] La Letizia (/lp/la-letizia-dubai-marina) で確認
 - [x] NOA hair (/lp/noa-hair-tokyo-nakameguro) で確認
 - [x] /r/:slug は変更なし確認
+
+## White Glass 完全統一 (/lp/:slug のみ)
+
+- [x] ドットナビ (pill): saturate 削除 → White Glass (rgba(255,255,255,0.75) + blur(20px))
+- [x] 矢印ボタン (↑↓): saturate 削除 → White Glass
+- [x] ホットスポット "?": White Glass (rgba(255,255,255,0.85))
+- [x] 共有アイコン (左下): White Glass
+- [x] MDS バッジ: White Glass
+- [x] RESERVE ボタン: 桜色/麦色/ゴールド全廃 → White Glass 統一
+- [x] ローディング画面 UI: light glass → White Glass (同じスタイル)
+- [x] 全業種で同じ見た目 (business_type/luxury_tier による色分け廃止)
+- [x] La Letizia (/lp/la-letizia-dubai-marina) スクショ確認
+- [x] NOA hair (/lp/noa-hair-tokyo-nakameguro) スクショ確認
+- [x] /r/:slug 変更なし確認
