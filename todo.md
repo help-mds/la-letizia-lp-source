@@ -403,3 +403,15 @@
 - [x] La Letizia (/lp/la-letizia-dubai-marina) で動作確認
 - [x] NOA hair (/lp/noa-hair-tokyo-nakameguro) で動作確認
 - [x] /r/:slug 変更なし確認
+
+## White Glass 透明感修正 (Apple Vision Pro / iOS 26 レベル)
+
+- [x] ドットナビ (pill): background rgba(255,255,255,0.55) + blur(24px) + inset shadow上下 + 外側shadow強め
+- [x] 矢印ボタン (↑↓): 同上
+- [x] 共有アイコン: 同上
+- [x] MDS バッジ: 同上
+- [x] RESERVE ボタン: 同上
+- [x] ホットスポット "?": rgba(255,255,255,0.6) + blur(20px) + inset上端 + 外側shadow
+- [x] saturate 使わない確認
+- [x] La Letizia で透明感確認 (写真が透けて見える)
+- [x] NOA hair で透明感確認
