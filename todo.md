@@ -271,3 +271,9 @@
 - [x] 下のDESIGNED BY MDSバッジを削除（上に移動したため）
 - [x] スマホ版シーン画像をobject-fit: containで画面にフィットさせる（見切れ防止）
 - [x] ツールチップの吹き出しがホットスポット？マークに被らないようにオフセットを増やす（60px）
+
+## モバイル全画面修正
+
+- [x] モバイル(< 768px)でシーン背景画像をviewport全体にcover表示（background-size:cover, position:absolute, inset:0）
+- [x] モバイルでアスペクト比固定を無効化（元々なし）
+- [x] 上下の黒帯を排除（scene-containerにmin-height:100dvh, bodyロックも100dvh）

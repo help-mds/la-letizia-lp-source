@@ -261,7 +261,7 @@ export default function InteractiveLpPage() {
     // Scroll to top and lock
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
     document.body.style.overflow = 'hidden';
-    document.body.style.height = '100vh';
+    document.body.style.height = '100dvh';
     setSceneMode(true);
     setCurrentScene(1); // Start at Scene 1 (The Space)
     // Show transition
@@ -432,7 +432,7 @@ export default function InteractiveLpPage() {
                 // From hero, enter scene mode and go to that scene
                 window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
                 document.body.style.overflow = 'hidden';
-                document.body.style.height = '100vh';
+                document.body.style.height = '100dvh';
                 setSceneMode(true);
                 setCurrentScene(index);
                 setTransitionEyebrow(SCENE_DEFS[index].eyebrow);
