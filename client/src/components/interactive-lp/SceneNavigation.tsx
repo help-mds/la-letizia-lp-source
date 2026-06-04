@@ -12,14 +12,11 @@ interface SceneNavigationProps {
 }
 
 /**
- * SceneNavigation: Top header bar (store name + Created by MDS),
- * Glassmorphism pill dot-nav (top center with circle dots),
- * glass arrows (right-bottom on mobile), share button (left-bottom),
- * beige/gold RESERVE CTA.
- *
- * Supports two visual modes:
- * - isLoading=true: light glass (for white background loading screen)
- * - isLoading=false: dark glass (for dark hero/scene backgrounds)
+ * SceneNavigation: Top header bar (store name + CREATED BY MDS prominent),
+ * Neomorphic glass pill dot-nav with outer container,
+ * Neomorphic glass arrows with outer container (vertical pill),
+ * Share button with outer container,
+ * RESERVE CTA with glass styling.
  */
 export default function SceneNavigation({
   scenes,
@@ -40,7 +37,6 @@ export default function SceneNavigation({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback for older browsers
       const textarea = document.createElement('textarea');
       textarea.value = window.location.href;
       textarea.style.position = 'fixed';
@@ -54,12 +50,11 @@ export default function SceneNavigation({
     }
   }, []);
 
-  // CSS class modifier for light/dark glass mode
   const modeClass = isLoading ? 'light-glass' : '';
 
   return (
     <>
-      {/* Top header bar — store name left, Created by MDS right */}
+      {/* Top header bar — store name left, CREATED BY MDS right (prominent) */}
       <div className={`scene-top-header ${modeClass}`}>
         <span className="scene-top-header-name">{storeName}</span>
         <a
@@ -68,67 +63,71 @@ export default function SceneNavigation({
           rel="noopener noreferrer"
           className="scene-top-header-credit"
         >
-          Created by MDS
+          CREATED BY MDS
         </a>
       </div>
 
-      {/* Glassmorphism pill dot nav — below header */}
-      <div className={`scene-pill-nav ${modeClass}`}>
-        {navScenes.map((scene) => {
-          const realIndex = scenes.findIndex((s) => s.id === scene.id);
-          return (
-            <button
-              key={scene.id}
-              className={`scene-pill-dot ${realIndex === currentIndex ? 'active' : ''}`}
-              onClick={() => onNavigate(realIndex)}
-              aria-label={scene.label}
-              title={scene.label}
-            >
-              <span className="scene-pill-dot-circle" />
-            </button>
-          );
-        })}
+      {/* Neomorphic glass pill dot nav — outer container + inner dot buttons */}
+      <div className={`scene-pill-nav-container ${modeClass}`}>
+        <div className="scene-pill-nav">
+          {navScenes.map((scene) => {
+            const realIndex = scenes.findIndex((s) => s.id === scene.id);
+            return (
+              <button
+                key={scene.id}
+                className={`scene-pill-dot ${realIndex === currentIndex ? 'active' : ''}`}
+                onClick={() => onNavigate(realIndex)}
+                aria-label={scene.label}
+                title={scene.label}
+              >
+                <span className="scene-pill-dot-circle" />
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Glass arrow navigation (right side desktop, right-bottom mobile) */}
-      <div className={`scene-arrows ${modeClass}`}>
+      {/* Neomorphic glass arrow container — outer pill + inner buttons */}
+      <div className={`scene-arrows-container ${modeClass}`}>
         <button
           className="scene-arrow-btn"
           onClick={() => onNavigate(currentIndex - 1)}
           disabled={currentIndex === 0}
-          aria-label="Previous scene"
+          aria-label="前のセクション"
         >
-          <IconChevronUp size={26} />
+          <IconChevronUp size={26} strokeWidth={2.5} />
         </button>
         <button
           className="scene-arrow-btn"
           onClick={() => onNavigate(currentIndex + 1)}
           disabled={currentIndex === scenes.length - 1}
-          aria-label="Next scene"
+          aria-label="次のセクション"
         >
-          <IconChevronDown size={26} />
+          <IconChevronDown size={26} strokeWidth={2.5} />
         </button>
       </div>
 
-      {/* Persistent Reserve CTA — beige/gold glass */}
+      {/* Persistent Reserve CTA */}
       <button
         className={`scene-persistent-cta ${modeClass}`}
         onClick={onReserve}
-        aria-label="Reserve a table"
+        aria-label="予約する"
       >
         RESERVE
       </button>
 
-      {/* Share button — left bottom, glass style */}
-      <button
-        className={`scene-share-btn ${modeClass}`}
-        onClick={handleShare}
-        aria-label="Share this page"
-        title={copied ? 'Copied!' : 'Share'}
-      >
-        <IconShare size={20} />
-        {copied && <span className="scene-share-copied">{copied ? 'Copied!' : ''}</span>}
-      </button>
+      {/* Share button with outer glass container */}
+      <div className={`scene-share-container ${modeClass}`}>
+        <button
+          className="scene-share-btn"
+          onClick={handleShare}
+          aria-label="共有する"
+          title={copied ? 'コピーしました' : '共有'}
+        >
+          <IconShare size={20} strokeWidth={2.5} />
+        </button>
+        {copied && <span className="scene-share-copied">コピーしました</span>}
+      </div>
     </>
   );
 }

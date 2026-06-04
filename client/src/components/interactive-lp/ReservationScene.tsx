@@ -71,7 +71,7 @@ export default function ReservationScene({
           textTransform: 'uppercase',
         }}
       >
-        RESERVATION
+        xxxxxx
       </div>
       <div
         style={{
@@ -84,7 +84,7 @@ export default function ReservationScene({
           textAlign: 'center',
         }}
       >
-        {title || 'Your table is waiting'}
+        {title || 'xxxxxx xxxxxx'}
       </div>
       <div
         style={{
@@ -95,7 +95,7 @@ export default function ReservationScene({
           textAlign: 'center',
         }}
       >
-        {subtitle || `Experience ${storeName} in person`}
+        {subtitle || 'xxxxxx xxxxxx xxxxxx'}
       </div>
 
       {/* CTA Grid */}

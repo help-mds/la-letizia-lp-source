@@ -38,7 +38,7 @@ export default function AccessScene({
             textTransform: 'uppercase',
           }}
         >
-          VISIT
+          xxxxxx
         </div>
         <div
           style={{
@@ -50,18 +50,18 @@ export default function AccessScene({
             color: '#1a1a1a',
           }}
         >
-          {addressLines[0] || 'Find Us'}
+          {addressLines[0] || 'xxxxxx'}
         </div>
 
         <div style={{ marginBottom: '14px' }}>
-          <div className="scene-access-label">Address</div>
+          <div className="scene-access-label">住所</div>
           {addressLines.map((line, i) => (
             <div key={i} className="scene-access-detail">{line}</div>
           ))}
         </div>
 
         <div style={{ marginBottom: '14px' }}>
-          <div className="scene-access-label">Hours</div>
+          <div className="scene-access-label">営業時間</div>
           {hoursLines.map((line, i) => (
             <div key={i} className="scene-access-detail">{line}</div>
           ))}
@@ -69,7 +69,7 @@ export default function AccessScene({
 
         {accessNote && (
           <div>
-            <div className="scene-access-label">Access</div>
+            <div className="scene-access-label">アクセス</div>
             <div className="scene-access-detail">{accessNote}</div>
           </div>
         )}
@@ -96,7 +96,7 @@ export default function AccessScene({
                 rel="noopener noreferrer"
                 className="scene-map-open-link"
               >
-                Open in Google Maps
+                Google Maps で開く
               </a>
             )}
           </div>
@@ -106,7 +106,7 @@ export default function AccessScene({
             target="_blank"
             rel="noopener noreferrer"
             className="scene-map-link"
-            aria-label="Open in Google Maps"
+            aria-label="Google Maps で開く"
           >
             <div
               style={{
@@ -117,7 +117,7 @@ export default function AccessScene({
                 textTransform: 'uppercase',
               }}
             >
-              OPEN MAP
+              地図を開く
             </div>
             <div
               style={{

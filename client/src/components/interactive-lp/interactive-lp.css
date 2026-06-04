@@ -1,421 +1,132 @@
 /* ============================================================
-   Interactive Scene LP — Styles
-   White Glass Unified — MDS Brand Layer
+   Interactive LP — Full CSS
+   Neomorphic glass containers + dewy translucent buttons
    ============================================================ */
 
-/* ---- Design Tokens ---- */
-:root {
-  /* White Glass tokens — Apple Vision Pro / iOS 26 level */
-  --glass-bg: rgba(255, 255, 255, 0.55);
-  --glass-bg-strong: rgba(255, 255, 255, 0.6);
-  --glass-border: 0.5px solid rgba(255, 255, 255, 0.6);
-  --glass-border-color: rgba(255, 255, 255, 0.6);
-  --glass-blur: 24px;
-  --glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.18);
-  --glass-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 12px 40px rgba(0, 0, 0, 0.22);
-  --glass-text: #1a1a1a;
-  --glass-text-muted: rgba(26, 26, 26, 0.6);
-}
-
-/* Ken Burns animation — subtle scale only, no translate so hotspots stay stable */
+/* ---- Ken Burns background animation ---- */
 @keyframes kenBurns {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.04); }
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(-1%, -0.5%); }
 }
 
-/* ============================================================
-   Top Header Bar (store name left, Created by MDS right)
-   ============================================================ */
+/* ---- Top Header Bar ---- */
 .scene-top-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 70;
+  z-index: 60;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.55);
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.6);
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 .scene-top-header-name {
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #1a1a1a;
 }
 .scene-top-header-credit {
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(26, 26, 26, 0.45);
+  color: #1a1a1a;
   text-decoration: none;
-  transition: color 0.2s;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
 }
 .scene-top-header-credit:hover {
-  color: rgba(26, 26, 26, 0.8);
-}
-
-/* ---- Hotspot ---- */
-.hotspot-btn {
-  position: absolute;
-  z-index: 20;
-  width: 54px;
-  height: 54px;
-  border: 0.5px solid rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  transition: background 0.2s ease, transform 0.16s ease, border-color 0.2s, box-shadow 0.2s;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 4px 16px rgba(0, 0, 0, 0.18);
-}
-.hotspot-btn:hover {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 8px 24px rgba(0, 0, 0, 0.22);
-}
-.hotspot-btn:active {
-  transform: translate(-50%, -50%) scale(0.95);
-}
-.hotspot-icon {
-  color: #1a1a1a;
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1;
-  text-shadow: none;
-}
-.hotspot-ripple {
-  position: absolute;
-  inset: -7px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  animation: hotspotPulse 2.2s ease-out infinite;
-}
-@keyframes hotspotPulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(1.7); opacity: 0; }
-}
-
-/* Autoplay glow state — draws attention before popup opens */
-.hotspot-btn--glow {
-  animation: hotspotGlow 0.5s ease-in-out;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
-  border-color: rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.95);
-}
-@keyframes hotspotGlow {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.15); }
-  100% { transform: translate(-50%, -50%) scale(1.05); }
-}
-
-/* ---- Hotspot Tooltip (Desktop) ---- */
-.hotspot-anchor {
-  z-index: 20;
-}
-.hotspot-tooltip {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 320px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 0.5px solid rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
-  padding: 28px 24px 24px;
-  z-index: 50;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    0 16px 48px rgba(0, 0, 0, 0.15);
-  animation: tooltipIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-}
-/* Offset increased to avoid overlapping the ? hotspot button */
-.hotspot-tooltip--right {
-  left: calc(100% + 60px);
-}
-.hotspot-tooltip--left {
-  right: calc(100% + 60px);
-}
-@keyframes tooltipIn {
-  from { opacity: 0; transform: translateY(-50%) scale(0.95); }
-  to { opacity: 1; transform: translateY(-50%) scale(1); }
-}
-/* Close button: light style on white popup */
-.hotspot-tooltip-close {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 0.5px solid rgba(0, 0, 0, 0.08);
-  border-radius: 50%;
-  color: rgba(26, 23, 20, 0.7);
-  cursor: pointer;
-  transition: transform 0.16s, box-shadow 0.2s, background 0.2s;
-  box-shadow: none;
-  z-index: 10;
-}
-.hotspot-tooltip-close:hover {
-  transform: scale(1.08);
-  background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.15);
-}
-.hotspot-tooltip-close:active {
-  transform: scale(0.95);
-}
-.hotspot-tooltip-title {
-  font-size: 22px;
-  font-weight: 400;
-  color: #1a1a1a;
-  margin-bottom: 12px;
-  margin-top: 24px;
-  padding-right: 0;
-  font-family: var(--font-heading), serif;
-  font-style: italic;
-  letter-spacing: -0.01em;
-}
-.hotspot-tooltip-body {
-  font-size: 14px;
-  color: rgba(26, 23, 20, 0.7);
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-.hotspot-tooltip-price {
-  font-size: 15px;
-  color: #1a1a1a;
-  font-weight: 600;
-  margin-bottom: 14px;
-}
-.hotspot-tooltip-ctas {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 4px;
-}
-.hotspot-tooltip-cta-btn {
-  padding: 12px 20px;
-  background: #ffffff;
-  border: 1px solid rgba(26, 23, 20, 0.2);
-  color: #1a1a1a;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.16s, border-color 0.2s;
-}
-.hotspot-tooltip-cta-btn:hover {
-  background: #f5f5f5;
-  border-color: rgba(26, 23, 20, 0.35);
-}
-.hotspot-tooltip-cta-btn:active {
-  transform: scale(0.96);
-}
-
-/* ---- Access Scene (white background) ---- */
-.scene-access-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: rgba(26, 23, 20, 0.6);
-  letter-spacing: 0.04em;
-  margin-bottom: 4px;
-}
-.scene-access-detail {
-  font-size: 12px;
-  color: rgba(26, 23, 20, 0.55);
-  line-height: 1.6;
-}
-.scene-map-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 160px;
-  height: 160px;
-  border: 1px solid rgba(26, 23, 20, 0.12);
-  border-radius: 8px;
-  color: #1a1a1a;
-  text-decoration: none;
-  transition: background 0.2s, border-color 0.2s;
-}
-.scene-map-link:hover {
-  background: rgba(26, 23, 20, 0.03);
-  border-color: rgba(26, 23, 20, 0.25);
-}
-.scene-map-embed {
-  width: 100%;
-  max-width: 420px;
-  height: 320px;
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid rgba(26, 23, 20, 0.1);
-}
-.scene-map-embed iframe {
-  width: 100%;
-  height: 100%;
-}
-.scene-map-open-link {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
-  border-radius: 6px;
-  color: #1a1a1a;
-  font-size: 10px;
-  letter-spacing: 0.05em;
-  text-decoration: none;
-  border: 0.5px solid rgba(0, 0, 0, 0.1);
-  opacity: 0.9;
-  transition: opacity 0.2s;
-}
-.scene-map-open-link:hover {
   opacity: 1;
 }
 
-/* ---- Reservation CTA Grid (white unified) ---- */
-.scene-cta-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  width: 100%;
-  max-width: 360px;
-}
-.scene-cta-btn {
-  padding: 12px 14px;
-  background: transparent;
-  border: 1px solid rgba(26, 23, 20, 0.15);
-  color: #1a1a1a;
-  cursor: pointer;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.2s, border-color 0.2s;
-  font-family: inherit;
-}
-.scene-cta-btn:hover {
-  background: rgba(26, 23, 20, 0.03);
-  border-color: rgba(26, 23, 20, 0.3);
-}
-.scene-cta-btn-primary {
-  background: #ffffff;
-  color: #1a1a1a;
-  border: 1px solid rgba(26, 23, 20, 0.2);
-  grid-column: span 2;
-  justify-content: center;
-  font-weight: 600;
-}
-.scene-cta-btn-primary:hover {
-  background: #f5f5f5;
-  border-color: rgba(26, 23, 20, 0.35);
-}
-.scene-cta-btn-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.scene-cta-btn-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: #1a1a1a;
-}
-.scene-cta-btn-sub {
-  font-size: 9px;
-  opacity: 0.5;
-  letter-spacing: 0.05em;
-  color: rgba(26, 23, 20, 0.6);
+/* ---- Outer Enclosure Container (shared base) ---- */
+.scene-pill-nav-container,
+.scene-arrows-container,
+.scene-share-container {
+  position: fixed;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
-/* ============================================================
-   Navigation: White Glass Pill Dot Nav (below header)
-   ============================================================ */
-.scene-pill-nav {
-  position: fixed;
-  top: 48px;
+/* ---- Pill Dot Nav Container (top center) ---- */
+.scene-pill-nav-container {
+  top: 56px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 60;
+  border-radius: 40px;
+  padding: 8px 10px;
+}
+.scene-pill-nav {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-radius: 32px;
-  border: 0.5px solid rgba(255, 255, 255, 0.6);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.18);
 }
 .scene-pill-dot {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  border: 0.5px solid rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-.scene-pill-dot-circle {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(26, 26, 26, 0.3);
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: pointer;
+  border: 1.5px solid rgba(160, 160, 170, 0.4);
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  /* Metallic glass sphere */
+  background: linear-gradient(160deg, rgba(220, 220, 225, 0.9) 0%, rgba(170, 170, 180, 0.7) 50%, rgba(200, 200, 210, 0.85) 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.15);
 }
 .scene-pill-dot:hover {
-  background: rgba(255, 255, 255, 0.65);
-  border-color: rgba(255, 255, 255, 0.7);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-.scene-pill-dot:hover .scene-pill-dot-circle {
-  background: rgba(26, 26, 26, 0.6);
+  background: linear-gradient(160deg, rgba(230, 230, 235, 0.95) 0%, rgba(185, 185, 195, 0.8) 50%, rgba(210, 210, 220, 0.9) 100%);
+  box-shadow:
+    inset 0 2px 5px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.12),
+    0 3px 10px rgba(0, 0, 0, 0.18);
 }
 .scene-pill-dot.active {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 4px 16px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(160deg, rgba(240, 240, 245, 1) 0%, rgba(195, 195, 205, 0.85) 50%, rgba(220, 220, 230, 0.95) 100%);
+  border-color: rgba(140, 140, 155, 0.5);
+  box-shadow:
+    inset 0 2px 5px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.scene-pill-dot-circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(26, 26, 26, 0.3);
+  transition: all 0.25s ease;
 }
 .scene-pill-dot.active .scene-pill-dot-circle {
+  width: 10px;
+  height: 10px;
   background: #1a1a1a;
-  width: 12px;
-  height: 12px;
 }
 
-/* ============================================================
-   Navigation: Arrows (White Glass, right side)
-   ============================================================ */
-.scene-arrows {
-  position: fixed;
+/* ---- Arrow Container (right center desktop) ---- */
+.scene-arrows-container {
+  top: 50%;
   right: 20px;
-  bottom: 28%;
-  z-index: 60;
+  transform: translateY(-50%);
+  border-radius: 50px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -424,99 +135,71 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  border: 0.5px solid rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  color: #1a1a1a;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.18);
+  border: 1.5px solid rgba(160, 160, 170, 0.4);
+  color: #ffffff;
+  transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  /* Metallic glass sphere */
+  background: linear-gradient(160deg, rgba(180, 180, 190, 0.85) 0%, rgba(130, 130, 145, 0.7) 40%, rgba(160, 160, 175, 0.8) 100%);
+  box-shadow:
+    inset 0 3px 6px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+    0 3px 10px rgba(0, 0, 0, 0.2);
 }
 .scene-arrow-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(255, 255, 255, 0.8);
-  color: #1a1a1a;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 12px 40px rgba(0, 0, 0, 0.22);
+  background: linear-gradient(160deg, rgba(195, 195, 205, 0.9) 0%, rgba(145, 145, 160, 0.75) 40%, rgba(175, 175, 190, 0.85) 100%);
+  box-shadow:
+    inset 0 3px 7px rgba(255, 255, 255, 0.6),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.18),
+    0 5px 16px rgba(0, 0, 0, 0.25);
 }
 .scene-arrow-btn:active:not(:disabled) {
-  transform: scale(0.94);
+  transform: scale(0.92);
+  background: linear-gradient(160deg, rgba(165, 165, 175, 0.8) 0%, rgba(120, 120, 135, 0.65) 40%, rgba(145, 145, 160, 0.75) 100%);
 }
 .scene-arrow-btn:disabled {
-  opacity: 0.25;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
-/* ============================================================
-   Persistent CTA (White Glass — MDS brand unified)
-   ============================================================ */
-.scene-persistent-cta {
-  position: fixed;
-  top: 48px;
-  right: 20px;
-  z-index: 60;
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  color: #1a1a1a;
-  border: 0.5px solid rgba(255, 255, 255, 0.6);
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.16s, box-shadow 0.2s;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.3),
-    0 8px 32px rgba(0, 0, 0, 0.18);
-}
-.scene-persistent-cta:hover {
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.3),
-    0 12px 40px rgba(0, 0, 0, 0.22);
-}
-.scene-persistent-cta:active {
-  transform: scale(0.96);
-}
-
-/* ============================================================
-   Share Button (left-bottom, White Glass)
-   ============================================================ */
-.scene-share-btn {
-  position: fixed;
-  bottom: 20px;
-  left: 16px;
-  z-index: 60;
-  width: 48px;
-  height: 48px;
+/* ---- Share Button Container (left bottom) ---- */
+.scene-share-container {
+  bottom: 24px;
+  left: 20px;
   border-radius: 50%;
-  border: 0.5px solid rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  color: #1a1a1a;
+  padding: 8px;
+}
+.scene-share-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border: 1.5px solid rgba(160, 160, 170, 0.4);
+  color: #ffffff;
   transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.18);
+  /* Metallic glass sphere */
+  background: linear-gradient(160deg, rgba(180, 180, 190, 0.85) 0%, rgba(130, 130, 145, 0.7) 40%, rgba(160, 160, 175, 0.8) 100%);
+  box-shadow:
+    inset 0 3px 6px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+    0 3px 10px rgba(0, 0, 0, 0.2);
 }
 .scene-share-btn:hover {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(255, 255, 255, 0.3), 0 12px 40px rgba(0, 0, 0, 0.22);
+  background: linear-gradient(160deg, rgba(195, 195, 205, 0.9) 0%, rgba(145, 145, 160, 0.75) 40%, rgba(175, 175, 190, 0.85) 100%);
+  box-shadow:
+    inset 0 3px 7px rgba(255, 255, 255, 0.6),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.18),
+    0 5px 16px rgba(0, 0, 0, 0.25);
 }
 .scene-share-btn:active {
   transform: scale(0.92);
+  background: linear-gradient(160deg, rgba(165, 165, 175, 0.8) 0%, rgba(120, 120, 135, 0.65) 40%, rgba(145, 145, 160, 0.75) 100%);
 }
 .scene-share-copied {
   position: absolute;
@@ -535,6 +218,187 @@
   to { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
+/* ---- Persistent CTA (RESERVE) ---- */
+.scene-persistent-cta {
+  position: fixed;
+  top: 56px;
+  right: 20px;
+  z-index: 50;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  color: #1a1a1a;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2),
+    0 6px 24px rgba(0, 0, 0, 0.12);
+}
+.scene-persistent-cta:hover {
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.3),
+    0 8px 32px rgba(0, 0, 0, 0.16);
+}
+.scene-persistent-cta:active {
+  transform: scale(0.96);
+}
+
+/* ---- Hotspot Button ---- */
+.hotspot-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #1a1a1a;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 25;
+}
+.hotspot-btn:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 6px 24px rgba(0, 0, 0, 0.22);
+}
+.hotspot-btn:active {
+  transform: scale(0.95);
+}
+.hotspot-btn--active {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 6px 24px rgba(0, 0, 0, 0.22);
+}
+.hotspot-icon {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+}
+.hotspot-ripple {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  animation: hotspotPulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes hotspotPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.25); opacity: 0; }
+}
+
+/* ---- Tooltip (Desktop) ---- */
+.hotspot-tooltip {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 280px;
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 0.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 16px 64px rgba(0, 0, 0, 0.2);
+  z-index: 30;
+  animation: tooltipIn 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes tooltipIn {
+  from { opacity: 0; transform: translateY(-50%) scale(0.95); }
+  to { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+.hotspot-tooltip--right {
+  left: calc(100% + 16px);
+}
+.hotspot-tooltip--left {
+  right: calc(100% + 16px);
+}
+.hotspot-tooltip-close {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #1a1a1a;
+  transition: background 0.15s ease;
+}
+.hotspot-tooltip-close:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+.hotspot-tooltip-title {
+  font-family: var(--font-heading), serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  padding-right: 32px;
+  line-height: 1.2;
+}
+.hotspot-tooltip-body {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(26, 26, 26, 0.7);
+  margin-bottom: 12px;
+}
+.hotspot-tooltip-price {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 14px;
+}
+.hotspot-tooltip-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hotspot-tooltip-cta-btn {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: 1px solid rgba(26, 23, 20, 0.15);
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.hotspot-tooltip-cta-btn:hover {
+  background: #f5f5f5;
+  border-color: rgba(26, 23, 20, 0.3);
+}
+
 /* ---- Scene container states ---- */
 .scene-container {
   position: absolute;
@@ -543,7 +407,6 @@
   pointer-events: none;
   transition: opacity 0.6s ease, filter 0.5s ease;
   filter: blur(0px) brightness(1);
-  /* Mobile: ensure full dynamic viewport height */
   min-height: 100vh;
   min-height: 100dvh;
 }
@@ -581,12 +444,48 @@
   50% { opacity: 0.8; }
 }
 
+/* ---- Hero Scroll Indicator ---- */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 20;
+  pointer-events: none;
+  animation: scrollIndicatorPulse 2.5s ease-in-out infinite;
+}
+.hero-scroll-indicator-text {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
+.hero-scroll-indicator-line {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+  animation: scrollLineDrop 1.8s ease-in-out infinite;
+}
+@keyframes scrollIndicatorPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+@keyframes scrollLineDrop {
+  0% { transform: scaleY(0.4); transform-origin: top; opacity: 0.3; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 0.8; }
+  100% { transform: scaleY(0.4); transform-origin: top; opacity: 0.3; }
+}
+
 /* ============================================================
    MOBILE / PORTRAIT OPTIMIZATION
    ============================================================ */
 
 @media (max-width: 640px) {
-  /* Top header: slightly smaller */
   .scene-top-header {
     padding: 8px 14px;
   }
@@ -595,41 +494,39 @@
     letter-spacing: 0.1em;
   }
   .scene-top-header-credit {
-    font-size: 8px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
   }
 
-  /* Pill nav: White Glass, slightly smaller dots, below header */
-  .scene-pill-nav {
+  /* Pill nav container: smaller */
+  .scene-pill-nav-container {
     top: 40px;
-    gap: 4px;
-    padding: 5px 8px;
+    padding: 4px;
   }
   .scene-pill-dot {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
   }
   .scene-pill-dot-circle {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
   }
   .scene-pill-dot.active .scene-pill-dot-circle {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
   }
 
-  /* Arrows: RIGHT-BOTTOM */
-  .scene-arrows {
+  /* Arrows container: right-bottom on mobile */
+  .scene-arrows-container {
     top: auto;
     bottom: calc(80px + env(safe-area-inset-bottom, 0px));
     right: 16px;
     left: auto;
     transform: none;
-    flex-direction: column;
-    gap: 10px;
   }
   .scene-arrow-btn {
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
   }
 
   /* Persistent CTA: below header on right */
@@ -649,7 +546,7 @@
     display: flex;
   }
 
-  /* Hotspots: White Glass, larger touch targets */
+  /* Hotspots: larger touch targets */
   .hotspot-btn {
     width: 52px;
     height: 52px;
@@ -679,15 +576,17 @@
     padding: 14px 16px;
   }
 
-  /* Share button: left-bottom on mobile */
-  .scene-share-btn {
+  /* Share container: left-bottom on mobile */
+  .scene-share-container {
     bottom: 16px;
     left: 12px;
-    width: 44px;
-    height: 44px;
+  }
+  .scene-share-btn {
+    width: 38px;
+    height: 38px;
   }
 
-  /* Mobile scene image: full viewport cover (no black bars) */
+  /* Mobile scene image: full viewport cover */
   .scene-container .absolute.inset-0.w-full.h-full {
     position: absolute !important;
     inset: 0 !important;
@@ -698,9 +597,8 @@
   }
 }
 
-/* Portrait orientation specific (includes taller phones) */
+/* Portrait orientation specific */
 @media (max-width: 768px) and (orientation: portrait) {
-  /* Access scene: stack vertically */
   .scene-access-wrap {
     flex-direction: column !important;
   }
@@ -718,31 +616,30 @@
 /* Very small screens (iPhone SE, etc.) */
 @media (max-width: 375px) {
   .scene-pill-dot {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
   }
   .scene-persistent-cta {
     padding: 6px 12px;
     font-size: 8px;
   }
   .scene-arrow-btn {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
   }
 }
 
 /* iOS safe area support */
 @supports (padding: env(safe-area-inset-bottom)) {
   @media (max-width: 640px) {
-    .scene-arrows {
+    .scene-arrows-container {
       bottom: calc(80px + env(safe-area-inset-bottom));
     }
   }
 }
 
 /* ============================================================
-   Mobile Full-Screen Tooltip Modal (White Glass)
-   Only visible on mobile; desktop uses inline tooltip beside hotspot
+   Mobile Full-Screen Tooltip Modal
    ============================================================ */
 .mobile-tooltip-overlay {
   display: none;
@@ -755,12 +652,10 @@
 }
 
 @media (max-width: 640px) {
-  /* Hide desktop inline tooltip on mobile */
   .hidden-on-mobile {
     display: none !important;
   }
 
-  /* Show mobile full-screen overlay */
   .mobile-tooltip-overlay {
     display: flex;
     position: fixed;
@@ -844,7 +739,6 @@
     font-weight: 600;
   }
 
-  /* Also hide the inline tooltip that was in the old mobile section */
   .hotspot-tooltip {
     display: none !important;
   }
@@ -852,38 +746,27 @@
 
 /* ============================================================
    LIGHT GLASS MODE (Loading screen on white background)
-   Since all UI is now White Glass, light-glass is the same style.
-   We keep the class for compatibility but no visual difference needed.
    ============================================================ */
-
-/* All glass elements get transition for smooth appearance */
 .scene-top-header,
-.scene-pill-nav,
-.scene-pill-dot,
-.scene-arrow-btn,
+.scene-pill-nav-container,
+.scene-arrows-container,
 .scene-persistent-cta,
-.scene-share-btn {
+.scene-share-container {
   transition: all 0.5s ease;
 }
 
-/* Light-glass overrides are now no-ops since base is already White Glass */
-/* Kept for backward compatibility with SceneNavigation isLoading prop */
+/* Light-glass: no visual change needed since base is already white glass */
 .scene-top-header.light-glass,
-.scene-pill-nav.light-glass,
+.scene-pill-nav-container.light-glass,
+.scene-arrows-container.light-glass,
 .scene-persistent-cta.light-glass,
-.scene-share-btn.light-glass {
-  /* Same as base — no visual change needed */
+.scene-share-container.light-glass {
+  /* Same as base */
 }
 
 /* ---- Reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
   .hotspot-ripple {
-    animation: none;
-  }
-  .scene-popup-backdrop {
-    animation: none;
-  }
-  .scene-popup-modal {
     animation: none;
   }
   .scene-container {
@@ -895,5 +778,11 @@
   .scene-swipe-hint {
     animation: none;
     opacity: 0.5;
+  }
+  .hero-scroll-indicator {
+    animation: none;
+  }
+  .hero-scroll-indicator-line {
+    animation: none;
   }
 }

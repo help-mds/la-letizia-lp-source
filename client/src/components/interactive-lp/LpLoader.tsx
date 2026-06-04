@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * LpLoader — Redesigned loading screen for /lp/:slug
+ * LpLoader — Loading screen for /lp/:slug
  *
- * Shows for exactly 0.8 seconds, then auto-fades out to reveal the Hero.
+ * Shows for 1.5 seconds, then auto-fades out to reveal the Hero.
  * Does NOT wait for frame loading to complete.
  *
  * Layout (centered vertical stack):
- * 1. MDS logo (48px height)
- * 2. "La Letizia" Fraunces italic 48px
- * 3. Decorative line (60px)
- * 4. "CREATED BY MDS" text
+ * 1. Store name (Fraunces italic 48px)
+ * 2. Decorative line
+ * 3. "created by" text
+ * 4. MDS logo (48px height) at bottom
  */
 interface LpLoaderProps {
   ready: boolean;
@@ -23,7 +23,7 @@ export default function LpLoader({ ready: _ready, onComplete, storeName = 'La Le
   const exitTriggered = useRef(false);
   const [fadeOut, setFadeOut] = useState(false);
 
-  // Auto-dismiss after 0.8 seconds (regardless of frame load status)
+  // Auto-dismiss after 1.5 seconds (0.8 + 0.7 extension)
   useEffect(() => {
     if (exitTriggered.current) return;
 
@@ -37,7 +37,7 @@ export default function LpLoader({ ready: _ready, onComplete, storeName = 'La Le
         setHasExited(true);
         onComplete();
       }, 500);
-    }, 800);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [onComplete]);
@@ -55,21 +55,9 @@ export default function LpLoader({ ready: _ready, onComplete, storeName = 'La Le
         willChange: 'opacity',
       }}
     >
-      {/* MDS Logo — 48px height, top of group */}
-      <img
-        src="/manus-storage/logoMDSblack_465d94de.webp"
-        alt="MDS"
-        style={{
-          height: '48px',
-          width: 'auto',
-          objectFit: 'contain',
-        }}
-      />
-
-      {/* Store name — Fraunces italic 48px black */}
+      {/* Store name — Fraunces italic 48px black — TOP of group */}
       <div
         style={{
-          marginTop: '32px',
           fontFamily: '"Fraunces", serif',
           fontStyle: 'italic',
           fontSize: '48px',
@@ -85,26 +73,38 @@ export default function LpLoader({ ready: _ready, onComplete, storeName = 'La Le
       {/* Decorative line — 60px wide, 1px */}
       <div
         style={{
-          marginTop: '20px',
+          marginTop: '24px',
           width: '60px',
           height: '1px',
           backgroundColor: 'rgba(26, 23, 20, 0.2)',
         }}
       />
 
-      {/* "CREATED BY MDS" — 11px, letter-spacing 0.3em, gray */}
+      {/* "created by" — 11px, letter-spacing 0.2em, gray */}
       <div
         style={{
           marginTop: '16px',
           fontSize: '11px',
-          letterSpacing: '0.3em',
+          letterSpacing: '0.2em',
           color: 'rgba(26, 23, 20, 0.4)',
-          textTransform: 'uppercase',
+          textTransform: 'lowercase',
           fontWeight: 400,
         }}
       >
-        CREATED BY MDS
+        created by
       </div>
+
+      {/* MDS Logo — 48px height, BOTTOM of group */}
+      <img
+        src="/manus-storage/logoMDSblack_465d94de.webp"
+        alt="MDS"
+        style={{
+          marginTop: '12px',
+          height: '48px',
+          width: 'auto',
+          objectFit: 'contain',
+        }}
+      />
     </div>
   );
 }

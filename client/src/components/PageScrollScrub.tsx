@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, type ReactNode } from 'react';
+import { useEffect, useRef, useCallback, useState, type ReactNode } from 'react';
 import { useFrameLoader } from '@/hooks/useFrameLoader';
 
 interface Props {
@@ -24,16 +24,11 @@ interface Props {
 
 /**
  * Full-viewport sticky canvas that scrubs through preloaded WebP frames
- * as the user scrolls. 800svh total scroll length.
+ * as the user scrolls. 400svh total scroll length.
  *
- * Faithfully translated from ZIP: components/templates/restaurant/PageScrollScrub.tsx
- *
- * Key features preserved:
- * - RAF coalesce (single rAF per scroll event)
- * - DPR-aware canvas with cover-fit drawing
- * - Orientation switch (landscape/portrait based on viewport)
- * - stride=2 on mobile (load every other frame)
- * - prefers-reduced-motion fallback (shows last frame, no scrub)
+ * Enhanced with:
+ * - Smooth lerp interpolation (no jitter/stutter)
+ * - Stylish "scroll" indicator at bottom center
  */
 export default function PageScrollScrub({
   framesPath,
@@ -48,8 +43,11 @@ export default function PageScrollScrub({
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafId = useRef<number | null>(null);
-  const lastProgress = useRef(-1);
+  const animFrameRef = useRef<number | null>(null);
+  const targetProgress = useRef(0);
+  const currentProgress = useRef(0);
+  const lastDrawnFrame = useRef(-1);
+  const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(true);
 
   // Determine orientation
   const isPortrait =
@@ -115,37 +113,63 @@ export default function PageScrollScrub({
     [],
   );
 
-  // Scroll handler with RAF coalesce
+  // Smooth lerp animation loop
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const LERP_FACTOR = 0.12; // Smoothness (lower = smoother but slower)
+
+    const tick = () => {
+      // Lerp current toward target
+      const diff = targetProgress.current - currentProgress.current;
+      if (Math.abs(diff) > 0.0005) {
+        currentProgress.current += diff * LERP_FACTOR;
+      } else {
+        currentProgress.current = targetProgress.current;
+      }
+
+      // Only redraw if frame index changed
+      const frameIndex = Math.round(currentProgress.current * (activeCount - 1));
+      if (frameIndex !== lastDrawnFrame.current) {
+        lastDrawnFrame.current = frameIndex;
+        const frame = getFrameAt(currentProgress.current);
+        if (frame) drawFrame(frame);
+      }
+
+      animFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    animFrameRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (animFrameRef.current !== null) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, [prefersReducedMotion, activeCount, getFrameAt, drawFrame]);
+
+  // Scroll handler — just updates target (no RAF coalesce needed, lerp handles smoothing)
   const handleScroll = useCallback(() => {
-    if (prefersReducedMotion) return; // No scrub for reduced motion
-    if (rafId.current !== null) return; // coalesce
+    if (prefersReducedMotion) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    rafId.current = requestAnimationFrame(() => {
-      rafId.current = null;
-      const container = containerRef.current;
-      if (!container) return;
+    const rect = container.getBoundingClientRect();
+    const scrollableHeight = container.scrollHeight - window.innerHeight;
+    const scrolled = -rect.top;
+    const progress = Math.max(0, Math.min(1, scrolled / scrollableHeight));
+    targetProgress.current = progress;
 
-      const rect = container.getBoundingClientRect();
-      const scrollableHeight = container.scrollHeight - window.innerHeight;
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / scrollableHeight));
-
-      if (Math.abs(progress - lastProgress.current) < 0.001) return;
-      lastProgress.current = progress;
-
-      const frame = getFrameAt(progress);
-      if (frame) drawFrame(frame);
-    });
-  }, [getFrameAt, drawFrame, prefersReducedMotion]);
+    // Hide scroll indicator after user scrolls a bit
+    if (progress > 0.05 && scrollIndicatorVisible) {
+      setScrollIndicatorVisible(false);
+    }
+  }, [prefersReducedMotion, scrollIndicatorVisible]);
 
   // Attach scroll listener
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (rafId.current !== null) {
-        cancelAnimationFrame(rafId.current);
-      }
     };
   }, [handleScroll]);
 
@@ -200,6 +224,14 @@ export default function PageScrollScrub({
               </div>
             </div>
           )}
+
+        {/* Scroll indicator — stylish, bottom center */}
+        {ready && !loaderActive && scrollIndicatorVisible && (
+          <div className="hero-scroll-indicator">
+            <span className="hero-scroll-indicator-text">SCROLL</span>
+            <div className="hero-scroll-indicator-line" />
+          </div>
+        )}
 
         {/* Overlay children — always visible inside sticky viewport */}
         <div className="absolute inset-0 pointer-events-none" style={{ opacity: loaderActive ? 0 : 1, transition: 'opacity 0.6s ease' }}>

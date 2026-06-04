@@ -27,14 +27,13 @@ interface SceneDef {
 }
 
 function buildSceneDefs(lead: { storeName: string; businessType: string }): SceneDef[] {
-  const isSalon = lead.businessType === 'salon';
   return [
-    { id: 'hero', label: 'Hero', dotLabel: 'G', eyebrow: 'PROLOGUE', title: lead.storeName },
-    { id: 's1', label: 'Space', dotLabel: '1', eyebrow: 'CHAPTER ONE', title: 'The Space' },
-    { id: 's2', label: 'Selection', dotLabel: '2', eyebrow: 'CHAPTER TWO', title: isSalon ? 'The Menu' : 'The Selection' },
-    { id: 's3', label: 'Craft', dotLabel: '3', eyebrow: 'CHAPTER THREE', title: 'The Craft' },
-    { id: 'access', label: 'Access', dotLabel: 'A', eyebrow: 'VISIT', title: 'How to Find Us' },
-    { id: 'cta', label: 'Reserve', dotLabel: 'R', eyebrow: 'FINALE', title: isSalon ? 'Book Now' : 'Reserve a Table' },
+    { id: 'hero', label: 'Hero', dotLabel: 'G', eyebrow: 'xxxxxx', title: lead.storeName },
+    { id: 's1', label: 'Space', dotLabel: '1', eyebrow: 'xxxxxx', title: 'xxxxxx' },
+    { id: 's2', label: 'Selection', dotLabel: '2', eyebrow: 'xxxxxx', title: 'xxxxxx' },
+    { id: 's3', label: 'Craft', dotLabel: '3', eyebrow: 'xxxxxx', title: 'xxxxxx' },
+    { id: 'access', label: 'Access', dotLabel: 'A', eyebrow: 'xxxxxx', title: 'xxxxxx' },
+    { id: 'cta', label: 'Reserve', dotLabel: 'R', eyebrow: 'xxxxxx', title: 'xxxxxx' },
   ];
 }
 
@@ -43,35 +42,35 @@ function buildSceneDefs(lead: { storeName: string; businessType: string }): Scen
    ============================================================ */
 const RESTAURANT_HOTSPOTS_DESKTOP: Record<string, Hotspot[]> = {
   s1: [
-    { id: 's1a', x: 18, y: 38, title: 'Counter Seating', body: '12 seats facing the marina. We recommend reserving for sunset hours.', ctas: [{ label: 'Reserve counter seat', action: 'reserve' }] },
-    { id: 's1b', x: 52, y: 55, title: 'Open Kitchen', body: "Watch every moment of preparation up close. The chef's hands are within arm's reach." },
-    { id: 's1c', x: 76, y: 42, title: 'Private Room', body: '6 seats with sliding doors. Available for groups of 4 or more.', ctas: [{ label: 'Reserve private room', action: 'reserve' }] },
+    { id: 's1a', x: 18, y: 38, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx', ctas: [{ label: '予約する', action: 'reserve' }] },
+    { id: 's1b', x: 52, y: 55, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's1c', x: 76, y: 42, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', ctas: [{ label: '予約する', action: 'reserve' }] },
   ],
   s2: [
-    { id: 's2a', x: 22, y: 55, title: 'Wagyu Sashimi', body: 'A5 rank from Miyazaki, hand-sliced. Wasabi, shiso, a single grain of sea salt.', price: 'AED 280', ctas: [{ label: 'View full menu', action: 'menu' }, { label: 'Reserve', action: 'reserve' }] },
-    { id: 's2b', x: 50, y: 75, title: 'Binchotan Grill', body: 'White binchotan charcoal from Wakayama, 30 seconds per side. Nothing else.', price: 'AED 360', ctas: [{ label: 'Reserve', action: 'reserve' }] },
-    { id: 's2c', x: 52, y: 30, title: "Chef's Omakase", body: '7 seasonal courses. Available for guests arriving before 7pm.', price: 'AED 880 / person', ctas: [{ label: 'Reserve omakase', action: 'reserve' }] },
+    { id: 's2a', x: 22, y: 55, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', price: '¥X,XXX', ctas: [{ label: 'メニューを見る', action: 'menu' }, { label: '予約する', action: 'reserve' }] },
+    { id: 's2b', x: 50, y: 75, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', price: '¥X,XXX', ctas: [{ label: '予約する', action: 'reserve' }] },
+    { id: 's2c', x: 52, y: 30, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', price: '¥X,XXX / 名', ctas: [{ label: '予約する', action: 'reserve' }] },
   ],
   s3: [
-    { id: 's3a', x: 30, y: 45, title: 'Sourcing', body: 'A5 wagyu exclusively from Miyazaki Prefecture. Weekly delivery, never frozen.' },
-    { id: 's3b', x: 68, y: 35, title: '21-Day Aging', body: '21 days of dry aging to develop depth. The fat softens, umami concentrates.' },
+    { id: 's3a', x: 30, y: 45, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's3b', x: 68, y: 35, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
   ],
 };
 
 const RESTAURANT_HOTSPOTS_MOBILE: Record<string, Hotspot[]> = {
   s1: [
-    { id: 's1a', x: 25, y: 35, title: 'Counter Seating', body: '12 seats facing the marina. We recommend reserving for sunset hours.', ctas: [{ label: 'Reserve counter seat', action: 'reserve' }] },
-    { id: 's1b', x: 50, y: 50, title: 'Open Kitchen', body: "Watch every moment of preparation up close. The chef's hands are within arm's reach." },
-    { id: 's1c', x: 75, y: 35, title: 'Private Room', body: '6 seats with sliding doors. Available for groups of 4 or more.', ctas: [{ label: 'Reserve private room', action: 'reserve' }] },
+    { id: 's1a', x: 25, y: 35, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx', ctas: [{ label: '予約する', action: 'reserve' }] },
+    { id: 's1b', x: 50, y: 50, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's1c', x: 75, y: 35, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', ctas: [{ label: '予約する', action: 'reserve' }] },
   ],
   s2: [
-    { id: 's2a', x: 25, y: 40, title: 'Wagyu Sashimi', body: 'A5 rank from Miyazaki, hand-sliced. Wasabi, shiso, a single grain of sea salt.', price: 'AED 280', ctas: [{ label: 'View full menu', action: 'menu' }, { label: 'Reserve', action: 'reserve' }] },
-    { id: 's2b', x: 50, y: 60, title: 'Binchotan Grill', body: 'White binchotan charcoal from Wakayama, 30 seconds per side. Nothing else.', price: 'AED 360', ctas: [{ label: 'Reserve', action: 'reserve' }] },
-    { id: 's2c', x: 70, y: 30, title: "Chef's Omakase", body: '7 seasonal courses. Available for guests arriving before 7pm.', price: 'AED 880 / person', ctas: [{ label: 'Reserve omakase', action: 'reserve' }] },
+    { id: 's2a', x: 25, y: 40, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', price: '¥X,XXX', ctas: [{ label: 'メニューを見る', action: 'menu' }, { label: '予約する', action: 'reserve' }] },
+    { id: 's2b', x: 50, y: 60, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', price: '¥X,XXX', ctas: [{ label: '予約する', action: 'reserve' }] },
+    { id: 's2c', x: 70, y: 30, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx', price: '¥X,XXX / 名', ctas: [{ label: '予約する', action: 'reserve' }] },
   ],
   s3: [
-    { id: 's3a', x: 30, y: 40, title: 'Sourcing', body: 'A5 wagyu exclusively from Miyazaki Prefecture. Weekly delivery, never frozen.' },
-    { id: 's3b', x: 70, y: 40, title: '21-Day Aging', body: '21 days of dry aging to develop depth. The fat softens, umami concentrates.' },
+    { id: 's3a', x: 30, y: 40, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's3b', x: 70, y: 40, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
   ],
 };
 
@@ -80,35 +79,35 @@ const RESTAURANT_HOTSPOTS_MOBILE: Record<string, Hotspot[]> = {
    ============================================================ */
 const SALON_HOTSPOTS_DESKTOP: Record<string, Hotspot[]> = {
   s1: [
-    { id: 's1a', x: 55, y: 45, title: 'Cut Chair', body: 'ゆったり横になれる、リクライニング付き。お疲れの方には足元のクッションも。' },
-    { id: 's1b', x: 18, y: 55, title: 'Waiting Lounge', body: 'コーヒー・お茶・スパークリングウォーター、すべて無料です。' },
-    { id: 's1c', x: 35, y: 35, title: 'Hair Bar', body: 'サロン用シャンプー・トリートメントの物販。自宅でサロン仕上がりを再現。' },
+    { id: 's1a', x: 55, y: 45, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's1b', x: 18, y: 55, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's1c', x: 35, y: 35, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
   ],
   s2: [
-    { id: 's2a', x: 25, y: 45, title: 'Cut + Treatment', body: 'カット + トリートメントの基本コース。', price: '¥6,500 / 90min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
-    { id: 's2b', x: 55, y: 50, title: 'Color Treatment', body: '傷みを最小限に抑える、ブリーチなしのカラー。', price: '¥9,800 / 120min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
-    { id: 's2c', x: 75, y: 35, title: 'Head Spa', body: '施術中の眠気保証。20分の追加ヘッドスパで頭皮を深くケア。', price: '+¥3,000', ctas: [{ label: 'ヘッドスパ付きで予約', action: 'reserve' }] },
+    { id: 's2a', x: 25, y: 45, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx', price: '¥X,XXX / 90min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
+    { id: 's2b', x: 55, y: 50, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx', price: '¥X,XXX / 120min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
+    { id: 's2c', x: 75, y: 35, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx', price: '+¥X,XXX', ctas: [{ label: 'ヘッドスパ付きで予約', action: 'reserve' }] },
   ],
   s3: [
-    { id: 's3a', x: 30, y: 45, title: 'Stylists', body: '在籍3名、全員キャリア10年以上。「似合う」を一緒に探します。' },
-    { id: 's3b', x: 68, y: 40, title: 'Products', body: 'Aveda・Oway 系を中心に。髪と頭皮、地球に優しい製品だけを使用。' },
+    { id: 's3a', x: 30, y: 45, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's3b', x: 68, y: 40, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
   ],
 };
 
 const SALON_HOTSPOTS_MOBILE: Record<string, Hotspot[]> = {
   s1: [
-    { id: 's1a', x: 50, y: 45, title: 'Cut Chair', body: 'ゆったり横になれる、リクライニング付き。お疲れの方には足元のクッションも。' },
-    { id: 's1b', x: 20, y: 55, title: 'Waiting Lounge', body: 'コーヒー・お茶・スパークリングウォーター、すべて無料です。' },
-    { id: 's1c', x: 75, y: 35, title: 'Hair Bar', body: 'サロン用シャンプー・トリートメントの物販。自宅でサロン仕上がりを再現。' },
+    { id: 's1a', x: 50, y: 45, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's1b', x: 20, y: 55, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's1c', x: 75, y: 35, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
   ],
   s2: [
-    { id: 's2a', x: 25, y: 40, title: 'Cut + Treatment', body: 'カット + トリートメントの基本コース。', price: '¥6,500 / 90min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
-    { id: 's2b', x: 50, y: 55, title: 'Color Treatment', body: '傷みを最小限に抑える、ブリーチなしのカラー。', price: '¥9,800 / 120min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
-    { id: 's2c', x: 75, y: 35, title: 'Head Spa', body: '施術中の眠気保証。20分の追加ヘッドスパで頭皮を深くケア。', price: '+¥3,000', ctas: [{ label: 'ヘッドスパ付きで予約', action: 'reserve' }] },
+    { id: 's2a', x: 25, y: 40, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx', price: '¥X,XXX / 90min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
+    { id: 's2b', x: 50, y: 55, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx', price: '¥X,XXX / 120min', ctas: [{ label: 'このコースで予約', action: 'reserve' }] },
+    { id: 's2c', x: 75, y: 35, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx', price: '+¥X,XXX', ctas: [{ label: 'ヘッドスパ付きで予約', action: 'reserve' }] },
   ],
   s3: [
-    { id: 's3a', x: 30, y: 40, title: 'Stylists', body: '在籍3名、全員キャリア10年以上。「似合う」を一緒に探します。' },
-    { id: 's3b', x: 70, y: 40, title: 'Products', body: 'Aveda・Oway 系を中心に。髪と頭皮、地球に優しい製品だけを使用。' },
+    { id: 's3a', x: 30, y: 40, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
+    { id: 's3b', x: 70, y: 40, title: 'xxxxxx', body: 'xxxxxx xxxxxx xxxxxx xxxxxx' },
   ],
 };
 
@@ -148,13 +147,13 @@ interface HeroOverlayCopy {
 const HERO_OVERLAY_BY_SLUG: Record<string, HeroOverlayCopy> = {
   'la-letizia-dubai-marina': {
     eyebrow: 'LA LETIZIA',
-    title: 'A Quiet Counter, Tonight',
-    subtitle: 'Wagyu from Miyazaki, charcoal from Wakayama. Twelve seats facing the marina.',
+    title: 'xxxxxx xxxxxx',
+    subtitle: 'xxxxxx xxxxxx xxxxxx xxxxxx xxxxxx',
   },
   'noa-hair-tokyo-nakameguro': {
     eyebrow: 'NOA HAIR',
-    title: 'Tomorrow, a little better',
-    subtitle: '中目黒の小さなサロン。今日の続きを、少しだけ変えに来てください。',
+    title: 'xxxxxx xxxxxx',
+    subtitle: 'xxxxxx xxxxxx xxxxxx xxxxxx',
   },
 };
 
@@ -177,6 +176,7 @@ export default function InteractiveLpPage() {
   const [transitionEyebrow, setTransitionEyebrow] = useState('');
   const [transitionTitle, setTransitionTitle] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [heroFadingOut, setHeroFadingOut] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const heroCompletedRef = useRef(false);
 
@@ -235,17 +235,22 @@ export default function InteractiveLpPage() {
   );
 
   const enterSceneMode = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-    document.body.style.overflow = 'hidden';
-    document.body.style.height = '100dvh';
-    setSceneMode(true);
-    setCurrentScene(1);
-    if (sceneDefs.length > 1) {
-      setTransitionEyebrow(sceneDefs[1].eyebrow);
-      setTransitionTitle(sceneDefs[1].title);
-    }
-    setIsTransitioning(true);
-    setTimeout(() => setIsTransitioning(false), 1600);
+    // Start fade-out overlay first, then switch to scene mode
+    setHeroFadingOut(true);
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100dvh';
+      setSceneMode(true);
+      setCurrentScene(1);
+      setHeroFadingOut(false);
+      if (sceneDefs.length > 1) {
+        setTransitionEyebrow(sceneDefs[1].eyebrow);
+        setTransitionTitle(sceneDefs[1].title);
+      }
+      setIsTransitioning(true);
+      setTimeout(() => setIsTransitioning(false), 1600);
+    }, 500);
   }, [sceneDefs]);
 
   // Detect when Hero scrub completes
@@ -437,30 +442,28 @@ export default function InteractiveLpPage() {
   // Build channels based on business type
   const channels: ReservationChannel[] = isSalon
     ? [
-        { type: 'reserve-form', label: 'Reserve Online', url: lead.reservationUrl || lead.infoReservationUrl || '#' },
-        { type: 'call', label: 'Call', sublabel: lead.infoPhone || lead.phoneNumber || '', url: `tel:${lead.infoPhone || lead.phoneNumber || ''}` },
-        { type: 'line', label: 'LINE 友達追加', sublabel: '@noa-hair', url: lineUrl || '#' },
-        { type: 'instagram', label: 'Instagram', sublabel: lead.instagramHandle || '', url: instagramUrl },
-        { type: 'maps', label: 'Map', sublabel: 'Google Maps', url: mapsUrl },
+        { type: 'reserve-form', label: 'オンライン予約', url: lead.reservationUrl || lead.infoReservationUrl || '#' },
+        { type: 'call', label: '電話', sublabel: lead.infoPhone || lead.phoneNumber || '', url: `tel:${lead.infoPhone || lead.phoneNumber || ''}` },
+        { type: 'line', label: 'LINE', sublabel: 'xxxxxx', url: lineUrl || '#' },
+        { type: 'instagram', label: 'Instagram', sublabel: 'xxxxxx', url: instagramUrl },
+        { type: 'maps', label: '地図', sublabel: 'Google Maps', url: mapsUrl },
       ]
     : [
-        { type: 'reserve-form', label: 'Reserve Online', url: lead.reservationUrl || lead.infoReservationUrl || '#' },
-        { type: 'call', label: 'Call', sublabel: lead.infoPhone || lead.phoneNumber || '+971 4 XXX XXXX', url: `tel:${lead.infoPhone || lead.phoneNumber || ''}` },
-        { type: 'whatsapp', label: 'WhatsApp', sublabel: 'Message us', url: whatsappUrl },
-        { type: 'instagram', label: 'Instagram', sublabel: lead.instagramHandle || 'Latest posts', url: instagramUrl },
-        { type: 'maps', label: 'Map', sublabel: 'Google Maps', url: mapsUrl },
+        { type: 'reserve-form', label: 'オンライン予約', url: lead.reservationUrl || lead.infoReservationUrl || '#' },
+        { type: 'call', label: '電話', sublabel: lead.infoPhone || lead.phoneNumber || 'XXX-XXXX-XXXX', url: `tel:${lead.infoPhone || lead.phoneNumber || ''}` },
+        { type: 'whatsapp', label: 'WhatsApp', sublabel: 'xxxxxx', url: whatsappUrl },
+        { type: 'instagram', label: 'Instagram', sublabel: 'xxxxxx', url: instagramUrl },
+        { type: 'maps', label: '地図', sublabel: 'Google Maps', url: mapsUrl },
       ];
 
   // Reservation scene copy
-  const reservationTitle = isSalon ? 'ご予約はこちらから' : 'Your table is waiting';
-  const reservationSubtitle = isSalon ? 'お好きな方法でお気軽にご連絡ください' : `Experience ${lead.storeName} in person`;
+  const reservationTitle = 'xxxxxx xxxxxx';
+  const reservationSubtitle = 'xxxxxx xxxxxx xxxxxx';
 
   // Access scene data
-  const accessAddress = lead.infoAddress || (isSalon ? '東京都目黒区中目黒1-2-3 ノアビル2F' : 'Dubai Marina Walk\nTower 3, Ground Floor\nDubai, UAE');
-  const accessHours = lead.infoHours || (isSalon ? '11:00 — 21:00（火曜定休）' : 'Daily 7:00 AM – 4:00 PM');
-  const accessNote = isSalon
-    ? '東急東横線・東京メトロ日比谷線 中目黒駅より徒歩5分\n駐車場なし（近隣コインパーキングをご利用ください）'
-    : 'Dubai Marina Metro Station — 6 min walk\nValet parking available';
+  const accessAddress = lead.infoAddress || 'xxxxxx xxxxxx\nxxxxxx xxxxxx';
+  const accessHours = lead.infoHours || 'XX:XX — XX:XX';
+  const accessNote = 'xxxxxx xxxxxx xxxxxx\nxxxxxx xxxxxx';
   const mapsEmbedUrl = isSalon
     ? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.7!2d139.6989!3d35.644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z5Lit55uu6buS!5e0!3m2!1sja!2sjp!4v1234567890'
     : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3840.71336055174!2d139.75278397578708!3d35.667317772591836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188babfe1da6ed%3A0xf10d781ee21f3eb9!2zWUFLSU5JS1UgMzcg5paw5qmL5bqX!5e1!3m2!1sja!2sae!4v1780562027490!5m2!1sja!2sae';
@@ -548,6 +551,17 @@ export default function InteractiveLpPage() {
             </div>
           </div>
         </PageScrollScrub>
+      )}
+
+      {/* ===== HERO FADE-OUT OVERLAY ===== */}
+      {heroFadingOut && (
+        <div
+          className="fixed inset-0 z-[150]"
+          style={{
+            background: '#000',
+            animation: 'fadeIn 500ms ease-out forwards',
+          }}
+        />
       )}
 
       {/* ===== SCENE MODE: Interactive scenes ===== */}

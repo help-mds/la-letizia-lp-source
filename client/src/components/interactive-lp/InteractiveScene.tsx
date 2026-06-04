@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { IconX } from '@tabler/icons-react';
 
 /**
@@ -32,7 +32,7 @@ function getTooltipSide(x: number): 'right' | 'left' {
 /**
  * InteractiveScene: A full-viewport scene with a Ken Burns animated background,
  * pulsing "?" hotspots, and tooltip popups.
- * Users tap "?" to reveal information.
+ * Users tap "?" to reveal information. No move-to-corner animation.
  */
 export default function InteractiveScene({
   imageUrl,
@@ -41,6 +41,8 @@ export default function InteractiveScene({
   onCtaAction,
 }: InteractiveSceneProps) {
   const [activePopup, setActivePopup] = useState<string | null>(null);
+  // Track touch start to distinguish taps from swipes
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
 
   // Close popup on Escape key
   useEffect(() => {
@@ -69,6 +71,30 @@ export default function InteractiveScene({
   const handleHotspotClick = useCallback((e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     setActivePopup((prev) => (prev === id ? null : id));
+  }, []);
+
+  // Touch handlers for hotspot buttons — distinguish tap from swipe
+  const handleHotspotTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+  }, []);
+
+  const handleHotspotTouchEnd = useCallback((e: React.TouchEvent, id: string) => {
+    e.stopPropagation();
+    const start = touchStartRef.current;
+    if (!start) return;
+
+    const touch = e.changedTouches[0];
+    const dx = Math.abs(touch.clientX - start.x);
+    const dy = Math.abs(touch.clientY - start.y);
+    const dt = Date.now() - start.time;
+
+    // Only treat as tap if movement < 15px and duration < 400ms
+    if (dx < 15 && dy < 15 && dt < 400) {
+      e.preventDefault(); // Prevent ghost click
+      setActivePopup((prev) => (prev === id ? null : id));
+    }
+    touchStartRef.current = null;
   }, []);
 
   const handleClosePopup = useCallback((e: React.MouseEvent) => {
@@ -128,10 +154,12 @@ export default function InteractiveScene({
               transform: 'translate(-50%, -50%)',
             }}
           >
-            {/* The ? button */}
+            {/* The ? button — NO move animation, stays in place */}
             <button
               className={`hotspot-btn ${isOpen ? 'hotspot-btn--active' : ''}`}
               onClick={(e) => handleHotspotClick(e, hotspot.id)}
+              onTouchStart={handleHotspotTouchStart}
+              onTouchEnd={(e) => handleHotspotTouchEnd(e, hotspot.id)}
               aria-label={hotspot.title}
               aria-expanded={isOpen}
             >
