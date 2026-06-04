@@ -107,14 +107,16 @@ export default function SceneNavigation({
         </button>
       </div>
 
-      {/* Persistent Reserve CTA */}
-      <button
-        className={`scene-persistent-cta ${modeClass}`}
-        onClick={onReserve}
-        aria-label="予約する"
-      >
-        RESERVE
-      </button>
+      {/* Persistent Reserve CTA with outer enclosure */}
+      <div className={`scene-reserve-container ${modeClass}`}>
+        <button
+          className={`scene-persistent-cta ${modeClass}`}
+          onClick={onReserve}
+          aria-label="予約する"
+        >
+          RESERVE
+        </button>
+      </div>
 
       {/* Share button with outer glass container */}
       <div className={`scene-share-container ${modeClass}`}>
