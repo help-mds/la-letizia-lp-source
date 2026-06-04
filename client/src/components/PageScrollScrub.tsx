@@ -169,7 +169,7 @@ export default function PageScrollScrub({
     <div
       ref={containerRef}
       className="relative w-full"
-      style={{ height: '800svh' }}
+      style={{ height: '400svh' }}
     >
       {/* Sticky canvas viewport */}
       <div className="sticky top-0 w-full h-[100svh] overflow-hidden">
@@ -200,11 +200,11 @@ export default function PageScrollScrub({
               </div>
             </div>
           )}
-      </div>
 
-      {/* Overlay children — hidden while loader is active */}
-      <div style={{ opacity: loaderActive ? 0 : 1, transition: 'opacity 0.3s ease' }}>
-        {children}
+        {/* Overlay children — always visible inside sticky viewport */}
+        <div className="absolute inset-0 pointer-events-none" style={{ opacity: loaderActive ? 0 : 1, transition: 'opacity 0.6s ease' }}>
+          {children}
+        </div>
       </div>
     </div>
   );
