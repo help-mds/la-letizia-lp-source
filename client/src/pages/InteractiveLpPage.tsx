@@ -281,6 +281,81 @@ export default function InteractiveLpPage() {
     return () => window.removeEventListener('keydown', handler);
   }, [sceneMode, currentScene, navigateToScene]);
 
+  // ===== SWIPE / WHEEL NAVIGATION (scene mode) =====
+  useEffect(() => {
+    if (!sceneMode) return;
+
+    let cooldown = false;
+    let touchStartY = 0;
+    let touchStartX = 0;
+
+    const COOLDOWN_MS = 1200;
+    const SWIPE_THRESHOLD = 60;
+    const WHEEL_THRESHOLD = 80;
+
+    const triggerNav = (direction: 'next' | 'prev') => {
+      if (cooldown || isTransitioning) return;
+      cooldown = true;
+      if (direction === 'next') {
+        navigateToScene(currentScene + 1);
+      } else {
+        navigateToScene(currentScene - 1);
+      }
+      setTimeout(() => { cooldown = false; }, COOLDOWN_MS);
+    };
+
+    // Wheel (PC trackpad / mouse)
+    let wheelAccum = 0;
+    let wheelTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      wheelAccum += e.deltaY;
+
+      if (wheelTimer) clearTimeout(wheelTimer);
+      wheelTimer = setTimeout(() => { wheelAccum = 0; }, 200);
+
+      if (wheelAccum > WHEEL_THRESHOLD) {
+        triggerNav('next');
+        wheelAccum = 0;
+      } else if (wheelAccum < -WHEEL_THRESHOLD) {
+        triggerNav('prev');
+        wheelAccum = 0;
+      }
+    };
+
+    // Touch (mobile swipe)
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const deltaY = touchStartY - e.changedTouches[0].clientY;
+      const deltaX = Math.abs(touchStartX - e.changedTouches[0].clientX);
+
+      // Ignore horizontal swipes
+      if (deltaX > Math.abs(deltaY)) return;
+
+      if (deltaY > SWIPE_THRESHOLD) {
+        triggerNav('next');
+      } else if (deltaY < -SWIPE_THRESHOLD) {
+        triggerNav('prev');
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+      if (wheelTimer) clearTimeout(wheelTimer);
+    };
+  }, [sceneMode, currentScene, isTransitioning, navigateToScene]);
+
   // Get hotspots based on viewport and business type
   const getHotspotsForScene = useCallback(
     (sceneId: string) => {
