@@ -72,7 +72,7 @@ export default function WestDemoPage() {
   ];
 
   return (
-    <main style={{ backgroundColor: '#0E0D0C' }}>
+    <main className="custom-cursor-active" style={{ backgroundColor: '#0E0D0C' }}>
       {/* === 01 Hero: Vertical video scrub === */}
       <PageScrollScrub
         frameUrls={heroFrames}

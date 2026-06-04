@@ -206,3 +206,8 @@
 - [x] Full integration test (all scenes, transitions, hotspots, popups verified)
 - [x] Accessibility (aria-labels on hotspots and CTAs)
 - [x] AI-generate Selection scene kaiseki overhead image
+
+## Bug Fix: カーソル非表示 + ヒーロー差し替え
+
+- [x] カスタムカーソルがInteractive LPでシステムカーソルを隠している問題を修正
+- [x] ヒーローセクションのスクロールスクラブを37 West（焼肉屋）のフレームデータに差し替え

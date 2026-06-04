@@ -103,7 +103,7 @@ export default function DemoPage() {
   const accentColor = lead.paletteAccent || '#B0552F';
 
   return (
-    <main style={{ backgroundColor: 'var(--bg)', '--accent-dynamic': accentColor } as React.CSSProperties}>
+    <main className="custom-cursor-active" style={{ backgroundColor: 'var(--bg)', '--accent-dynamic': accentColor } as React.CSSProperties}>
       {/* === Cinematic Loading Intro (Option B) === */}
       {hasFrames && (
         <PageScrollScrub

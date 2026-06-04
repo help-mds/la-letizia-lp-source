@@ -9,6 +9,7 @@ import AccessScene from '@/components/interactive-lp/AccessScene';
 import ReservationScene, { ReservationChannel } from '@/components/interactive-lp/ReservationScene';
 import SceneNavigation from '@/components/interactive-lp/SceneNavigation';
 import '@/components/interactive-lp/interactive-lp.css';
+import frameData from '@/data/37west-frames.json';
 
 /* ============================================================
    Scene definitions — derived from lead data
@@ -422,8 +423,8 @@ export default function InteractiveLpPage() {
       {/* ===== HERO MODE: Existing PageScrollScrub ===== */}
       {!sceneMode && (
         <PageScrollScrub
-          frameUrls={lead.frameUrlsLandscape as string[] || []}
-          frameCount={241}
+          frameUrls={frameData.hero.frames}
+          frameCount={frameData.hero.count}
           renderLoader={(progress, ready) => (
             <CinematicLoader
               storeName={lead.storeName || ''}
