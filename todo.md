@@ -172,3 +172,37 @@
 - [x] Verify TypeScript compiles without errors
 - [x] Verify all existing tests pass
 - [x] Visual verification: all sections render correctly
+
+## Interactive Scene LP Template (/lp/:slug)
+
+### Phase 1: InteractiveScene + Hotspots + Popups
+- [x] Select/generate photos for Scene 2 (Space), Scene 3 (Selection), Scene 4 (Craft)
+- [x] Build InteractiveScene.tsx (full-bleed photo + Ken Burns + hotspot layer + popup layer)
+- [x] Build HotspotPopup.tsx (slide-up popup with title, description, CTA)
+- [x] Configure hotspot data structure (business_type-aware)
+
+### Phase 2: SceneTransition + Hero Bridge
+- [x] Build SceneTransition.tsx (zoom-in → black curtain → chapter title → zoom-out, 1.6s)
+- [x] Implement Hero-to-scene-mode bridge (scroll completion → viewport lock → auto-transition)
+- [x] Wire scene navigation state machine
+
+### Phase 3: Access + Reservation + CTA
+- [x] Build AccessScene.tsx (address, hours, map link)
+- [x] Build ReservationScene.tsx (5 CTAs: form, phone, WhatsApp, Instagram, Maps)
+- [x] Add persistent "Reserve" button (top-right, all scenes)
+- [ ] Add leads table columns (phone_number, whatsapp_number, instagram_handle, reservation_url, map_lat, map_lng)
+
+### Phase 4: Navigation
+- [x] Build SceneNav tabs (Hero | Space | Selection | Craft | Access | Reserve)
+- [x] Build dot pagination (G | 1 | 2 | 3 | A | R)
+- [x] Add prev/next arrow buttons
+- [x] Add keyboard navigation (arrow keys, Esc)
+- [x] Add MDS badge (bottom-left, link to mds-fund.com)
+
+### Phase 5: Mobile + Integration
+- [ ] Mobile layout optimization (portrait viewport, hotspot repositioning)
+- [x] Register /lp/:slug route in App.tsx
+- [x] Create InteractiveLpPage.tsx integrating all components
+- [x] Full integration test (all scenes, transitions, hotspots, popups verified)
+- [x] Accessibility (aria-labels on hotspots and CTAs)
+- [x] AI-generate Selection scene kaiseki overhead image

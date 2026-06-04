@@ -1,0 +1,422 @@
+/* ============================================================
+   Interactive Scene LP — Styles
+   ============================================================ */
+
+/* Ken Burns animation */
+@keyframes kenBurns {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.06) translate(-0.5%, -0.3%); }
+}
+
+/* ---- Hotspot ---- */
+.hotspot-btn {
+  position: absolute;
+  z-index: 20;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s ease, transform 0.16s ease;
+}
+.hotspot-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.hotspot-btn:active {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+.hotspot-plus {
+  color: white;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1;
+}
+.hotspot-ripple {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: hotspotPulse 2.4s ease-out infinite;
+}
+@keyframes hotspotPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ---- Popup ---- */
+.scene-popup {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: rgba(18, 18, 18, 0.92);
+  backdrop-filter: blur(16px);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 20px 24px;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.3s ease;
+  pointer-events: none;
+}
+.scene-popup.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.scene-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+.scene-popup-close:hover {
+  color: white;
+}
+.scene-popup-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 6px;
+}
+.scene-popup-body {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.scene-popup-price {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.scene-popup-ctas {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.scene-popup-cta-btn {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  font-size: 11px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.scene-popup-cta-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ---- Access Scene ---- */
+.scene-access-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.scene-access-detail {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+}
+.scene-map-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.scene-map-link:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ---- Reservation CTA Grid ---- */
+.scene-cta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 360px;
+}
+.scene-cta-btn {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+.scene-cta-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.scene-cta-btn-primary {
+  background: rgba(255, 255, 255, 0.95);
+  color: #111;
+  border-color: transparent;
+  grid-column: span 2;
+  justify-content: center;
+}
+.scene-cta-btn-primary:hover {
+  background: white;
+}
+.scene-cta-btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.scene-cta-btn-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+.scene-cta-btn-sub {
+  font-size: 9px;
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+}
+
+/* ---- Navigation: Tabs ---- */
+.scene-tabs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+.scene-tab {
+  flex: 1;
+  padding: 10px 6px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  border-bottom: 1.5px solid transparent;
+}
+.scene-tab:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+.scene-tab.active {
+  color: white;
+  border-bottom-color: white;
+}
+
+/* ---- Navigation: Dots ---- */
+.scene-dots {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.scene-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.scene-dot:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+.scene-dot.active {
+  background: white;
+  color: #111;
+  border-color: white;
+}
+
+/* ---- Navigation: Arrows ---- */
+.scene-arrows {
+  position: absolute;
+  right: 12px;
+  bottom: 16px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.scene-arrow-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.scene-arrow-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+.scene-arrow-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ---- Persistent CTA ---- */
+.scene-persistent-cta {
+  position: absolute;
+  top: 50px;
+  right: 12px;
+  z-index: 60;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111;
+  border: none;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.16s;
+}
+.scene-persistent-cta:hover {
+  background: white;
+}
+.scene-persistent-cta:active {
+  transform: scale(0.96);
+}
+
+/* ---- MDS Badge ---- */
+.scene-mds-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 60;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.scene-mds-badge:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---- Scene container states ---- */
+.scene-container {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+.scene-container.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.scene-container.exiting {
+  transform: scale(1.04);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+/* ---- Mobile adjustments ---- */
+@media (max-width: 640px) {
+  .scene-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scene-tab {
+    font-size: 9px;
+    padding: 8px 4px;
+    white-space: nowrap;
+  }
+  .scene-dots {
+    display: none;
+  }
+  .scene-persistent-cta {
+    top: auto;
+    bottom: 12px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+  .scene-persistent-cta:active {
+    transform: translateX(50%) scale(0.96);
+  }
+  .scene-arrows {
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+  .scene-map-link {
+    width: 120px;
+    height: 120px;
+  }
+  .scene-cta-grid {
+    grid-template-columns: 1fr;
+  }
+  .scene-cta-btn-primary {
+    grid-column: span 1;
+  }
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .hotspot-ripple {
+    animation: none;
+  }
+  .scene-popup {
+    transition: opacity 0.2s ease;
+    transform: none !important;
+  }
+  .scene-popup.show {
+    transform: none !important;
+  }
+  .scene-container {
+    transition: opacity 0.2s ease;
+  }
+  .scene-container.exiting {
+    transform: none;
+  }
+}
