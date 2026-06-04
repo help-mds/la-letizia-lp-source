@@ -1,15 +1,14 @@
-import { IconMapPin } from '@tabler/icons-react';
-
 interface AccessSceneProps {
   address: string;
   hours: string;
   accessNote?: string;
   mapsUrl?: string;
+  mapsEmbedUrl?: string;
 }
 
 /**
  * AccessScene: Scene 4 (Visit/Access).
- * Dark gradient background with address, hours, and a map link panel.
+ * Dark gradient background with address, hours, and embedded Google Map.
  * Responsive: side-by-side on desktop, stacked on portrait mobile.
  */
 export default function AccessScene({
@@ -17,6 +16,7 @@ export default function AccessScene({
   hours,
   accessNote,
   mapsUrl,
+  mapsEmbedUrl,
 }: AccessSceneProps) {
   const addressLines = address.split('\n');
   const hoursLines = hours.split('\n');
@@ -75,37 +75,61 @@ export default function AccessScene({
         )}
       </div>
 
-      {/* Right/Bottom: Map link */}
+      {/* Right/Bottom: Embedded Google Map */}
       <div className="scene-access-right flex-1 flex items-center justify-center p-4 sm:p-8">
-        <a
-          href={mapsUrl || '#'}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="scene-map-link"
-          aria-label="Open in Google Maps"
-        >
-          <IconMapPin size={32} style={{ opacity: 0.6 }} />
-          <div
-            style={{
-              fontSize: '10px',
-              letterSpacing: '0.18em',
-              opacity: 0.7,
-              marginTop: '8px',
-              textTransform: 'uppercase',
-            }}
-          >
-            OPEN MAP
+        {mapsEmbedUrl ? (
+          <div className="scene-map-embed">
+            <iframe
+              src={mapsEmbedUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0, borderRadius: '12px' }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Google Maps"
+            />
+            {mapsUrl && (
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="scene-map-open-link"
+              >
+                Open in Google Maps
+              </a>
+            )}
           </div>
-          <div
-            style={{
-              fontSize: '8px',
-              opacity: 0.4,
-              marginTop: '4px',
-            }}
+        ) : (
+          <a
+            href={mapsUrl || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="scene-map-link"
+            aria-label="Open in Google Maps"
           >
-            Google Maps
-          </div>
-        </a>
+            <div
+              style={{
+                fontSize: '10px',
+                letterSpacing: '0.18em',
+                opacity: 0.7,
+                marginTop: '8px',
+                textTransform: 'uppercase',
+              }}
+            >
+              OPEN MAP
+            </div>
+            <div
+              style={{
+                fontSize: '8px',
+                opacity: 0.4,
+                marginTop: '4px',
+              }}
+            >
+              Google Maps
+            </div>
+          </a>
+        )}
       </div>
     </div>
   );

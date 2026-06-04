@@ -53,92 +53,89 @@
   100% { transform: scale(1.7); opacity: 0; }
 }
 
-/* ---- Popup: Center Modal ---- */
-.scene-popup-backdrop {
+/* ---- Hotspot Tooltip (anchored beside hotspot) ---- */
+.hotspot-anchor {
+  z-index: 20;
+}
+.hotspot-tooltip {
   position: absolute;
-  inset: 0;
-  z-index: 40;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 16px 18px 14px;
+  z-index: 50;
+  animation: tooltipIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.hotspot-tooltip--right {
+  left: calc(100% + 16px);
+}
+.hotspot-tooltip--left {
+  right: calc(100% + 16px);
+}
+@keyframes tooltipIn {
+  from { opacity: 0; transform: translateY(-50%) scale(0.95); }
+  to { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+.hotspot-tooltip-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
-  animation: popupFadeIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-}
-@keyframes popupFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.scene-popup-modal {
-  position: relative;
-  width: 340px;
-  max-width: 85vw;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 0.5px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
-  padding: 24px 24px 20px;
-  animation: popupScaleIn 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-}
-@keyframes popupScaleIn {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-.scene-popup-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border: none;
   border-radius: 50%;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
-.scene-popup-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+.hotspot-tooltip-close:hover {
+  background: rgba(255, 255, 255, 0.15);
   color: white;
 }
-.scene-popup-title {
-  font-size: 16px;
+.hotspot-tooltip-title {
+  font-size: 14px;
   font-weight: 500;
   color: white;
-  margin-bottom: 8px;
-  padding-right: 32px;
+  margin-bottom: 6px;
+  padding-right: 28px;
 }
-.scene-popup-body {
-  font-size: 13px;
+.hotspot-tooltip-body {
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.75);
-  line-height: 1.7;
-  margin-bottom: 10px;
+  line-height: 1.6;
+  margin-bottom: 8px;
 }
-.scene-popup-price {
-  font-size: 14px;
+.hotspot-tooltip-price {
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
-.scene-popup-ctas {
+.hotspot-tooltip-ctas {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
-.scene-popup-cta-btn {
-  padding: 8px 14px;
+.hotspot-tooltip-cta-btn {
+  padding: 6px 12px;
   background: rgba(255, 255, 255, 0.1);
   border: 0.5px solid rgba(255, 255, 255, 0.25);
   color: white;
-  font-size: 11px;
-  border-radius: 6px;
+  font-size: 10px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background 0.2s;
 }
-.scene-popup-cta-btn:hover {
+.hotspot-tooltip-cta-btn:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
@@ -171,6 +168,37 @@
 .scene-map-link:hover {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.3);
+}
+.scene-map-embed {
+  width: 100%;
+  max-width: 420px;
+  height: 320px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+}
+.scene-map-embed iframe {
+  width: 100%;
+  height: 100%;
+}
+.scene-map-open-link {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  border-radius: 6px;
+  color: white;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.scene-map-open-link:hover {
+  opacity: 1;
 }
 
 /* ---- Reservation CTA Grid ---- */
@@ -476,19 +504,28 @@
     inset: -6px;
   }
 
-  /* Popup modal: mobile adjustments */
-  .scene-popup-modal {
-    width: 90vw;
-    max-width: 90vw;
-    padding: 20px 18px calc(18px + env(safe-area-inset-bottom));
-    max-height: 60vh;
+  /* Tooltip: mobile adjustments — show below hotspot on small screens */
+  .hotspot-tooltip {
+    position: fixed;
+    top: auto;
+    bottom: 80px;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    width: 85vw;
+    max-width: 320px;
+    max-height: 50vh;
     overflow-y: auto;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
   }
-  .scene-popup-title {
-    font-size: 14px;
+  .hotspot-tooltip--right,
+  .hotspot-tooltip--left {
+    left: 50% !important;
+    right: auto !important;
   }
-  .scene-popup-body {
-    font-size: 12px;
+  @keyframes tooltipIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 
   /* Map link: smaller on mobile */
@@ -545,8 +582,9 @@
     padding: 7px 14px;
     font-size: 10px;
   }
-  .scene-popup-modal {
-    padding: 14px 12px calc(16px + env(safe-area-inset-bottom));
+  .hotspot-tooltip {
+    width: 90vw;
+    bottom: 70px;
   }
 }
 

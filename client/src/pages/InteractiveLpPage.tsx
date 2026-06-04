@@ -394,7 +394,7 @@ export default function InteractiveLpPage() {
   // Derive scene images from lead data
   const galleryImages = (lead.galleryImages as string[] | null) || [];
   const sceneImages = {
-    s1: galleryImages[1] || '/placeholder-space.jpg', // gallery-2 = space/interior
+    s1: '/manus-storage/37west-space-interior_400cd9de.webp', // 37 West interior photo
     s2: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663064885811/MVWtXfT9PJdjxCo6eCiQbT/lp-selection-overhead-eHmSyrXD96nxSAFVzzMQiM.webp', // AI-generated kaiseki overhead
     s3: '/manus-storage/lp-craft-scene_16c7baf2.png', // AI-generated craft scene
   };
@@ -494,9 +494,10 @@ export default function InteractiveLpPage() {
                 >
                   <AccessScene
                     address={lead.infoAddress || 'Dubai Marina Walk\nTower 3, Ground Floor\nDubai, UAE'}
-                    hours={lead.infoHours || 'Daily 7:00 AM – 4:00 PM'}
-                    accessNote="Dubai Marina Metro Station — 6 min walk\nValet parking available"
+                    hours={lead.infoHours || 'Daily 7:00 AM \u2013 4:00 PM'}
+                    accessNote="Dubai Marina Metro Station \u2014 6 min walk\nValet parking available"
                     mapsUrl={mapsUrl}
+                    mapsEmbedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3840.71336055174!2d139.75278397578708!3d35.667317772591836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188babfe1da6ed%3A0xf10d781ee21f3eb9!2zWUFLSU5JS1UgMzcg5paw5qmL5bqX!5e1!3m2!1sja!2sae!4v1780562027490!5m2!1sja!2sae"
                   />
                 </div>
               );

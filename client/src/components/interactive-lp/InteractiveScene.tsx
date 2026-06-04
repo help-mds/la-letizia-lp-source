@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { IconX } from '@tabler/icons-react';
 
 /**
@@ -23,11 +23,16 @@ interface InteractiveSceneProps {
 }
 
 /**
+ * Compute tooltip position class based on hotspot location.
+ * Tooltip appears to the right by default, or left if hotspot is on the right side.
+ */
+function getTooltipSide(x: number): 'right' | 'left' {
+  return x > 60 ? 'left' : 'right';
+}
+
+/**
  * InteractiveScene: A full-viewport scene with a Ken Burns animated background,
- * pulsing "+" hotspots, and center modal popups.
- *
- * Used for scenes 1-3 (The Space, The Selection, The Craft).
- * Each scene is a single large photo with interactive discovery points.
+ * pulsing "?" hotspots, and tooltip popups anchored beside each hotspot.
  */
 export default function InteractiveScene({
   imageUrl,
@@ -36,7 +41,6 @@ export default function InteractiveScene({
   onCtaAction,
 }: InteractiveSceneProps) {
   const [activePopup, setActivePopup] = useState<string | null>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
 
   // Close popup on Escape key
   useEffect(() => {
@@ -53,35 +57,31 @@ export default function InteractiveScene({
     if (!isActive) setActivePopup(null);
   }, [isActive]);
 
-  const handleHotspotClick = useCallback((id: string) => {
+  // Close on click anywhere outside hotspots/tooltips
+  const handleBackgroundClick = useCallback(() => {
+    if (activePopup) setActivePopup(null);
+  }, [activePopup]);
+
+  const handleHotspotClick = useCallback((e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
     setActivePopup((prev) => (prev === id ? null : id));
   }, []);
 
-  const handleClosePopup = useCallback(() => {
+  const handleClosePopup = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
     setActivePopup(null);
   }, []);
 
-  // Close on backdrop click (outside the modal content)
-  const handleBackdropClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        setActivePopup(null);
-      }
-    },
-    [],
-  );
-
   const handleCtaClick = useCallback(
-    (action: string) => {
+    (e: React.MouseEvent, action: string) => {
+      e.stopPropagation();
       onCtaAction?.(action);
     },
     [onCtaAction],
   );
 
-  const activeHotspot = hotspots.find((h) => h.id === activePopup);
-
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden" onClick={handleBackgroundClick}>
       {/* Ken Burns animated background */}
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center"
@@ -98,63 +98,69 @@ export default function InteractiveScene({
         style={{ boxShadow: 'inset 0 0 150px rgba(0,0,0,0.55)' }}
       />
 
-      {/* Hotspots */}
-      {hotspots.map((hotspot) => (
-        <button
-          key={hotspot.id}
-          className="hotspot-btn"
-          style={{
-            position: 'absolute',
-            left: `${hotspot.x}%`,
-            top: `${hotspot.y}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-          onClick={() => handleHotspotClick(hotspot.id)}
-          aria-label={hotspot.title}
-        >
-          <span className="hotspot-icon">?</span>
-          <span className="hotspot-ripple" />
-        </button>
-      ))}
+      {/* Hotspots with inline tooltips */}
+      {hotspots.map((hotspot) => {
+        const isOpen = activePopup === hotspot.id;
+        const side = getTooltipSide(hotspot.x);
 
-      {/* Center Modal Popup with backdrop */}
-      {activePopup && activeHotspot && (
-        <div
-          className="scene-popup-backdrop"
-          onClick={handleBackdropClick}
-          role="dialog"
-          aria-modal="true"
-          aria-label={activeHotspot.title}
-        >
-          <div ref={modalRef} className="scene-popup-modal">
+        return (
+          <div
+            key={hotspot.id}
+            className="hotspot-anchor"
+            style={{
+              position: 'absolute',
+              left: `${hotspot.x}%`,
+              top: `${hotspot.y}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            {/* The ? button */}
             <button
-              className="scene-popup-close"
-              onClick={handleClosePopup}
-              aria-label="Close"
+              className={`hotspot-btn ${isOpen ? 'hotspot-btn--active' : ''}`}
+              onClick={(e) => handleHotspotClick(e, hotspot.id)}
+              aria-label={hotspot.title}
+              aria-expanded={isOpen}
             >
-              <IconX size={18} />
+              <span className="hotspot-icon">?</span>
+              {!isOpen && <span className="hotspot-ripple" />}
             </button>
-            <div className="scene-popup-title">{activeHotspot.title}</div>
-            <div className="scene-popup-body">{activeHotspot.body}</div>
-            {activeHotspot.price && (
-              <div className="scene-popup-price">{activeHotspot.price}</div>
-            )}
-            {activeHotspot.ctas && activeHotspot.ctas.length > 0 && (
-              <div className="scene-popup-ctas">
-                {activeHotspot.ctas.map((cta) => (
-                  <button
-                    key={cta.action}
-                    className="scene-popup-cta-btn"
-                    onClick={() => handleCtaClick(cta.action)}
-                  >
-                    {cta.label}
-                  </button>
-                ))}
+
+            {/* Tooltip anchored beside the hotspot */}
+            {isOpen && (
+              <div
+                className={`hotspot-tooltip hotspot-tooltip--${side}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className="hotspot-tooltip-close"
+                  onClick={handleClosePopup}
+                  aria-label="Close"
+                >
+                  <IconX size={14} />
+                </button>
+                <div className="hotspot-tooltip-title">{hotspot.title}</div>
+                <div className="hotspot-tooltip-body">{hotspot.body}</div>
+                {hotspot.price && (
+                  <div className="hotspot-tooltip-price">{hotspot.price}</div>
+                )}
+                {hotspot.ctas && hotspot.ctas.length > 0 && (
+                  <div className="hotspot-tooltip-ctas">
+                    {hotspot.ctas.map((cta) => (
+                      <button
+                        key={cta.action}
+                        className="hotspot-tooltip-cta-btn"
+                        onClick={(e) => handleCtaClick(e, cta.action)}
+                      >
+                        {cta.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
-        </div>
-      )}
+        );
+      })}
     </div>
   );
 }
