@@ -8,8 +8,7 @@ import SceneTransition from '@/components/interactive-lp/SceneTransition';
 import AccessScene from '@/components/interactive-lp/AccessScene';
 import ReservationScene, { ReservationChannel } from '@/components/interactive-lp/ReservationScene';
 import SceneNavigation from '@/components/interactive-lp/SceneNavigation';
-import { useAutoplay } from '@/hooks/useAutoplay';
-import { useSceneScroll } from '@/hooks/useSceneScroll';
+
 import '@/components/interactive-lp/interactive-lp.css';
 
 // Frame data imports
@@ -159,10 +158,6 @@ const HERO_OVERLAY_BY_SLUG: Record<string, HeroOverlayCopy> = {
   },
 };
 
-/* ============================================================
-   Autoplay-enabled scenes
-   ============================================================ */
-const AUTOPLAY_SCENES = new Set(['s1', 's2', 's3']);
 
 /* ============================================================
    Main Page Component
@@ -286,23 +281,7 @@ export default function InteractiveLpPage() {
     return () => window.removeEventListener('keydown', handler);
   }, [sceneMode, currentScene, navigateToScene]);
 
-  // ===== SCROLL-TO-NAVIGATE (wheel/swipe in scene mode) =====
-  useSceneScroll({
-    enabled: sceneMode,
-    isTransitioning,
-    onNext: useCallback(() => navigateToScene(currentScene + 1), [navigateToScene, currentScene]),
-    onPrev: useCallback(() => navigateToScene(currentScene - 1), [navigateToScene, currentScene]),
-    onUserScroll: useCallback(() => {
-      // Interrupt autoplay when user scrolls to navigate
-      autoplayInterruptRef.current?.();
-    }, []),
-  });
-
-  // ===== AUTOPLAY =====
-  // Get current scene's hotspots for autoplay
-  const currentSceneId = sceneDefs[currentScene]?.id || '';
-  const autoplayEnabled = AUTOPLAY_SCENES.has(currentSceneId);
-
+  // Get hotspots based on viewport and business type
   const getHotspotsForScene = useCallback(
     (sceneId: string) => {
       if (!lead) return [];
@@ -314,31 +293,6 @@ export default function InteractiveLpPage() {
     },
     [isMobile, lead],
   );
-
-  const currentHotspots = useMemo(
-    () => getHotspotsForScene(currentSceneId),
-    [getHotspotsForScene, currentSceneId],
-  );
-
-  const hotspotIds = useMemo(() => currentHotspots.map((h) => h.id), [currentHotspots]);
-  const hotspotBodies = useMemo(() => currentHotspots.map((h) => h.body), [currentHotspots]);
-
-  const {
-    activePopupId: autoplayPopupId,
-    glowingHotspotId,
-    interrupt: autoplayInterrupt,
-  } = useAutoplay({
-    hotspotIds,
-    hotspotBodies,
-    isActive: sceneMode && currentScene > 0,
-    sceneId: currentSceneId,
-    isTransitioning,
-    enabled: autoplayEnabled,
-  });
-
-  // Store interrupt ref for scroll handler
-  const autoplayInterruptRef = useRef(autoplayInterrupt);
-  autoplayInterruptRef.current = autoplayInterrupt;
 
   const handleReserve = useCallback(() => {
     const ctaIndex = sceneDefs.findIndex((s) => s.id === 'cta');
@@ -578,9 +532,6 @@ export default function InteractiveLpPage() {
                   hotspots={getHotspots(scene.id)}
                   isActive={isActive}
                   onCtaAction={handleCtaAction}
-                  autoplayPopupId={isActive && scene.id === currentSceneId ? autoplayPopupId : null}
-                  glowingHotspotId={isActive && scene.id === currentSceneId ? glowingHotspotId : null}
-                  onUserInterrupt={autoplayInterrupt}
                 />
               </div>
             );
