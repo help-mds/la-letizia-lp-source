@@ -296,10 +296,10 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .scene-pill-dot {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -307,23 +307,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 0.02em;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.15);
 }
+.scene-pill-dot-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
 .scene-pill-dot:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.4);
-  color: rgba(255, 255, 255, 0.9);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 12px rgba(0, 0, 0, 0.2);
 }
+.scene-pill-dot:hover .scene-pill-dot-circle {
+  background: rgba(255, 255, 255, 0.8);
+}
 .scene-pill-dot.active {
+  background: rgba(201, 169, 110, 0.15);
+  border-color: var(--beige-gold);
+  box-shadow: 0 0 12px rgba(201, 169, 110, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.scene-pill-dot.active .scene-pill-dot-circle {
   background: var(--beige-gold);
-  border-color: var(--beige-light);
-  color: #1a1a1a;
-  box-shadow: 0 0 16px rgba(201, 169, 110, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  width: 12px;
+  height: 12px;
+  box-shadow: 0 0 8px rgba(201, 169, 110, 0.5);
 }
 
 /* ============================================================
@@ -400,29 +410,78 @@
 }
 
 /* ============================================================
-   MDS Badge (glassmorphism)
+   MDS Badge (bottom-left)
    ============================================================ */
 .scene-mds-badge {
   position: fixed;
-  top: 22px;
+  bottom: 16px;
   left: 16px;
   z-index: 60;
   font-size: 9px;
   letter-spacing: 0.16em;
   padding: 6px 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.4);
   text-decoration: none;
   text-transform: uppercase;
   transition: color 0.2s, border-color 0.2s;
-  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .scene-mds-badge:hover {
-  color: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ============================================================
+   Share Button (left-bottom, glass style)
+   ============================================================ */
+.scene-share-btn {
+  position: fixed;
+  bottom: 56px;
+  left: 16px;
+  z-index: 60;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: var(--glass-shadow);
+}
+.scene-share-btn:hover {
+  background: rgba(201, 169, 110, 0.25);
+  border-color: var(--beige-gold);
+  color: var(--beige-gold);
+  box-shadow: 0 4px 20px rgba(201, 169, 110, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.scene-share-btn:active {
+  transform: scale(0.92);
+}
+.scene-share-copied {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--beige-gold);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  animation: copiedFadeIn 0.2s ease;
+}
+@keyframes copiedFadeIn {
+  from { opacity: 0; transform: translateY(-50%) translateX(-4px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
 /* ---- Scene container states ---- */
@@ -546,14 +605,22 @@
     padding: 14px 16px;
   }
 
-  /* MDS badge: top-left on mobile */
+  /* MDS badge: bottom-left on mobile */
   .scene-mds-badge {
-    top: 14px;
+    bottom: 12px;
     left: 12px;
-    bottom: auto;
+    top: auto;
     font-size: 8px;
     padding: 4px 8px;
     letter-spacing: 0.14em;
+  }
+
+  /* Share button: left-bottom on mobile, above MDS badge */
+  .scene-share-btn {
+    bottom: 44px;
+    left: 12px;
+    width: 44px;
+    height: 44px;
   }
 }
 
