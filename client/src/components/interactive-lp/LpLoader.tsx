@@ -3,51 +3,48 @@ import { useEffect, useRef, useState } from 'react';
 /**
  * LpLoader — Redesigned loading screen for /lp/:slug
  *
- * White (#FBFAF8) background with centered vertical stack:
- * 1. MDS logo (large, ~48px height) — top of group
- * 2. "La Letizia" in Fraunces italic ~48px black
- * 3. Decorative line (60px wide, 1px)
- * 4. "CREATED BY" text
- * 5. MDS logo (small, ~24px) — at bottom
+ * Shows for exactly 0.8 seconds, then auto-fades out to reveal the Hero.
+ * Does NOT wait for frame loading to complete.
  *
- * Layout matches reference: logo → title → line → "CREATED BY" → logo
- *
- * On load complete: 0.5s fade out (white bg → transparent, revealing Hero beneath)
+ * Layout (centered vertical stack):
+ * 1. MDS logo (48px height)
+ * 2. "La Letizia" Fraunces italic 48px
+ * 3. Decorative line (60px)
+ * 4. "CREATED BY MDS" text
  */
 interface LpLoaderProps {
   ready: boolean;
   onComplete: () => void;
 }
 
-export default function LpLoader({ ready, onComplete }: LpLoaderProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
+export default function LpLoader({ ready: _ready, onComplete }: LpLoaderProps) {
   const [hasExited, setHasExited] = useState(false);
   const exitTriggered = useRef(false);
   const [fadeOut, setFadeOut] = useState(false);
 
-  // Exit animation when ready
+  // Auto-dismiss after 0.8 seconds (regardless of frame load status)
   useEffect(() => {
-    if (!ready || exitTriggered.current) return;
-    exitTriggered.current = true;
+    if (exitTriggered.current) return;
 
-    // Brief pause before fade out (let user see the branding)
     const timer = setTimeout(() => {
+      if (exitTriggered.current) return;
+      exitTriggered.current = true;
       setFadeOut(true);
-      // After fade completes, unmount
+
+      // After fade animation completes (0.5s), unmount and notify parent
       setTimeout(() => {
         setHasExited(true);
         onComplete();
-      }, 550);
-    }, 300);
+      }, 500);
+    }, 800);
 
     return () => clearTimeout(timer);
-  }, [ready, onComplete]);
+  }, [onComplete]);
 
   if (hasExited) return null;
 
   return (
     <div
-      ref={overlayRef}
       className="fixed inset-0 flex flex-col items-center justify-center"
       style={{
         zIndex: 99999,
@@ -57,7 +54,7 @@ export default function LpLoader({ ready, onComplete }: LpLoaderProps) {
         willChange: 'opacity',
       }}
     >
-      {/* MDS Logo — large, top of the group */}
+      {/* MDS Logo — 48px height, top of group */}
       <img
         src="/manus-storage/logoMDSblack_465d94de.webp"
         alt="MDS"
@@ -94,7 +91,7 @@ export default function LpLoader({ ready, onComplete }: LpLoaderProps) {
         }}
       />
 
-      {/* "CREATED BY" — 11px, letter-spacing 0.3em, gray */}
+      {/* "CREATED BY MDS" — 11px, letter-spacing 0.3em, gray */}
       <div
         style={{
           marginTop: '16px',
@@ -105,21 +102,8 @@ export default function LpLoader({ ready, onComplete }: LpLoaderProps) {
           fontWeight: 400,
         }}
       >
-        CREATED BY
+        CREATED BY MDS
       </div>
-
-      {/* MDS Logo — small, below "CREATED BY" */}
-      <img
-        src="/manus-storage/logoMDSblack_465d94de.webp"
-        alt="MDS"
-        style={{
-          marginTop: '12px',
-          height: '24px',
-          width: 'auto',
-          objectFit: 'contain',
-          opacity: 0.7,
-        }}
-      />
     </div>
   );
 }
