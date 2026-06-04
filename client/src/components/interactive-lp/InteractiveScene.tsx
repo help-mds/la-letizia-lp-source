@@ -33,7 +33,7 @@ function getTooltipSide(x: number): 'right' | 'left' {
 /**
  * InteractiveScene: A full-viewport scene with a Ken Burns animated background,
  * pulsing "?" hotspots, and tooltip popups.
- * Desktop: tooltip anchored beside hotspot.
+ * Desktop: tooltip anchored beside hotspot with background blur+darken.
  * Mobile: full-screen centered modal (Marina Bay Sands style).
  */
 export default function InteractiveScene({
@@ -83,26 +83,33 @@ export default function InteractiveScene({
   );
 
   const activeHotspot = hotspots.find((h) => h.id === activePopup);
+  const hasPopup = !!activePopup;
 
   return (
     <div className="absolute inset-0 overflow-hidden" onClick={handleBackgroundClick}>
-      {/* Ken Burns animated background */}
+      {/* Ken Burns animated background — blurs when popup is open */}
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center"
         style={{
           backgroundImage: `url(${imageUrl})`,
           animation: isActive ? 'kenBurns 18s ease-in-out infinite alternate' : 'none',
           willChange: 'transform',
+          filter: hasPopup ? 'blur(4px) brightness(0.7)' : 'blur(0px) brightness(1)',
+          transition: 'filter 0.4s ease',
         }}
       />
 
-      {/* Vignette overlay */}
+      {/* Vignette overlay — also blurs with background */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ boxShadow: 'inset 0 0 150px rgba(0,0,0,0.55)' }}
+        style={{
+          boxShadow: 'inset 0 0 150px rgba(0,0,0,0.55)',
+          filter: hasPopup ? 'blur(4px) brightness(0.7)' : 'none',
+          transition: 'filter 0.4s ease',
+        }}
       />
 
-      {/* Hotspots layer — positioned independently from Ken Burns background */}
+      {/* Hotspots layer — NOT blurred, stays interactive */}
       <div className="absolute inset-0" style={{ zIndex: 20 }}>
       {hotspots.map((hotspot) => {
         const isOpen = activePopup === hotspot.id;

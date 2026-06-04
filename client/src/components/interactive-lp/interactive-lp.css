@@ -5,12 +5,16 @@
 
 /* ---- Design Tokens ---- */
 :root {
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-bg-strong: rgba(255, 255, 255, 0.14);
-  --glass-border: rgba(255, 255, 255, 0.22);
-  --glass-border-strong: rgba(255, 255, 255, 0.4);
+  /* Apple Vision Pro glass tokens */
+  --glass-bg: rgba(20, 20, 20, 0.35);
+  --glass-bg-strong: rgba(20, 20, 20, 0.45);
+  --glass-border: 0.5px solid rgba(255, 255, 255, 0.18);
+  --glass-border-color: rgba(255, 255, 255, 0.18);
+  --glass-border-strong: rgba(255, 255, 255, 0.35);
   --glass-blur: 16px;
-  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-saturate: saturate(180%);
+  --glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --glass-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 12px 32px rgba(0, 0, 0, 0.35);
   --beige-gold: #C9A96E;
   --beige-light: #D4B896;
   --beige-soft: #E8D5B7;
@@ -36,10 +40,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 20, 20, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 .scene-top-header-name {
   font-size: 11px;
@@ -66,22 +71,22 @@
   z-index: 20;
   width: 54px;
   height: 54px;
-  border: 1.5px solid var(--glass-border-strong);
-  background: var(--glass-bg-strong);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 20, 0.35);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   transition: background 0.2s ease, transform 0.16s ease, border-color 0.2s, box-shadow 0.2s;
-  box-shadow: var(--glass-shadow);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 .hotspot-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: rgba(20, 20, 20, 0.5);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 .hotspot-btn:active {
   transform: translate(-50%, -50%) scale(0.95);
@@ -134,7 +139,7 @@
   from { opacity: 0; transform: translateY(-50%) scale(0.95); }
   to { opacity: 1; transform: translateY(-50%) scale(1); }
 }
-/* Close button: positioned inside card top-left to avoid overlapping hotspot */
+/* Close button: Apple Vision Pro glass style */
 .hotspot-tooltip-close {
   position: absolute;
   top: 12px;
@@ -144,18 +149,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  border: none;
+  background: rgba(20, 20, 20, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
   border-radius: 50%;
-  color: #111;
+  color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
-  transition: transform 0.16s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.16s, box-shadow 0.2s, background 0.2s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
   z-index: 10;
 }
 .hotspot-tooltip-close:hover {
   transform: scale(1.08);
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  background: rgba(20, 20, 20, 0.5);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 .hotspot-tooltip-close:active {
   transform: scale(0.95);
@@ -336,26 +345,28 @@
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(20, 20, 20, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   border-radius: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 .scene-pill-dot {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(20, 20, 20, 0.35);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 .scene-pill-dot-circle {
   width: 10px;
@@ -365,9 +376,9 @@
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .scene-pill-dot:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(20, 20, 20, 0.5);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 .scene-pill-dot:hover .scene-pill-dot-circle {
   background: rgba(255, 255, 255, 0.8);
@@ -400,23 +411,23 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 20, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   color: rgba(255, 255, 255, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: var(--glass-shadow);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 .scene-arrow-btn:hover:not(:disabled) {
-  background: var(--glass-bg-strong);
-  border-color: var(--glass-border-strong);
+  background: rgba(20, 20, 20, 0.5);
+  border-color: rgba(255, 255, 255, 0.35);
   color: white;
-  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 .scene-arrow-btn:active:not(:disabled) {
   transform: scale(0.94);
@@ -468,23 +479,23 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 20, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
   color: rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: var(--glass-shadow);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 .scene-share-btn:hover {
   background: rgba(201, 169, 110, 0.25);
   border-color: var(--beige-gold);
   color: var(--beige-gold);
-  box-shadow: 0 4px 20px rgba(201, 169, 110, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 12px 32px rgba(201, 169, 110, 0.3);
 }
 .scene-share-btn:active {
   transform: scale(0.92);

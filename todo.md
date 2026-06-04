@@ -277,3 +277,12 @@
 - [x] モバイル(< 768px)でシーン背景画像をviewport全体にcover表示（background-size:cover, position:absolute, inset:0）
 - [x] モバイルでアスペクト比固定を無効化（元々なし）
 - [x] 上下の黒帯を排除（scene-containerにmin-height:100dvh, bodyロックも100dvh）
+
+## デザイン強化
+
+- [x] ポップアップ表示時に背景blur(4px) + brightness(0.7)を適用（0.4s ease遷移）
+- [x] ポップアップ閉じたら背景がclearに戻る
+- [x] ホットスポット自体はblurしない（押せる状態維持）
+- [x] UI要素のガラス感をApple Vision Pro風に強化（blur16px, saturate180%, inset shadow, 外側shadow）
+- [x] 対象: ドットナビ、↑↓矢印、共有アイコン、×ボタン、MDSバッジ
+- [x] 触らない: RESERVEボタン（ゴールド）、ポップアップ本体（黒カード）
