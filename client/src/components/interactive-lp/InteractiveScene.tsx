@@ -24,8 +24,8 @@ interface InteractiveSceneProps {
 
 /**
  * InteractiveScene: A full-viewport scene with a Ken Burns animated background,
- * pulsing "+" hotspots, and slide-up popups.
- * 
+ * pulsing "+" hotspots, and center modal popups.
+ *
  * Used for scenes 1-3 (The Space, The Selection, The Craft).
  * Each scene is a single large photo with interactive discovery points.
  */
@@ -36,7 +36,7 @@ export default function InteractiveScene({
   onCtaAction,
 }: InteractiveSceneProps) {
   const [activePopup, setActivePopup] = useState<string | null>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   // Close popup on Escape key
   useEffect(() => {
@@ -60,6 +60,16 @@ export default function InteractiveScene({
   const handleClosePopup = useCallback(() => {
     setActivePopup(null);
   }, []);
+
+  // Close on backdrop click (outside the modal content)
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setActivePopup(null);
+      }
+    },
+    [],
+  );
 
   const handleCtaClick = useCallback(
     (action: string) => {
@@ -107,22 +117,22 @@ export default function InteractiveScene({
         </button>
       ))}
 
-      {/* Popup */}
-      <div
-        ref={popupRef}
-        className={`scene-popup ${activePopup ? 'show' : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label={activeHotspot?.title || ''}
-      >
-        {activeHotspot && (
-          <>
+      {/* Center Modal Popup with backdrop */}
+      {activePopup && activeHotspot && (
+        <div
+          className="scene-popup-backdrop"
+          onClick={handleBackdropClick}
+          role="dialog"
+          aria-modal="true"
+          aria-label={activeHotspot.title}
+        >
+          <div ref={modalRef} className="scene-popup-modal">
             <button
               className="scene-popup-close"
               onClick={handleClosePopup}
               aria-label="Close"
             >
-              <IconX size={16} />
+              <IconX size={18} />
             </button>
             <div className="scene-popup-title">{activeHotspot.title}</div>
             <div className="scene-popup-body">{activeHotspot.body}</div>
@@ -142,9 +152,9 @@ export default function InteractiveScene({
                 ))}
               </div>
             )}
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

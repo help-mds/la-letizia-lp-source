@@ -49,59 +49,75 @@
   100% { transform: scale(1.6); opacity: 0; }
 }
 
-/* ---- Popup ---- */
-.scene-popup {
+/* ---- Popup: Center Modal ---- */
+.scene-popup-backdrop {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  inset: 0;
   z-index: 40;
-  background: rgba(18, 18, 18, 0.92);
-  backdrop-filter: blur(16px);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
-  padding: 20px 20px 24px;
-  transform: translateY(100%);
-  opacity: 0;
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-              opacity 0.3s ease;
-  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  animation: popupFadeIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.scene-popup.show {
-  transform: translateY(0);
-  opacity: 1;
-  pointer-events: auto;
+@keyframes popupFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.scene-popup-modal {
+  position: relative;
+  width: 340px;
+  max-width: 85vw;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 24px 24px 20px;
+  animation: popupScaleIn 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes popupScaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 .scene-popup-close {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: none;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  padding: 4px;
-  transition: color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 .scene-popup-close:hover {
+  background: rgba(255, 255, 255, 0.2);
   color: white;
 }
 .scene-popup-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: white;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  padding-right: 32px;
 }
 .scene-popup-body {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
-  line-height: 1.6;
-  margin-bottom: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+  margin-bottom: 10px;
 }
 .scene-popup-price {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .scene-popup-ctas {
   display: flex;
@@ -110,16 +126,16 @@
 }
 .scene-popup-cta-btn {
   padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
   border: 0.5px solid rgba(255, 255, 255, 0.25);
   color: white;
   font-size: 11px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
 }
 .scene-popup-cta-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ---- Access Scene ---- */
@@ -457,17 +473,19 @@
     inset: -6px;
   }
 
-  /* Popup: full-width with safe area padding */
-  .scene-popup {
-    padding: 16px 16px calc(20px + env(safe-area-inset-bottom));
-    max-height: 50vh;
+  /* Popup modal: mobile adjustments */
+  .scene-popup-modal {
+    width: 90vw;
+    max-width: 90vw;
+    padding: 20px 18px calc(18px + env(safe-area-inset-bottom));
+    max-height: 60vh;
     overflow-y: auto;
   }
   .scene-popup-title {
     font-size: 14px;
   }
   .scene-popup-body {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   /* Map link: smaller on mobile */
@@ -524,7 +542,7 @@
     padding: 7px 14px;
     font-size: 10px;
   }
-  .scene-popup {
+  .scene-popup-modal {
     padding: 14px 12px calc(16px + env(safe-area-inset-bottom));
   }
 }
@@ -534,7 +552,7 @@
   .scene-arrows {
     bottom: calc(14px + env(safe-area-inset-bottom));
   }
-  .scene-popup {
+  .scene-popup-modal {
     padding-bottom: calc(24px + env(safe-area-inset-bottom));
   }
 }
@@ -544,12 +562,11 @@
   .hotspot-ripple {
     animation: none;
   }
-  .scene-popup {
-    transition: opacity 0.2s ease;
-    transform: none !important;
+  .scene-popup-backdrop {
+    animation: none;
   }
-  .scene-popup.show {
-    transform: none !important;
+  .scene-popup-modal {
+    animation: none;
   }
   .scene-container {
     transition: opacity 0.2s ease;
