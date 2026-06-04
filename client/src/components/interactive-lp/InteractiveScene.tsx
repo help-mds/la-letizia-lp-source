@@ -98,7 +98,8 @@ export default function InteractiveScene({
         style={{ boxShadow: 'inset 0 0 150px rgba(0,0,0,0.55)' }}
       />
 
-      {/* Hotspots with inline tooltips */}
+      {/* Hotspots layer — positioned independently from Ken Burns background */}
+      <div className="absolute inset-0" style={{ zIndex: 20 }}>
       {hotspots.map((hotspot) => {
         const isOpen = activePopup === hotspot.id;
         const side = getTooltipSide(hotspot.x);
@@ -161,6 +162,7 @@ export default function InteractiveScene({
           </div>
         );
       })}
+      </div>
     </div>
   );
 }

@@ -2,10 +2,10 @@
    Interactive Scene LP — Styles
    ============================================================ */
 
-/* Ken Burns animation */
+/* Ken Burns animation — subtle scale only, no translate so hotspots stay stable */
 @keyframes kenBurns {
-  0% { transform: scale(1) translate(0, 0); }
-  100% { transform: scale(1.06) translate(-0.5%, -0.3%); }
+  0% { transform: scale(1); }
+  100% { transform: scale(1.04); }
 }
 
 /* ---- Hotspot ---- */
