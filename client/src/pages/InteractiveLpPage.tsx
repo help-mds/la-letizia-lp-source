@@ -426,6 +426,7 @@ export default function InteractiveLpPage() {
           <SceneNavigation
             scenes={SCENE_DEFS}
             currentIndex={sceneMode ? currentScene : 0}
+            storeName={lead.storeName || ''}
             onNavigate={(index) => {
               if (!sceneMode && index > 0) {
                 // From hero, enter scene mode and go to that scene

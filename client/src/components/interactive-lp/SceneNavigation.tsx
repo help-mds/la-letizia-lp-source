@@ -6,18 +6,21 @@ interface SceneNavigationProps {
   currentIndex: number;
   onNavigate: (index: number) => void;
   onReserve: () => void;
+  storeName?: string;
 }
 
 /**
- * SceneNavigation: Glassmorphism pill dot-nav (top center with circle dots),
+ * SceneNavigation: Top header bar (store name + Created by MDS),
+ * Glassmorphism pill dot-nav (top center with circle dots),
  * glass arrows (right-bottom on mobile), share button (left-bottom),
- * beige/gold RESERVE CTA, and MDS badge (bottom-left).
+ * beige/gold RESERVE CTA.
  */
 export default function SceneNavigation({
   scenes,
   currentIndex,
   onNavigate,
   onReserve,
+  storeName = '',
 }: SceneNavigationProps) {
   const [copied, setCopied] = useState(false);
 
@@ -46,7 +49,20 @@ export default function SceneNavigation({
 
   return (
     <>
-      {/* Glassmorphism pill dot nav — top center with circle dots */}
+      {/* Top header bar — store name left, Created by MDS right */}
+      <div className="scene-top-header">
+        <span className="scene-top-header-name">{storeName}</span>
+        <a
+          href="https://mds-fund.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="scene-top-header-credit"
+        >
+          Created by MDS
+        </a>
+      </div>
+
+      {/* Glassmorphism pill dot nav — below header */}
       <div className="scene-pill-nav">
         {navScenes.map((scene) => {
           const realIndex = scenes.findIndex((s) => s.id === scene.id);
@@ -103,16 +119,6 @@ export default function SceneNavigation({
         <IconShare size={20} />
         {copied && <span className="scene-share-copied">Copied!</span>}
       </button>
-
-      {/* MDS Badge - bottom left (below share button) */}
-      <a
-        href="https://mds-fund.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="scene-mds-badge"
-      >
-        DESIGNED BY MDS
-      </a>
     </>
   );
 }
