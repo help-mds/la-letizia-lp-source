@@ -8,8 +8,8 @@ interface SceneNavigationProps {
 }
 
 /**
- * SceneNavigation: Compact pill dot-nav (top center), arrows (right), MDS badge.
- * Reserve tab removed from header — only the persistent CTA remains.
+ * SceneNavigation: Large pill dot-nav with labels (top center), large arrows (right), MDS badge.
+ * Inspired by Marina Bay Sands interactive nav.
  */
 export default function SceneNavigation({
   scenes,
@@ -22,10 +22,9 @@ export default function SceneNavigation({
 
   return (
     <>
-      {/* Compact pill dot nav — top center */}
+      {/* Large pill dot nav — top center with labels */}
       <div className="scene-pill-nav">
-        {navScenes.map((scene, i) => {
-          // Find the real index in the full scenes array
+        {navScenes.map((scene) => {
           const realIndex = scenes.findIndex((s) => s.id === scene.id);
           return (
             <button
@@ -34,12 +33,14 @@ export default function SceneNavigation({
               onClick={() => onNavigate(realIndex)}
               aria-label={scene.label}
               title={scene.label}
-            />
+            >
+              {scene.dotLabel}
+            </button>
           );
         })}
       </div>
 
-      {/* Arrow navigation (right side) */}
+      {/* Arrow navigation (right side, larger) */}
       <div className="scene-arrows">
         <button
           className="scene-arrow-btn"
@@ -47,7 +48,7 @@ export default function SceneNavigation({
           disabled={currentIndex === 0}
           aria-label="Previous scene"
         >
-          <IconChevronUp size={22} />
+          <IconChevronUp size={28} />
         </button>
         <button
           className="scene-arrow-btn"
@@ -55,7 +56,7 @@ export default function SceneNavigation({
           disabled={currentIndex === scenes.length - 1}
           aria-label="Next scene"
         >
-          <IconChevronDown size={22} />
+          <IconChevronDown size={28} />
         </button>
       </div>
 

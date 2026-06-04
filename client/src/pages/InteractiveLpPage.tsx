@@ -420,6 +420,33 @@ export default function InteractiveLpPage() {
 
   return (
     <div ref={containerRef} className="relative bg-black text-white">
+      {/* ===== PERSISTENT HEADER: Always visible (hero + scenes) ===== */}
+      <div className="fixed top-0 left-0 right-0 z-[200] pointer-events-none" style={{ opacity: 1 }}>
+        <div className="pointer-events-auto">
+          <SceneNavigation
+            scenes={SCENE_DEFS}
+            currentIndex={sceneMode ? currentScene : 0}
+            onNavigate={(index) => {
+              if (!sceneMode && index > 0) {
+                // From hero, enter scene mode and go to that scene
+                window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+                document.body.style.overflow = 'hidden';
+                document.body.style.height = '100vh';
+                setSceneMode(true);
+                setCurrentScene(index);
+                setTransitionEyebrow(SCENE_DEFS[index].eyebrow);
+                setTransitionTitle(SCENE_DEFS[index].title);
+                setIsTransitioning(true);
+                setTimeout(() => setIsTransitioning(false), 1600);
+              } else {
+                navigateToScene(index);
+              }
+            }}
+            onReserve={handleReserve}
+          />
+        </div>
+      </div>
+
       {/* ===== HERO MODE: Existing PageScrollScrub ===== */}
       {!sceneMode && (
         <PageScrollScrub
@@ -540,13 +567,7 @@ export default function InteractiveLpPage() {
             title={transitionTitle}
           />
 
-          {/* Navigation */}
-          <SceneNavigation
-            scenes={SCENE_DEFS}
-            currentIndex={currentScene}
-            onNavigate={navigateToScene}
-            onReserve={handleReserve}
-          />
+
         </div>
       )}
     </div>

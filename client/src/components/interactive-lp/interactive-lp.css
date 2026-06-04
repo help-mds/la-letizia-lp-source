@@ -249,64 +249,74 @@
   letter-spacing: 0.05em;
 }
 
-/* ---- Navigation: Compact Pill Dot Nav (top center) ---- */
+/* ---- Navigation: Large Pill Dot Nav with Labels (top center) ---- */
 .scene-pill-nav {
-  position: absolute;
-  top: 16px;
+  position: fixed;
+  top: 18px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 60;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 24px;
-  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(20, 20, 20, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 28px;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
 }
 .scene-pill-dot {
-  width: 8px;
-  height: 8px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
   padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.02em;
 }
 .scene-pill-dot:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: scale(1.3);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.9);
 }
 .scene-pill-dot.active {
-  background: white;
-  transform: scale(1.4);
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.92);
+  border-color: white;
+  color: #111;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 /* (dots removed) */
 
-/* ---- Navigation: Arrows ---- */
+/* ---- Navigation: Arrows (larger) ---- */
 .scene-arrows {
-  position: absolute;
-  right: 16px;
+  position: fixed;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 60;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .scene-arrow-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(4px);
-  color: rgba(255, 255, 255, 0.75);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,7 +325,7 @@
 }
 .scene-arrow-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.6);
   color: white;
 }
 .scene-arrow-btn:disabled {
@@ -325,9 +335,9 @@
 
 /* ---- Persistent CTA ---- */
 .scene-persistent-cta {
-  position: absolute;
-  top: 16px;
-  right: 16px;
+  position: fixed;
+  top: 18px;
+  right: 20px;
   z-index: 60;
   padding: 8px 18px;
   background: rgba(255, 255, 255, 0.9);
@@ -350,7 +360,7 @@
 
 /* ---- MDS Badge ---- */
 .scene-mds-badge {
-  position: absolute;
+  position: fixed;
   bottom: 16px;
   left: 16px;
   z-index: 60;
@@ -417,30 +427,31 @@
 
 /* Small screens (portrait phones) */
 @media (max-width: 640px) {
-  /* Pill nav: slightly smaller on mobile */
+  /* Pill nav: slightly smaller on mobile but still readable */
   .scene-pill-nav {
     top: 12px;
-    gap: 8px;
-    padding: 6px 14px;
+    gap: 6px;
+    padding: 6px 10px;
   }
   .scene-pill-dot {
-    width: 7px;
-    height: 7px;
+    width: 26px;
+    height: 26px;
+    font-size: 9px;
   }
 
-  /* Arrows: right side, higher up on mobile */
+  /* Arrows: right side, vertically centered on mobile */
   .scene-arrows {
-    top: auto;
-    bottom: 80px;
-    right: 16px;
+    top: 50%;
+    bottom: auto;
+    right: 12px;
     left: auto;
-    transform: none;
+    transform: translateY(-50%);
     flex-direction: column;
     gap: 8px;
   }
   .scene-arrow-btn {
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
   }
 
   /* Persistent CTA: top-right on mobile */
@@ -449,8 +460,8 @@
     bottom: auto;
     right: 12px;
     transform: none;
-    padding: 8px 16px;
-    font-size: 10px;
+    padding: 7px 14px;
+    font-size: 9px;
   }
   .scene-persistent-cta:active {
     transform: scale(0.96);
@@ -515,10 +526,10 @@
     padding: 14px 16px;
   }
 
-  /* MDS badge: top-left on mobile to avoid overlap */
+  /* MDS badge: bottom-left on mobile, above safe area */
   .scene-mds-badge {
-    bottom: auto;
-    top: 12px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    top: auto;
     left: 12px;
     font-size: 9px;
     padding: 4px 8px;
