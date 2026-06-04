@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import DemoPage from "./pages/DemoPage";
 import SalonDemoPage from "./pages/SalonDemoPage";
 import LpInput from "./pages/LpInput";
+import WestDemoPage from "./pages/WestDemoPage";
 
 function Router() {
   return (
@@ -15,6 +16,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/r/:slug"} component={DemoPage} />
       <Route path={"/s/:slug"} component={SalonDemoPage} />
+      <Route path={"/w/37west"} component={WestDemoPage} />
       <Route path={"/lp-input"} component={LpInput} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />

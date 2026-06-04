@@ -150,3 +150,25 @@
 - [x] Hero + TheWork のクロスフェード速度をもっとゆっくりに（早すぎる問題）
 - [x] CinematicLoader をサロンテンプレートに追加（黒画面問題の解消）
 - [x] メニューセクションをサロンテンプレートに追加
+
+## 37 West Prototype — Into The Amazon Style
+
+- [x] Upload 3 source photos to S3
+- [x] AI-generate Detail seed image (wagyu overhead)
+- [x] AI-generate Showcase extras (3 images: sashimi, grilled, plated)
+- [x] Generate Hero forward dolly video (8s) from interior photo
+- [x] Generate Detail vertical descent video (8s) from overhead wagyu image
+- [x] Generate Story horizontal pan video (8s) from interior photo
+- [x] Extract frames from all 3 videos (240 frames each @ 30fps)
+- [x] Upload all frames + images to CDN storage
+- [x] Build ShowcaseSection (GSAP pin + full-screen morph timeline)
+- [x] Build DetailSection (vertical video scrub, reusing useFrameLoader)
+- [x] Build StorySection (horizontal video scrub + kinetic text overlay)
+- [x] Build NumbersSection (large typography kinetic reveal)
+- [x] Build VisitSection (cinematic endroll CTA)
+- [x] Build SeamTransition component (A/B/C patterns)
+- [x] Create WestDemoPage integrating all sections in correct order
+- [x] Register /w/37west route in App.tsx
+- [x] Verify TypeScript compiles without errors
+- [x] Verify all existing tests pass
+- [x] Visual verification: all sections render correctly
