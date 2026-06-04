@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 /**
  * LpLoader — Redesigned loading screen for /lp/:slug
  *
- * White (#FBFAF8) background with:
- * - MDS logo (48px height, centered)
- * - "La Letizia" in Fraunces italic 48px black (32px below logo)
- * - Decorative line (60px wide, 1px)
- * - "CREATED BY MDS" in 11px, letter-spacing 0.3em, gray
- * - No percentage display
+ * White (#FBFAF8) background with centered vertical stack:
+ * 1. MDS logo (large, ~48px height) — top of group
+ * 2. "La Letizia" in Fraunces italic ~48px black
+ * 3. Decorative line (60px wide, 1px)
+ * 4. "CREATED BY" text
+ * 5. MDS logo (small, ~24px) — at bottom
+ *
+ * Layout matches reference: logo → title → line → "CREATED BY" → logo
  *
  * On load complete: 0.5s fade out (white bg → transparent, revealing Hero beneath)
  */
@@ -55,7 +57,7 @@ export default function LpLoader({ ready, onComplete }: LpLoaderProps) {
         willChange: 'opacity',
       }}
     >
-      {/* MDS Logo — 48px height, centered */}
+      {/* MDS Logo — large, top of the group */}
       <img
         src="/manus-storage/logoMDSblack_465d94de.webp"
         alt="MDS"
@@ -92,7 +94,7 @@ export default function LpLoader({ ready, onComplete }: LpLoaderProps) {
         }}
       />
 
-      {/* "CREATED BY MDS" — 11px, letter-spacing 0.3em, gray */}
+      {/* "CREATED BY" — 11px, letter-spacing 0.3em, gray */}
       <div
         style={{
           marginTop: '16px',
@@ -103,8 +105,21 @@ export default function LpLoader({ ready, onComplete }: LpLoaderProps) {
           fontWeight: 400,
         }}
       >
-        CREATED BY MDS
+        CREATED BY
       </div>
+
+      {/* MDS Logo — small, below "CREATED BY" */}
+      <img
+        src="/manus-storage/logoMDSblack_465d94de.webp"
+        alt="MDS"
+        style={{
+          marginTop: '12px',
+          height: '24px',
+          width: 'auto',
+          objectFit: 'contain',
+          opacity: 0.7,
+        }}
+      />
     </div>
   );
 }
