@@ -12,41 +12,45 @@
 .hotspot-btn {
   position: absolute;
   z-index: 20;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: rgba(255, 255, 255, 0.12);
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.18);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
-  transition: background 0.2s ease, transform 0.16s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.2s ease, transform 0.16s ease, border-color 0.2s;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 .hotspot-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
-  transform: translate(-50%, -50%) scale(1.1);
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translate(-50%, -50%) scale(1.12);
 }
 .hotspot-btn:active {
   transform: translate(-50%, -50%) scale(0.95);
 }
-.hotspot-plus {
+.hotspot-icon {
   color: white;
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 500;
   line-height: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .hotspot-ripple {
   position: absolute;
-  inset: -4px;
+  inset: -5px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  animation: hotspotPulse 2.4s ease-out infinite;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  animation: hotspotPulse 2.2s ease-out infinite;
 }
 @keyframes hotspotPulse {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(1.6); opacity: 0; }
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.7); opacity: 0; }
 }
 
 /* ---- Popup: Center Modal ---- */
@@ -289,20 +293,22 @@
 /* ---- Navigation: Arrows ---- */
 .scene-arrows {
   position: absolute;
-  right: 12px;
-  bottom: 16px;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 60;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 .scene-arrow-btn {
-  width: 30px;
-  height: 30px;
-  border-radius: 4px;
-  border: 0.5px solid rgba(255, 255, 255, 0.2);
-  background: rgba(0, 0, 0, 0.4);
-  color: rgba(255, 255, 255, 0.6);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -310,7 +316,8 @@
   transition: all 0.2s ease;
 }
 .scene-arrow-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
   color: white;
 }
 .scene-arrow-btn:disabled {
@@ -424,23 +431,19 @@
     min-width: 0;
   }
 
-  /* Hide dot navigation on mobile — tabs + swipe are sufficient */
-  .scene-dots {
-    display: none;
-  }
-
-  /* Arrows: move to bottom-center horizontal layout */
+  /* Arrows: bottom-center horizontal on mobile */
   .scene-arrows {
+    top: auto;
     bottom: 14px;
     right: auto;
     left: 50%;
     transform: translateX(-50%);
     flex-direction: row;
-    gap: 8px;
+    gap: 10px;
   }
   .scene-arrow-btn {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
   }
 
   /* Persistent CTA: bottom-center, above arrows */
@@ -466,8 +469,8 @@
     width: 44px;
     height: 44px;
   }
-  .hotspot-plus {
-    font-size: 22px;
+  .hotspot-icon {
+    font-size: 20px;
   }
   .hotspot-ripple {
     inset: -6px;

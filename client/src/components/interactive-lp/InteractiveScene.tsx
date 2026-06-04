@@ -112,7 +112,7 @@ export default function InteractiveScene({
           onClick={() => handleHotspotClick(hotspot.id)}
           aria-label={hotspot.title}
         >
-          <span className="hotspot-plus">+</span>
+          <span className="hotspot-icon">?</span>
           <span className="hotspot-ripple" />
         </button>
       ))}

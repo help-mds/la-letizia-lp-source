@@ -8,8 +8,8 @@ interface SceneNavigationProps {
 }
 
 /**
- * SceneNavigation: Tabs (top), dots (right), arrows (right-bottom), persistent CTA.
- * Matches the prototype's navigation exactly.
+ * SceneNavigation: Tabs (top), arrows (right), persistent CTA.
+ * Dots removed per design feedback — arrows only for scene navigation.
  */
 export default function SceneNavigation({
   scenes,
@@ -33,21 +33,7 @@ export default function SceneNavigation({
         ))}
       </div>
 
-      {/* Right dot navigation */}
-      <div className="scene-dots">
-        {scenes.map((scene, i) => (
-          <button
-            key={scene.id}
-            className={`scene-dot ${i === currentIndex ? 'active' : ''}`}
-            onClick={() => onNavigate(i)}
-            aria-label={`Go to ${scene.label}`}
-          >
-            {scene.dotLabel}
-          </button>
-        ))}
-      </div>
-
-      {/* Arrow navigation */}
+      {/* Arrow navigation (larger, no dots) */}
       <div className="scene-arrows">
         <button
           className="scene-arrow-btn"
@@ -55,7 +41,7 @@ export default function SceneNavigation({
           disabled={currentIndex === 0}
           aria-label="Previous scene"
         >
-          <IconChevronUp size={18} />
+          <IconChevronUp size={22} />
         </button>
         <button
           className="scene-arrow-btn"
@@ -63,7 +49,7 @@ export default function SceneNavigation({
           disabled={currentIndex === scenes.length - 1}
           aria-label="Next scene"
         >
-          <IconChevronDown size={18} />
+          <IconChevronDown size={22} />
         </button>
       </div>
 
