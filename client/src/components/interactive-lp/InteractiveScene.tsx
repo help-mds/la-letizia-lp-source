@@ -20,11 +20,16 @@ interface InteractiveSceneProps {
   hotspots: Hotspot[];
   isActive: boolean;
   onCtaAction?: (action: string) => void;
+  /** Externally controlled popup (from autoplay) */
+  autoplayPopupId?: string | null;
+  /** Externally controlled glow (from autoplay) */
+  glowingHotspotId?: string | null;
+  /** Called when user manually interacts (interrupts autoplay) */
+  onUserInterrupt?: () => void;
 }
 
 /**
  * Compute tooltip position class based on hotspot location.
- * Tooltip appears to the right by default, or left if hotspot is on the right side.
  */
 function getTooltipSide(x: number): 'right' | 'left' {
   return x > 60 ? 'left' : 'right';
@@ -33,46 +38,60 @@ function getTooltipSide(x: number): 'right' | 'left' {
 /**
  * InteractiveScene: A full-viewport scene with a Ken Burns animated background,
  * pulsing "?" hotspots, and tooltip popups.
- * Desktop: tooltip anchored beside hotspot with background blur+darken.
- * Mobile: full-screen centered modal (Marina Bay Sands style).
+ * Supports both manual interaction and external autoplay control.
  */
 export default function InteractiveScene({
   imageUrl,
   hotspots,
   isActive,
   onCtaAction,
+  autoplayPopupId,
+  glowingHotspotId,
+  onUserInterrupt,
 }: InteractiveSceneProps) {
-  const [activePopup, setActivePopup] = useState<string | null>(null);
+  const [manualPopup, setManualPopup] = useState<string | null>(null);
+
+  // Effective popup: manual takes priority, then autoplay
+  const activePopup = manualPopup || autoplayPopupId || null;
 
   // Close popup on Escape key
   useEffect(() => {
     if (!activePopup) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActivePopup(null);
+      if (e.key === 'Escape') {
+        setManualPopup(null);
+        onUserInterrupt?.();
+      }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [activePopup]);
+  }, [activePopup, onUserInterrupt]);
 
   // Close popup when scene becomes inactive
   useEffect(() => {
-    if (!isActive) setActivePopup(null);
+    if (!isActive) setManualPopup(null);
   }, [isActive]);
 
   // Close on click anywhere outside hotspots/tooltips
   const handleBackgroundClick = useCallback(() => {
-    if (activePopup) setActivePopup(null);
-  }, [activePopup]);
+    if (activePopup) {
+      setManualPopup(null);
+      onUserInterrupt?.();
+    }
+  }, [activePopup, onUserInterrupt]);
 
   const handleHotspotClick = useCallback((e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    setActivePopup((prev) => (prev === id ? null : id));
-  }, []);
+    // User manually clicked — interrupt autoplay
+    onUserInterrupt?.();
+    setManualPopup((prev) => (prev === id ? null : id));
+  }, [onUserInterrupt]);
 
   const handleClosePopup = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    setActivePopup(null);
-  }, []);
+    setManualPopup(null);
+    onUserInterrupt?.();
+  }, [onUserInterrupt]);
 
   const handleCtaClick = useCallback(
     (e: React.MouseEvent, action: string) => {
@@ -99,7 +118,7 @@ export default function InteractiveScene({
         }}
       />
 
-      {/* Vignette overlay — also blurs with background */}
+      {/* Vignette overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -109,10 +128,11 @@ export default function InteractiveScene({
         }}
       />
 
-      {/* Hotspots layer — NOT blurred, stays interactive */}
+      {/* Hotspots layer */}
       <div className="absolute inset-0" style={{ zIndex: 20 }}>
       {hotspots.map((hotspot) => {
         const isOpen = activePopup === hotspot.id;
+        const isGlowing = glowingHotspotId === hotspot.id;
         const side = getTooltipSide(hotspot.x);
 
         return (
@@ -128,13 +148,13 @@ export default function InteractiveScene({
           >
             {/* The ? button */}
             <button
-              className={`hotspot-btn ${isOpen ? 'hotspot-btn--active' : ''}`}
+              className={`hotspot-btn ${isOpen ? 'hotspot-btn--active' : ''} ${isGlowing ? 'hotspot-btn--glow' : ''}`}
               onClick={(e) => handleHotspotClick(e, hotspot.id)}
               aria-label={hotspot.title}
               aria-expanded={isOpen}
             >
               <span className="hotspot-icon">?</span>
-              {!isOpen && <span className="hotspot-ripple" />}
+              {!isOpen && !isGlowing && <span className="hotspot-ripple" />}
             </button>
 
             {/* Desktop tooltip anchored beside the hotspot (hidden on mobile via CSS) */}
@@ -175,7 +195,7 @@ export default function InteractiveScene({
       })}
       </div>
 
-      {/* Mobile full-screen tooltip modal (shown only on mobile when popup is active) */}
+      {/* Mobile full-screen tooltip modal */}
       {activePopup && activeHotspot && (
         <div
           className="mobile-tooltip-overlay"

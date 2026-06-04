@@ -8,6 +8,8 @@ import SceneTransition from '@/components/interactive-lp/SceneTransition';
 import AccessScene from '@/components/interactive-lp/AccessScene';
 import ReservationScene, { ReservationChannel } from '@/components/interactive-lp/ReservationScene';
 import SceneNavigation from '@/components/interactive-lp/SceneNavigation';
+import { useAutoplay } from '@/hooks/useAutoplay';
+import { useSceneScroll } from '@/hooks/useSceneScroll';
 import '@/components/interactive-lp/interactive-lp.css';
 
 // Frame data imports
@@ -158,6 +160,11 @@ const HERO_OVERLAY_BY_SLUG: Record<string, HeroOverlayCopy> = {
 };
 
 /* ============================================================
+   Autoplay-enabled scenes
+   ============================================================ */
+const AUTOPLAY_SCENES = new Set(['s1', 's2', 's3']);
+
+/* ============================================================
    Main Page Component
    ============================================================ */
 export default function InteractiveLpPage() {
@@ -180,9 +187,6 @@ export default function InteractiveLpPage() {
 
   // Loading state: controls light glass → dark glass transition
   const [lpLoading, setLpLoading] = useState(true);
-
-  // Touch swipe state
-  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
 
   // Derive scene defs from lead
   const sceneDefs = useMemo(() => {
@@ -282,47 +286,59 @@ export default function InteractiveLpPage() {
     return () => window.removeEventListener('keydown', handler);
   }, [sceneMode, currentScene, navigateToScene]);
 
-  // Touch swipe navigation (mobile)
-  useEffect(() => {
-    if (!sceneMode) return;
+  // ===== SCROLL-TO-NAVIGATE (wheel/swipe in scene mode) =====
+  useSceneScroll({
+    enabled: sceneMode,
+    isTransitioning,
+    onNext: useCallback(() => navigateToScene(currentScene + 1), [navigateToScene, currentScene]),
+    onPrev: useCallback(() => navigateToScene(currentScene - 1), [navigateToScene, currentScene]),
+    onUserScroll: useCallback(() => {
+      // Interrupt autoplay when user scrolls to navigate
+      autoplayInterruptRef.current?.();
+    }, []),
+  });
 
-    const handleTouchStart = (e: TouchEvent) => {
-      const touch = e.touches[0];
-      touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
-    };
+  // ===== AUTOPLAY =====
+  // Get current scene's hotspots for autoplay
+  const currentSceneId = sceneDefs[currentScene]?.id || '';
+  const autoplayEnabled = AUTOPLAY_SCENES.has(currentSceneId);
 
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (!touchStartRef.current) return;
-      const touch = e.changedTouches[0];
-      const dx = touch.clientX - touchStartRef.current.x;
-      const dy = touch.clientY - touchStartRef.current.y;
-      const dt = Date.now() - touchStartRef.current.time;
-      touchStartRef.current = null;
+  const getHotspotsForScene = useCallback(
+    (sceneId: string) => {
+      if (!lead) return [];
+      const isSalon = lead.businessType === 'salon';
+      const source = isMobile
+        ? (isSalon ? SALON_HOTSPOTS_MOBILE : RESTAURANT_HOTSPOTS_MOBILE)
+        : (isSalon ? SALON_HOTSPOTS_DESKTOP : RESTAURANT_HOTSPOTS_DESKTOP);
+      return source[sceneId] || [];
+    },
+    [isMobile, lead],
+  );
 
-      const minDistance = 50;
-      const maxTime = 500;
+  const currentHotspots = useMemo(
+    () => getHotspotsForScene(currentSceneId),
+    [getHotspotsForScene, currentSceneId],
+  );
 
-      if (dt > maxTime) return;
+  const hotspotIds = useMemo(() => currentHotspots.map((h) => h.id), [currentHotspots]);
+  const hotspotBodies = useMemo(() => currentHotspots.map((h) => h.body), [currentHotspots]);
 
-      const absDx = Math.abs(dx);
-      const absDy = Math.abs(dy);
+  const {
+    activePopupId: autoplayPopupId,
+    glowingHotspotId,
+    interrupt: autoplayInterrupt,
+  } = useAutoplay({
+    hotspotIds,
+    hotspotBodies,
+    isActive: sceneMode && currentScene > 0,
+    sceneId: currentSceneId,
+    isTransitioning,
+    enabled: autoplayEnabled,
+  });
 
-      if (absDx > absDy && absDx > minDistance) {
-        if (dx < 0) navigateToScene(currentScene + 1);
-        else navigateToScene(currentScene - 1);
-      } else if (absDy > absDx && absDy > minDistance) {
-        if (dy < 0) navigateToScene(currentScene + 1);
-        else navigateToScene(currentScene - 1);
-      }
-    };
-
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd, { passive: true });
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [sceneMode, currentScene, navigateToScene]);
+  // Store interrupt ref for scroll handler
+  const autoplayInterruptRef = useRef(autoplayInterrupt);
+  autoplayInterruptRef.current = autoplayInterrupt;
 
   const handleReserve = useCallback(() => {
     const ctaIndex = sceneDefs.findIndex((s) => s.id === 'cta');
@@ -338,14 +354,9 @@ export default function InteractiveLpPage() {
   // Get hotspots based on viewport and business type
   const getHotspots = useCallback(
     (sceneId: string) => {
-      if (!lead) return [];
-      const isSalon = lead.businessType === 'salon';
-      const source = isMobile
-        ? (isSalon ? SALON_HOTSPOTS_MOBILE : RESTAURANT_HOTSPOTS_MOBILE)
-        : (isSalon ? SALON_HOTSPOTS_DESKTOP : RESTAURANT_HOTSPOTS_DESKTOP);
-      return source[sceneId] || [];
+      return getHotspotsForScene(sceneId);
     },
-    [isMobile, lead],
+    [getHotspotsForScene],
   );
 
   // Handler when LpLoader fade-out completes
@@ -567,6 +578,9 @@ export default function InteractiveLpPage() {
                   hotspots={getHotspots(scene.id)}
                   isActive={isActive}
                   onCtaAction={handleCtaAction}
+                  autoplayPopupId={isActive && scene.id === currentSceneId ? autoplayPopupId : null}
+                  glowingHotspotId={isActive && scene.id === currentSceneId ? glowingHotspotId : null}
+                  onUserInterrupt={autoplayInterrupt}
                 />
               </div>
             );
