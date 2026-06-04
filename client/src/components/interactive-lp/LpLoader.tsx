@@ -15,9 +15,10 @@ import { useEffect, useRef, useState } from 'react';
 interface LpLoaderProps {
   ready: boolean;
   onComplete: () => void;
+  storeName?: string;
 }
 
-export default function LpLoader({ ready: _ready, onComplete }: LpLoaderProps) {
+export default function LpLoader({ ready: _ready, onComplete, storeName = 'La Letizia' }: LpLoaderProps) {
   const [hasExited, setHasExited] = useState(false);
   const exitTriggered = useRef(false);
   const [fadeOut, setFadeOut] = useState(false);
@@ -65,7 +66,7 @@ export default function LpLoader({ ready: _ready, onComplete }: LpLoaderProps) {
         }}
       />
 
-      {/* "La Letizia" — Fraunces italic 48px black */}
+      {/* Store name — Fraunces italic 48px black */}
       <div
         style={{
           marginTop: '32px',
@@ -78,7 +79,7 @@ export default function LpLoader({ ready: _ready, onComplete }: LpLoaderProps) {
           letterSpacing: '-0.01em',
         }}
       >
-        La Letizia
+        {storeName}
       </div>
 
       {/* Decorative line — 60px wide, 1px */}

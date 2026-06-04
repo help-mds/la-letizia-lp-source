@@ -28,6 +28,7 @@ export const leads = mysqlTable("leads", {
   area: varchar("area", { length: 255 }).notNull(),
   businessType: mysqlEnum("business_type", ["restaurant", "salon"]).notNull(),
   businessSubtype: varchar("business_subtype", { length: 100 }),
+  luxuryTier: mysqlEnum("luxury_tier", ["luxury", "casual"]).default("luxury"),
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   status: varchar("status", { length: 50 }).notNull().default("NEW_LEAD"),
 
@@ -38,6 +39,7 @@ export const leads = mysqlTable("leads", {
   email: varchar("email", { length: 320 }),
   whatsappNumber: varchar("whatsapp_number", { length: 50 }),
   phoneNumber: varchar("phone_number", { length: 50 }),
+  lineUrl: text("line_url"),
   logoUrl: text("logo_url"),
   photoUrls: json("photo_urls").$type<string[]>(),
   screenshotUrls: json("screenshot_urls").$type<string[]>(),

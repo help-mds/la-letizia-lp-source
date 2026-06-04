@@ -1,0 +1,39 @@
+{
+  "hero": {
+    "count": 32,
+    "frames": [
+      "/manus-storage/frame_001_5daa1837.webp",
+      "/manus-storage/frame_002_cf212a91.webp",
+      "/manus-storage/frame_003_3a97f37a.webp",
+      "/manus-storage/frame_004_2d40aa56.webp",
+      "/manus-storage/frame_005_619604af.webp",
+      "/manus-storage/frame_006_516d5cf3.webp",
+      "/manus-storage/frame_007_f6b0b13a.webp",
+      "/manus-storage/frame_008_60c449df.webp",
+      "/manus-storage/frame_009_688deacf.webp",
+      "/manus-storage/frame_010_f2c83b3a.webp",
+      "/manus-storage/frame_011_762ca8cd.webp",
+      "/manus-storage/frame_012_b1446d1f.webp",
+      "/manus-storage/frame_013_3805abb6.webp",
+      "/manus-storage/frame_014_48a58a58.webp",
+      "/manus-storage/frame_015_36c9d976.webp",
+      "/manus-storage/frame_016_97536c86.webp",
+      "/manus-storage/frame_017_7c66a3c2.webp",
+      "/manus-storage/frame_018_2646e91c.webp",
+      "/manus-storage/frame_019_7833b349.webp",
+      "/manus-storage/frame_020_59e4dbcd.webp",
+      "/manus-storage/frame_021_0469a858.webp",
+      "/manus-storage/frame_022_492636b4.webp",
+      "/manus-storage/frame_023_9e146e97.webp",
+      "/manus-storage/frame_024_22d61824.webp",
+      "/manus-storage/frame_025_47357311.webp",
+      "/manus-storage/frame_026_662822f9.webp",
+      "/manus-storage/frame_027_d6b11730.webp",
+      "/manus-storage/frame_028_589c7809.webp",
+      "/manus-storage/frame_029_f2a30c85.webp",
+      "/manus-storage/frame_030_3e93921b.webp",
+      "/manus-storage/frame_031_74f74246.webp",
+      "/manus-storage/frame_032_8f3b871a.webp"
+    ]
+  }
+}

@@ -307,3 +307,40 @@
 - [x] 同時に UI 要素が light glass → dark glass に切り替わる
 - [x] Hero overlay (店名 + タイトル + サブ) 出現
 - [x] /r/:slug テンプレート (DemoPage.tsx) は変更しない
+
+## NOA hair サロン版 LP (/lp/noa-hair-tokyo-nakameguro)
+
+### DB & データ
+- [x] leads テーブルに business_type フィールド追加 (restaurant/salon/gym/clinic)
+- [x] leads テーブルに luxury_tier フィールド追加 (luxury/casual)
+- [x] leads テーブルに accent_color フィールド追加 (既存 palette_accent を使用)
+- [x] leads テーブルに line_url フィールド追加 (WhatsApp代替)
+- [x] NOA hair の lead レコード作成 (slug: noa-hair-tokyo-nakameguro)
+
+### AI画像生成
+- [x] Space シーン画像生成 (ヘアサロン内装、明るい自然光)
+- [x] Selection シーン画像生成 (メニュー&ツール俯瞰)
+- [x] Craft シーン画像生成 (スタイリストの手元クローズアップ)
+
+### Hero動画 & フレーム
+- [x] Seedance でヘアサロン Hero 動画生成 (8秒)
+- [x] ffmpeg フレーム抽出 + S3 アップロード (32フレーム)
+
+### テンプレート拡張
+- [x] InteractiveLpPage: business_type に応じた CTA ラベル自動切替
+- [x] InteractiveLpPage: luxury_tier に応じた RESERVE ボタン色切替 (casual=桜色)
+- [x] InteractiveLpPage: luxury_tier に応じたタイポグラフィ切替 (casual=Fraunces SOFT)
+- [x] LpLoader: 店名を動的に表示 (La Letizia → NOA hair)
+
+### シーンデータ設定
+- [x] Hero overlay コピー設定 (NOA HAIR / Tomorrow, a little better / サブタイトル)
+- [x] Space ホットスポット3点設定 (Cut Chair / Waiting Lounge / Hair Bar)
+- [x] Selection ホットスポット3点設定 (Cut+Treatment / Color / Head Spa)
+- [x] Craft ホットスポット2点設定 (Stylists / Products)
+- [x] Access 情報設定 (中目黒、Google Maps埋め込み)
+- [x] Reservation CTA 5点設定 (Reserve Online / Call / LINE / Instagram / Map)
+
+### 確認
+- [x] /lp/noa-hair-tokyo-nakameguro で全シーン表示確認
+- [x] La Letizia (/lp/la-letizia-dubai-marina) に影響なし確認
+- [x] TypeScript エラーゼロ確認

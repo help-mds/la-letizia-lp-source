@@ -4,10 +4,11 @@ import {
   IconBrandWhatsapp,
   IconBrandInstagram,
   IconMapPin,
+  IconMessageCircle,
 } from '@tabler/icons-react';
 
 export interface ReservationChannel {
-  type: 'reserve-form' | 'call' | 'whatsapp' | 'instagram' | 'maps';
+  type: 'reserve-form' | 'call' | 'whatsapp' | 'instagram' | 'maps' | 'line';
   label: string;
   sublabel?: string;
   url?: string;
@@ -16,6 +17,9 @@ export interface ReservationChannel {
 interface ReservationSceneProps {
   storeName: string;
   channels: ReservationChannel[];
+  title?: string;
+  subtitle?: string;
+  accentColor?: string;
 }
 
 const iconMap = {
@@ -24,6 +28,7 @@ const iconMap = {
   whatsapp: IconBrandWhatsapp,
   instagram: IconBrandInstagram,
   maps: IconMapPin,
+  line: IconMessageCircle,
 };
 
 /**
@@ -34,6 +39,9 @@ const iconMap = {
 export default function ReservationScene({
   storeName,
   channels,
+  title,
+  subtitle,
+  accentColor,
 }: ReservationSceneProps) {
   const handleClick = (channel: ReservationChannel) => {
     if (channel.url && channel.url !== '#') {
@@ -76,7 +84,7 @@ export default function ReservationScene({
           textAlign: 'center',
         }}
       >
-        Your table is waiting
+        {title || 'Your table is waiting'}
       </div>
       <div
         style={{
@@ -87,7 +95,7 @@ export default function ReservationScene({
           textAlign: 'center',
         }}
       >
-        Experience {storeName} in person
+        {subtitle || `Experience ${storeName} in person`}
       </div>
 
       {/* CTA Grid */}
