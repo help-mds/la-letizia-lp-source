@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'wouter';
 import { trpc } from '@/lib/trpc';
 import PageScrollScrub from '@/components/PageScrollScrub';
-import CinematicLoader from '@/components/CinematicLoader';
+import LpLoader from '@/components/interactive-lp/LpLoader';
 import InteractiveScene, { Hotspot } from '@/components/interactive-lp/InteractiveScene';
 import SceneTransition from '@/components/interactive-lp/SceneTransition';
 import AccessScene from '@/components/interactive-lp/AccessScene';
@@ -209,6 +209,9 @@ export default function InteractiveLpPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroCompletedRef = useRef(false);
 
+  // Loading state: controls light glass → dark glass transition
+  const [lpLoading, setLpLoading] = useState(true);
+
   // Touch swipe state
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
 
@@ -385,11 +388,18 @@ export default function InteractiveLpPage() {
     [isMobile],
   );
 
-  // Loading state
+  // Handler when LpLoader fade-out completes
+  const handleLoaderComplete = useCallback(() => {
+    setLpLoading(false);
+  }, []);
+
+  // Loading state — show minimal loader while tRPC data loads
   if (isLoading || !lead) {
     return (
-      <div className="w-full h-screen bg-black flex items-center justify-center">
-        <CinematicLoader storeName={slug || 'Loading'} progress={0.5} ready={false} onComplete={() => {}} />
+      <div className="w-full h-screen flex items-center justify-center" style={{ backgroundColor: '#FBFAF8' }}>
+        <div style={{ fontFamily: '"Fraunces", serif', fontStyle: 'italic', fontSize: '24px', color: '#1A1714', opacity: 0.5 }}>
+          Loading...
+        </div>
       </div>
     );
   }
@@ -430,6 +440,7 @@ export default function InteractiveLpPage() {
             scenes={SCENE_DEFS}
             currentIndex={sceneMode ? currentScene : 0}
             storeName={lead.storeName || ''}
+            isLoading={lpLoading}
             onNavigate={(index) => {
               if (!sceneMode && index > 0) {
                 // From hero, enter scene mode and go to that scene
@@ -456,12 +467,11 @@ export default function InteractiveLpPage() {
         <PageScrollScrub
           frameUrls={frameData.hero.frames}
           frameCount={frameData.hero.count}
+          loaderActive={lpLoading}
           renderLoader={(progress, ready) => (
-            <CinematicLoader
-              storeName={lead.storeName || ''}
-              progress={progress}
+            <LpLoader
               ready={ready}
-              onComplete={() => {}}
+              onComplete={handleLoaderComplete}
             />
           )}
         >

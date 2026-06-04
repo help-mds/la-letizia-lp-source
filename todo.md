@@ -291,3 +291,19 @@
 
 - [x] ポップアップ本体に薄いガラスボーダー追加（0.5px rgba(255,255,255,0.18) + inset shadow + saturate）で統一感
 - [x] シーン切り替え時にblur(6px)+brightness(0.6)+scale(1.04)のトランジション（映画的演出）
+
+## ローディング画面リデザイン (/lp/:slug のみ)
+
+- [x] MDS ロゴ (logoMDSblack.webp) をストレージにアップロードし、ローディング画面中央に配置 (高さ48px)
+- [x] 白背景 (#FBFAF8) のローディング画面
+- [x] ロゴ下に "La Letizia" Fraunces italic 48px 黒 (margin-top: 32px)
+- [x] 装飾線 (60px幅、1px細線)
+- [x] "CREATED BY MDS" 11px, letter-spacing 0.3em, グレー
+- [x] パーセント表示を削除
+- [x] ローディング中にトップヘッダーバー表示 (黒文字 on 白背景)
+- [x] ローディング中にガラスドットナビ (light glass スタイル) 表示
+- [x] ローディング中に矢印 + RESERVE + Share ボタン表示 (light glass + ゴールド)
+- [x] ロード完了時: 0.5秒で白背景フェードアウト + Hero 1フレーム目フェードイン
+- [x] 同時に UI 要素が light glass → dark glass に切り替わる
+- [x] Hero overlay (店名 + タイトル + サブ) 出現
+- [x] /r/:slug テンプレート (DemoPage.tsx) は変更しない

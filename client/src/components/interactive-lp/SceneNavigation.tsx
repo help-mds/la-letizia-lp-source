@@ -7,6 +7,8 @@ interface SceneNavigationProps {
   onNavigate: (index: number) => void;
   onReserve: () => void;
   storeName?: string;
+  /** When true, uses light glass style (for white loading background) */
+  isLoading?: boolean;
 }
 
 /**
@@ -14,6 +16,10 @@ interface SceneNavigationProps {
  * Glassmorphism pill dot-nav (top center with circle dots),
  * glass arrows (right-bottom on mobile), share button (left-bottom),
  * beige/gold RESERVE CTA.
+ *
+ * Supports two visual modes:
+ * - isLoading=true: light glass (for white background loading screen)
+ * - isLoading=false: dark glass (for dark hero/scene backgrounds)
  */
 export default function SceneNavigation({
   scenes,
@@ -21,6 +27,7 @@ export default function SceneNavigation({
   onNavigate,
   onReserve,
   storeName = '',
+  isLoading = false,
 }: SceneNavigationProps) {
   const [copied, setCopied] = useState(false);
 
@@ -47,10 +54,13 @@ export default function SceneNavigation({
     }
   }, []);
 
+  // CSS class modifier for light/dark glass mode
+  const modeClass = isLoading ? 'light-glass' : '';
+
   return (
     <>
       {/* Top header bar — store name left, Created by MDS right */}
-      <div className="scene-top-header">
+      <div className={`scene-top-header ${modeClass}`}>
         <span className="scene-top-header-name">{storeName}</span>
         <a
           href="https://mds-fund.com"
@@ -63,7 +73,7 @@ export default function SceneNavigation({
       </div>
 
       {/* Glassmorphism pill dot nav — below header */}
-      <div className="scene-pill-nav">
+      <div className={`scene-pill-nav ${modeClass}`}>
         {navScenes.map((scene) => {
           const realIndex = scenes.findIndex((s) => s.id === scene.id);
           return (
@@ -81,7 +91,7 @@ export default function SceneNavigation({
       </div>
 
       {/* Glass arrow navigation (right side desktop, right-bottom mobile) */}
-      <div className="scene-arrows">
+      <div className={`scene-arrows ${modeClass}`}>
         <button
           className="scene-arrow-btn"
           onClick={() => onNavigate(currentIndex - 1)}
@@ -102,7 +112,7 @@ export default function SceneNavigation({
 
       {/* Persistent Reserve CTA — beige/gold glass */}
       <button
-        className="scene-persistent-cta"
+        className={`scene-persistent-cta ${modeClass}`}
         onClick={onReserve}
         aria-label="Reserve a table"
       >
@@ -111,13 +121,13 @@ export default function SceneNavigation({
 
       {/* Share button — left bottom, glass style */}
       <button
-        className="scene-share-btn"
+        className={`scene-share-btn ${modeClass}`}
         onClick={handleShare}
         aria-label="Share this page"
         title={copied ? 'Copied!' : 'Share'}
       >
         <IconShare size={20} />
-        {copied && <span className="scene-share-copied">Copied!</span>}
+        {copied && <span className="scene-share-copied">{copied ? 'Copied!' : ''}</span>}
       </button>
     </>
   );
