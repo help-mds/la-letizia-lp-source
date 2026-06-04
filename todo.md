@@ -344,3 +344,18 @@
 - [x] /lp/noa-hair-tokyo-nakameguro で全シーン表示確認
 - [x] La Letizia (/lp/la-letizia-dubai-marina) に影響なし確認
 - [x] TypeScript エラーゼロ確認
+
+## 白基調テンプレ統一 (/lp/:slug のみ、/r/:slug は変更なし)
+
+- [x] RESERVE ボタン: ゴールド → White Glass (rgba(255,255,255,0.85) + blur + 黒文字)
+- [x] Access セクション: 黒背景 → 白背景 #FBFAF8 + 黒文字
+- [x] Reservation セクション: 黒背景 → 白背景 #FBFAF8 + 黒文字
+- [x] Reservation CTA ボタン: メイン=白背景+黒文字+黒ボーダー、サブ=透明+黒文字+グレーボーダー
+- [x] ポップアップ (InteractiveScene): 黒背景 → 白背景 (rgba(255,255,255,0.95) + backdrop-filter) + 黒文字
+- [x] ポップアップ内 CTA ボタン: 白背景 + 黒文字 + 黒ボーダー
+- [x] 装飾線: rgba(0,0,0,0.15)
+- [x] ガラス UI (ドットナビ・矢印・共有): dark glass 維持 (写真上で映える)
+- [x] ローディング画面: light glass 維持 (既に実装済み)
+- [x] La Letizia (/lp/la-letizia-dubai-marina) で確認
+- [x] NOA hair (/lp/noa-hair-tokyo-nakameguro) で確認
+- [x] /r/:slug は変更なし確認

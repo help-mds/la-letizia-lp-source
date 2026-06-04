@@ -24,7 +24,7 @@ export default function AccessScene({
   return (
     <div
       className="scene-access-wrap absolute inset-0 flex flex-col md:flex-row"
-      style={{ background: 'linear-gradient(to bottom, #1a1a1a, #0a0a0a)' }}
+      style={{ background: '#FBFAF8' }}
     >
       {/* Left/Top: Info */}
       <div className="scene-access-left flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-16 pt-14 md:pt-0">
@@ -34,7 +34,7 @@ export default function AccessScene({
             letterSpacing: '0.4em',
             opacity: 0.5,
             marginBottom: '10px',
-            color: 'white',
+            color: '#1a1a1a',
             textTransform: 'uppercase',
           }}
         >
@@ -47,7 +47,7 @@ export default function AccessScene({
             fontSize: 'clamp(20px, 3.5vw, 28px)',
             fontWeight: 400,
             marginBottom: '18px',
-            color: 'white',
+            color: '#1a1a1a',
           }}
         >
           {addressLines[0] || 'Find Us'}

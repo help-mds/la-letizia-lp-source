@@ -59,7 +59,7 @@ export default function ReservationScene({
   return (
     <div
       className="absolute inset-0 flex flex-col items-center justify-center px-6"
-      style={{ background: '#0a0a0a' }}
+      style={{ background: '#FBFAF8' }}
     >
       <div
         style={{
@@ -67,7 +67,7 @@ export default function ReservationScene({
           letterSpacing: '0.4em',
           opacity: 0.5,
           marginBottom: '12px',
-          color: 'white',
+          color: '#1a1a1a',
           textTransform: 'uppercase',
         }}
       >
@@ -80,7 +80,7 @@ export default function ReservationScene({
           fontSize: 'clamp(24px, 4vw, 32px)',
           fontWeight: 400,
           marginBottom: '6px',
-          color: 'white',
+          color: '#1a1a1a',
           textAlign: 'center',
         }}
       >
@@ -91,7 +91,7 @@ export default function ReservationScene({
           fontSize: '11px',
           opacity: 0.6,
           marginBottom: '28px',
-          color: 'white',
+          color: '#1a1a1a',
           textAlign: 'center',
         }}
       >
