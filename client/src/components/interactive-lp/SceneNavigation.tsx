@@ -8,8 +8,9 @@ interface SceneNavigationProps {
 }
 
 /**
- * SceneNavigation: Large pill dot-nav with labels (top center), large arrows (right), MDS badge.
- * Inspired by Marina Bay Sands interactive nav.
+ * SceneNavigation: Glassmorphism pill dot-nav (top center), glass arrows (right-bottom on mobile),
+ * beige/gold RESERVE CTA, and MDS badge.
+ * Inspired by Marina Bay Sands interactive experience.
  */
 export default function SceneNavigation({
   scenes,
@@ -22,7 +23,7 @@ export default function SceneNavigation({
 
   return (
     <>
-      {/* Large pill dot nav — top center with labels */}
+      {/* Glassmorphism pill dot nav — top center with labels */}
       <div className="scene-pill-nav">
         {navScenes.map((scene) => {
           const realIndex = scenes.findIndex((s) => s.id === scene.id);
@@ -40,7 +41,7 @@ export default function SceneNavigation({
         })}
       </div>
 
-      {/* Arrow navigation (right side, larger) */}
+      {/* Glass arrow navigation (right side desktop, right-bottom mobile) */}
       <div className="scene-arrows">
         <button
           className="scene-arrow-btn"
@@ -48,7 +49,7 @@ export default function SceneNavigation({
           disabled={currentIndex === 0}
           aria-label="Previous scene"
         >
-          <IconChevronUp size={28} />
+          <IconChevronUp size={26} />
         </button>
         <button
           className="scene-arrow-btn"
@@ -56,11 +57,11 @@ export default function SceneNavigation({
           disabled={currentIndex === scenes.length - 1}
           aria-label="Next scene"
         >
-          <IconChevronDown size={28} />
+          <IconChevronDown size={26} />
         </button>
       </div>
 
-      {/* Persistent Reserve CTA — top right */}
+      {/* Persistent Reserve CTA — beige/gold */}
       <button
         className="scene-persistent-cta"
         onClick={onReserve}
@@ -69,7 +70,7 @@ export default function SceneNavigation({
         RESERVE
       </button>
 
-      {/* MDS Badge - bottom left */}
+      {/* MDS Badge - top left */}
       <a
         href="https://mds-fund.com"
         target="_blank"

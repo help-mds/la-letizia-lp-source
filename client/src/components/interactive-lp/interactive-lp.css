@@ -1,6 +1,21 @@
 /* ============================================================
    Interactive Scene LP — Styles
+   Glassmorphism + Beige/Gold Theme (Marina Bay Sands inspired)
    ============================================================ */
+
+/* ---- Design Tokens ---- */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-strong: rgba(255, 255, 255, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-border-strong: rgba(255, 255, 255, 0.4);
+  --glass-blur: 16px;
+  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --beige-gold: #C9A96E;
+  --beige-light: #D4B896;
+  --beige-soft: #E8D5B7;
+  --beige-cream: #F2E8D9;
+}
 
 /* Ken Burns animation — subtle scale only, no translate so hotspots stay stable */
 @keyframes kenBurns {
@@ -14,27 +29,28 @@
   z-index: 20;
   width: 54px;
   height: 54px;
-  border: 1.5px solid rgba(255, 255, 255, 0.55);
-  background: rgba(255, 255, 255, 0.2);
+  border: 1.5px solid var(--glass-border-strong);
+  background: var(--glass-bg-strong);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  transition: background 0.2s ease, transform 0.16s ease, border-color 0.2s;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition: background 0.2s ease, transform 0.16s ease, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--glass-shadow);
 }
 .hotspot-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
-  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .hotspot-btn:active {
   transform: translate(-50%, -50%) scale(0.95);
 }
 .hotspot-icon {
-  color: white;
+  color: var(--beige-cream);
   font-size: 22px;
   font-weight: 600;
   line-height: 1;
@@ -44,7 +60,7 @@
   position: absolute;
   inset: -7px;
   border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   animation: hotspotPulse 2.2s ease-out infinite;
 }
 @keyframes hotspotPulse {
@@ -52,7 +68,7 @@
   100% { transform: scale(1.7); opacity: 0; }
 }
 
-/* ---- Hotspot Tooltip (anchored beside hotspot) ---- */
+/* ---- Hotspot Tooltip (anchored beside hotspot — DESKTOP) ---- */
 .hotspot-anchor {
   z-index: 20;
 }
@@ -61,12 +77,12 @@
   top: 50%;
   transform: translateY(-50%);
   width: 300px;
-  background: rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 0.5px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 20px 22px 18px;
+  background: rgba(15, 15, 15, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  padding: 22px 24px 20px;
   z-index: 50;
   animation: tooltipIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -82,22 +98,22 @@
 }
 .hotspot-tooltip-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 24px;
-  height: 24px;
+  top: 12px;
+  left: 12px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 .hotspot-tooltip-close:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
 }
 .hotspot-tooltip-title {
@@ -105,37 +121,43 @@
   font-weight: 500;
   color: white;
   margin-bottom: 8px;
-  padding-right: 30px;
+  padding-right: 10px;
+  font-family: var(--font-heading), serif;
 }
 .hotspot-tooltip-body {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.65;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .hotspot-tooltip-price {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  color: var(--beige-gold);
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .hotspot-tooltip-ctas {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 .hotspot-tooltip-cta-btn {
-  padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 0.5px solid rgba(255, 255, 255, 0.25);
-  color: white;
+  padding: 10px 16px;
+  background: var(--beige-gold);
+  border: none;
+  color: #111;
   font-size: 11px;
-  border-radius: 5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.16s;
 }
 .hotspot-tooltip-cta-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--beige-light);
+}
+.hotspot-tooltip-cta-btn:active {
+  transform: scale(0.96);
 }
 
 /* ---- Access Scene ---- */
@@ -210,29 +232,33 @@
 }
 .scene-cta-btn {
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
   color: white;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   font-family: inherit;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .scene-cta-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border-strong);
 }
 .scene-cta-btn-primary {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--beige-gold);
   color: #111;
   border-color: transparent;
   grid-column: span 2;
   justify-content: center;
+  font-weight: 600;
 }
 .scene-cta-btn-primary:hover {
-  background: white;
+  background: var(--beige-light);
 }
 .scene-cta-btn-text {
   display: flex;
@@ -249,7 +275,9 @@
   letter-spacing: 0.05em;
 }
 
-/* ---- Navigation: Large Pill Dot Nav with Labels (top center) ---- */
+/* ============================================================
+   Navigation: Glassmorphism Pill Dot Nav (top center)
+   ============================================================ */
 .scene-pill-nav {
   position: fixed;
   top: 18px;
@@ -258,123 +286,139 @@
   z-index: 60;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  background: rgba(20, 20, 20, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 28px;
-  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 .scene-pill-dot {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.02em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 .scene-pill-dot:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
   color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 .scene-pill-dot.active {
-  background: rgba(255, 255, 255, 0.92);
-  border-color: white;
-  color: #111;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  background: var(--beige-gold);
+  border-color: var(--beige-light);
+  color: #1a1a1a;
+  box-shadow: 0 0 16px rgba(201, 169, 110, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* (dots removed) */
-
-/* ---- Navigation: Arrows (larger) ---- */
+/* ============================================================
+   Navigation: Arrows (glassmorphism, right side)
+   ============================================================ */
 .scene-arrows {
   position: fixed;
   right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 28%;
   z-index: 60;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 .scene-arrow-btn {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: rgba(255, 255, 255, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: var(--glass-shadow);
 }
 .scene-arrow-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border-strong);
   color: white;
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.scene-arrow-btn:active:not(:disabled) {
+  transform: scale(0.94);
 }
 .scene-arrow-btn:disabled {
-  opacity: 0.3;
+  opacity: 0.25;
   cursor: not-allowed;
 }
 
-/* ---- Persistent CTA ---- */
+/* ============================================================
+   Persistent CTA (glassmorphism)
+   ============================================================ */
 .scene-persistent-cta {
   position: fixed;
   top: 18px;
   right: 20px;
   z-index: 60;
-  padding: 8px 18px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #111;
-  border: none;
-  border-radius: 4px;
+  padding: 10px 20px;
+  background: rgba(201, 169, 110, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
   font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s, transform 0.16s;
+  transition: background 0.2s, transform 0.16s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px rgba(201, 169, 110, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .scene-persistent-cta:hover {
-  background: white;
+  background: rgba(212, 184, 150, 0.9);
+  box-shadow: 0 4px 18px rgba(201, 169, 110, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .scene-persistent-cta:active {
   transform: scale(0.96);
 }
 
-/* ---- MDS Badge ---- */
+/* ============================================================
+   MDS Badge (glassmorphism)
+   ============================================================ */
 .scene-mds-badge {
   position: fixed;
-  bottom: 16px;
+  top: 22px;
   left: 16px;
   z-index: 60;
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-size: 9px;
+  letter-spacing: 0.16em;
   padding: 6px 12px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.2s;
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(4px);
+  transition: color 0.2s, border-color 0.2s;
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .scene-mds-badge:hover {
   color: rgba(255, 255, 255, 0.8);
@@ -425,43 +469,41 @@
    MOBILE / PORTRAIT OPTIMIZATION
    ============================================================ */
 
-/* Small screens (portrait phones) */
 @media (max-width: 640px) {
-  /* Pill nav: slightly smaller on mobile but still readable */
+  /* Pill nav: glass style, slightly smaller dots */
   .scene-pill-nav {
     top: 12px;
-    gap: 6px;
-    padding: 6px 10px;
+    gap: 4px;
+    padding: 5px 8px;
   }
   .scene-pill-dot {
-    width: 26px;
-    height: 26px;
-    font-size: 9px;
+    width: 30px;
+    height: 30px;
+    font-size: 10px;
   }
 
-  /* Arrows: right side, vertically centered on mobile */
+  /* Arrows: RIGHT-BOTTOM (Marina Bay Sands style) */
   .scene-arrows {
-    top: 50%;
-    bottom: auto;
-    right: 12px;
+    top: auto;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
     left: auto;
-    transform: translateY(-50%);
+    transform: none;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
   .scene-arrow-btn {
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
   }
 
-  /* Persistent CTA: top-right on mobile */
+  /* Persistent CTA: top-right */
   .scene-persistent-cta {
-    top: 12px;
-    bottom: auto;
+    top: 14px;
     right: 12px;
-    transform: none;
-    padding: 7px 14px;
+    padding: 8px 14px;
     font-size: 9px;
+    letter-spacing: 0.1em;
   }
   .scene-persistent-cta:active {
     transform: scale(0.96);
@@ -472,10 +514,10 @@
     display: flex;
   }
 
-  /* Hotspots: larger touch targets on mobile */
+  /* Hotspots: glass style, larger touch targets */
   .hotspot-btn {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
   }
   .hotspot-icon {
     font-size: 20px;
@@ -484,29 +526,7 @@
     inset: -6px;
   }
 
-  /* Tooltip: fixed bottom card on mobile */
-  .hotspot-tooltip {
-    position: fixed;
-    top: auto;
-    bottom: 24px;
-    left: 16px !important;
-    right: 16px !important;
-    transform: none;
-    width: auto;
-    max-width: none;
-    max-height: 45vh;
-    overflow-y: auto;
-    padding: 20px 20px calc(18px + env(safe-area-inset-bottom));
-  }
-  .hotspot-tooltip--right,
-  .hotspot-tooltip--left {
-    left: 16px !important;
-    right: 16px !important;
-  }
-  @keyframes tooltipIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  /* Mobile tooltip handled by .mobile-tooltip-overlay below */
 
   /* Map link: smaller on mobile */
   .scene-map-link {
@@ -526,13 +546,14 @@
     padding: 14px 16px;
   }
 
-  /* MDS badge: bottom-left on mobile, above safe area */
+  /* MDS badge: top-left on mobile */
   .scene-mds-badge {
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    top: auto;
+    top: 14px;
     left: 12px;
-    font-size: 9px;
+    bottom: auto;
+    font-size: 8px;
     padding: 4px 8px;
+    letter-spacing: 0.14em;
   }
 }
 
@@ -555,26 +576,137 @@
 
 /* Very small screens (iPhone SE, etc.) */
 @media (max-width: 375px) {
-  .scene-tab {
-    font-size: 8px;
-    padding: 7px 3px;
-    letter-spacing: 0.04em;
+  .scene-pill-dot {
+    width: 26px;
+    height: 26px;
+    font-size: 9px;
   }
   .scene-persistent-cta {
-    bottom: 56px;
-    padding: 7px 14px;
-    font-size: 10px;
+    padding: 6px 12px;
+    font-size: 8px;
   }
   .hotspot-tooltip {
-    width: 90vw;
-    bottom: 70px;
+    width: calc(100vw - 32px) !important;
+    padding: 24px 20px;
+  }
+  .scene-arrow-btn {
+    width: 44px;
+    height: 44px;
   }
 }
 
 /* iOS safe area support */
 @supports (padding: env(safe-area-inset-bottom)) {
-  .scene-arrows {
-    bottom: calc(80px + env(safe-area-inset-bottom));
+  @media (max-width: 640px) {
+    .scene-arrows {
+      bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* ============================================================
+   Mobile Full-Screen Tooltip Modal (Marina Bay Sands style)
+   Only visible on mobile; desktop uses inline tooltip beside hotspot
+   ============================================================ */
+.mobile-tooltip-overlay {
+  display: none;
+}
+.mobile-tooltip-modal {
+  display: none;
+}
+.hidden-on-mobile {
+  display: block;
+}
+
+@media (max-width: 640px) {
+  /* Hide desktop inline tooltip on mobile */
+  .hidden-on-mobile {
+    display: none !important;
+  }
+
+  /* Show mobile full-screen overlay */
+  .mobile-tooltip-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: mobileOverlayIn 0.2s ease;
+  }
+  @keyframes mobileOverlayIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .mobile-tooltip-modal {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: none;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 36px 28px calc(32px + env(safe-area-inset-bottom, 0px));
+    border-radius: 20px;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7);
+    animation: mobileModalIn 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @keyframes mobileModalIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .mobile-tooltip-modal .hotspot-tooltip-close {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 32px;
+    height: 32px;
+  }
+  .mobile-tooltip-modal .hotspot-tooltip-title {
+    font-size: 24px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    padding-right: 0;
+    font-family: var(--font-heading), serif;
+  }
+  .mobile-tooltip-modal .hotspot-tooltip-body {
+    font-size: 15px;
+    line-height: 1.8;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .mobile-tooltip-modal .hotspot-tooltip-price {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--beige-gold);
+  }
+  .mobile-tooltip-modal .hotspot-tooltip-ctas {
+    justify-content: center;
+    gap: 10px;
+  }
+  .mobile-tooltip-modal .hotspot-tooltip-cta-btn {
+    padding: 14px 28px;
+    font-size: 13px;
+    border-radius: 8px;
+    background: var(--beige-gold);
+    color: #1a1a1a;
+    font-weight: 600;
+  }
+
+  /* Also hide the inline tooltip that was in the old mobile section */
+  .hotspot-tooltip {
+    display: none !important;
   }
 }
 

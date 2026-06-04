@@ -32,7 +32,9 @@ function getTooltipSide(x: number): 'right' | 'left' {
 
 /**
  * InteractiveScene: A full-viewport scene with a Ken Burns animated background,
- * pulsing "?" hotspots, and tooltip popups anchored beside each hotspot.
+ * pulsing "?" hotspots, and tooltip popups.
+ * Desktop: tooltip anchored beside hotspot.
+ * Mobile: full-screen centered modal (Marina Bay Sands style).
  */
 export default function InteractiveScene({
   imageUrl,
@@ -80,6 +82,8 @@ export default function InteractiveScene({
     [onCtaAction],
   );
 
+  const activeHotspot = hotspots.find((h) => h.id === activePopup);
+
   return (
     <div className="absolute inset-0 overflow-hidden" onClick={handleBackgroundClick}>
       {/* Ken Burns animated background */}
@@ -126,10 +130,10 @@ export default function InteractiveScene({
               {!isOpen && <span className="hotspot-ripple" />}
             </button>
 
-            {/* Tooltip anchored beside the hotspot */}
+            {/* Desktop tooltip anchored beside the hotspot (hidden on mobile via CSS) */}
             {isOpen && (
               <div
-                className={`hotspot-tooltip hotspot-tooltip--${side}`}
+                className={`hotspot-tooltip hotspot-tooltip--${side} hidden-on-mobile`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -163,6 +167,45 @@ export default function InteractiveScene({
         );
       })}
       </div>
+
+      {/* Mobile full-screen tooltip modal (shown only on mobile when popup is active) */}
+      {activePopup && activeHotspot && (
+        <div
+          className="mobile-tooltip-overlay"
+          onClick={handleClosePopup}
+        >
+          <div
+            className="mobile-tooltip-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="hotspot-tooltip-close"
+              onClick={handleClosePopup}
+              aria-label="Close"
+            >
+              <IconX size={16} />
+            </button>
+            <div className="hotspot-tooltip-title">{activeHotspot.title}</div>
+            <div className="hotspot-tooltip-body">{activeHotspot.body}</div>
+            {activeHotspot.price && (
+              <div className="hotspot-tooltip-price">{activeHotspot.price}</div>
+            )}
+            {activeHotspot.ctas && activeHotspot.ctas.length > 0 && (
+              <div className="hotspot-tooltip-ctas">
+                {activeHotspot.ctas.map((cta) => (
+                  <button
+                    key={cta.action}
+                    className="hotspot-tooltip-cta-btn"
+                    onClick={(e) => handleCtaClick(e, cta.action)}
+                  >
+                    {cta.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
