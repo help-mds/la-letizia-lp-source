@@ -60,13 +60,13 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 260px;
-  background: rgba(0, 0, 0, 0.75);
+  width: 300px;
+  background: rgba(0, 0, 0, 0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 0.5px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  padding: 16px 18px 14px;
+  border-radius: 12px;
+  padding: 20px 22px 18px;
   z-index: 50;
   animation: tooltipIn 0.25s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -101,17 +101,17 @@
   color: white;
 }
 .hotspot-tooltip-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: white;
-  margin-bottom: 6px;
-  padding-right: 28px;
+  margin-bottom: 8px;
+  padding-right: 30px;
 }
 .hotspot-tooltip-body {
-  font-size: 12px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.75);
-  line-height: 1.6;
-  margin-bottom: 8px;
+  line-height: 1.65;
+  margin-bottom: 10px;
 }
 .hotspot-tooltip-price {
   font-size: 13px;
@@ -125,11 +125,11 @@
   flex-wrap: wrap;
 }
 .hotspot-tooltip-cta-btn {
-  padding: 6px 12px;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.1);
   border: 0.5px solid rgba(255, 255, 255, 0.25);
   color: white;
-  font-size: 10px;
+  font-size: 11px;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.2s;
@@ -428,32 +428,32 @@
     height: 7px;
   }
 
-  /* Arrows: bottom-center horizontal on mobile */
+  /* Arrows: right side, higher up on mobile */
   .scene-arrows {
     top: auto;
-    bottom: 14px;
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    flex-direction: row;
-    gap: 10px;
+    bottom: 80px;
+    right: 16px;
+    left: auto;
+    transform: none;
+    flex-direction: column;
+    gap: 8px;
   }
   .scene-arrow-btn {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
   }
 
-  /* Persistent CTA: bottom-center, above arrows */
+  /* Persistent CTA: top-right on mobile */
   .scene-persistent-cta {
-    top: auto;
-    bottom: 60px;
-    right: 50%;
-    transform: translateX(50%);
-    padding: 8px 18px;
-    font-size: 11px;
+    top: 12px;
+    bottom: auto;
+    right: 12px;
+    transform: none;
+    padding: 8px 16px;
+    font-size: 10px;
   }
   .scene-persistent-cta:active {
-    transform: translateX(50%) scale(0.96);
+    transform: scale(0.96);
   }
 
   /* Show swipe hint on mobile */
@@ -473,28 +473,28 @@
     inset: -6px;
   }
 
-  /* Tooltip: mobile adjustments — show below hotspot on small screens */
+  /* Tooltip: fixed bottom card on mobile */
   .hotspot-tooltip {
     position: fixed;
     top: auto;
-    bottom: 80px;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%);
-    width: 85vw;
-    max-width: 320px;
-    max-height: 50vh;
+    bottom: 24px;
+    left: 16px !important;
+    right: 16px !important;
+    transform: none;
+    width: auto;
+    max-width: none;
+    max-height: 45vh;
     overflow-y: auto;
-    padding-bottom: calc(14px + env(safe-area-inset-bottom));
+    padding: 20px 20px calc(18px + env(safe-area-inset-bottom));
   }
   .hotspot-tooltip--right,
   .hotspot-tooltip--left {
-    left: 50% !important;
-    right: auto !important;
+    left: 16px !important;
+    right: 16px !important;
   }
   @keyframes tooltipIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* Map link: smaller on mobile */
@@ -515,10 +515,13 @@
     padding: 14px 16px;
   }
 
-  /* MDS badge: adjust for safe area */
+  /* MDS badge: top-left on mobile to avoid overlap */
   .scene-mds-badge {
-    bottom: calc(12px + env(safe-area-inset-bottom));
-    left: calc(12px + env(safe-area-inset-left));
+    bottom: auto;
+    top: 12px;
+    left: 12px;
+    font-size: 9px;
+    padding: 4px 8px;
   }
 }
 
@@ -560,10 +563,7 @@
 /* iOS safe area support */
 @supports (padding: env(safe-area-inset-bottom)) {
   .scene-arrows {
-    bottom: calc(14px + env(safe-area-inset-bottom));
-  }
-  .scene-popup-modal {
-    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    bottom: calc(80px + env(safe-area-inset-bottom));
   }
 }
 
