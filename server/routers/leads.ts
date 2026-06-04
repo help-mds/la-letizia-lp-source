@@ -74,6 +74,10 @@ export const leadsRouter = router({
         info_hours: z.string().optional(),
         info_phone: z.string().optional(),
         info_reservation_url: z.string().optional(),
+        instagram_handle: z.string().optional(),
+        reservation_url: z.string().optional(),
+        map_lat: z.string().optional(),
+        map_lng: z.string().optional(),
         menu_items: z.array(z.object({
           name: z.string(),
           desc: z.string().optional(),
@@ -124,6 +128,10 @@ export const leadsRouter = router({
         infoHours: input.info_hours,
         infoPhone: input.info_phone,
         infoReservationUrl: input.info_reservation_url,
+        instagramHandle: input.instagram_handle,
+        reservationUrl: input.reservation_url,
+        mapLat: input.map_lat,
+        mapLng: input.map_lng,
         menuItems: input.menu_items,
       }).$returningId();
 

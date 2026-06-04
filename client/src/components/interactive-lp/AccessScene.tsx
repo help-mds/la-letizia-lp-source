@@ -10,6 +10,7 @@ interface AccessSceneProps {
 /**
  * AccessScene: Scene 4 (Visit/Access).
  * Dark gradient background with address, hours, and a map link panel.
+ * Responsive: side-by-side on desktop, stacked on portrait mobile.
  */
 export default function AccessScene({
   address,
@@ -22,11 +23,11 @@ export default function AccessScene({
 
   return (
     <div
-      className="absolute inset-0 flex"
+      className="scene-access-wrap absolute inset-0 flex flex-col md:flex-row"
       style={{ background: 'linear-gradient(to bottom, #1a1a1a, #0a0a0a)' }}
     >
-      {/* Left: Info */}
-      <div className="flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-16">
+      {/* Left/Top: Info */}
+      <div className="scene-access-left flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-16 pt-14 md:pt-0">
         <div
           style={{
             fontSize: '9px',
@@ -74,8 +75,8 @@ export default function AccessScene({
         )}
       </div>
 
-      {/* Right: Map link */}
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-8">
+      {/* Right/Bottom: Map link */}
+      <div className="scene-access-right flex-1 flex items-center justify-center p-4 sm:p-8">
         <a
           href={mapsUrl || '#'}
           target="_blank"

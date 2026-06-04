@@ -83,6 +83,12 @@ export const leads = mysqlTable("leads", {
   infoPhone: varchar("info_phone", { length: 50 }),
   infoReservationUrl: text("info_reservation_url"),
 
+  // Interactive LP contact fields
+  instagramHandle: varchar("instagram_handle", { length: 100 }),
+  reservationUrl: text("reservation_url"),
+  mapLat: varchar("map_lat", { length: 20 }),
+  mapLng: varchar("map_lng", { length: 20 }),
+
   // Video pipeline results
   videoUrl: text("video_url"),
   videoTaskId: varchar("video_task_id", { length: 255 }),

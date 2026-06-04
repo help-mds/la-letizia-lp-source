@@ -190,7 +190,7 @@
 - [x] Build AccessScene.tsx (address, hours, map link)
 - [x] Build ReservationScene.tsx (5 CTAs: form, phone, WhatsApp, Instagram, Maps)
 - [x] Add persistent "Reserve" button (top-right, all scenes)
-- [ ] Add leads table columns (phone_number, whatsapp_number, instagram_handle, reservation_url, map_lat, map_lng)
+- [x] Add leads table columns (phone_number, whatsapp_number, instagram_handle, reservation_url, map_lat, map_lng)
 
 ### Phase 4: Navigation
 - [x] Build SceneNav tabs (Hero | Space | Selection | Craft | Access | Reserve)
@@ -200,7 +200,7 @@
 - [x] Add MDS badge (bottom-left, link to mds-fund.com)
 
 ### Phase 5: Mobile + Integration
-- [ ] Mobile layout optimization (portrait viewport, hotspot repositioning)
+- [x] Mobile layout optimization (portrait viewport, hotspot repositioning)
 - [x] Register /lp/:slug route in App.tsx
 - [x] Create InteractiveLpPage.tsx integrating all components
 - [x] Full integration test (all scenes, transitions, hotspots, popups verified)

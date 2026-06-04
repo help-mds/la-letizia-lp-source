@@ -33,3 +33,33 @@ Note: GSAP scrub interactions (scroll-driven animations) cannot be fully tested 
 - Detail video frame progression
 - Story horizontal video scrub
 - SeamTransition A/B/C patterns between sections
+
+---
+
+# Visual QA Notes - Interactive LP (/lp/:slug)
+
+## Selection Scene (AI-generated kaiseki image)
+- Image loads correctly from CDN
+- Shows overhead shot of kaiseki dinner spread on dark marble
+- A5 wagyu sashimi visible on left (ceramic plate with wasabi)
+- Binchotan-grilled wagyu steak in center-bottom (charred edges on stone plate)
+- Chef's omakase selection on wooden tray (top-center)
+- 3 hotspots positioned correctly: Wagyu Sashimi (left), Binchotan Grill (center-bottom), Chef's Omakase (top-center)
+- Cool neutral lighting, magazine-quality composition confirmed
+
+## Reservation Scene (DB-driven contacts)
+- "Reserve Online" → links to sevenrooms.com/reservations/laletizia
+- "Call" → +971 4 555 0123 (correct)
+- "WhatsApp" → "Message us" (correct)
+- "Instagram" → @laletizia.dubai (from DB instagram_handle field)
+- "Map" → Google Maps link with lat/lng 25.0801,55.1399 (correct)
+
+## Access Scene
+- Address: Dubai Marina Walk, Tower 3, Ground Floor, Dubai, UAE
+- Hours: Daily 7:00 AM – 4:00 PM
+- Access note: Dubai Marina Metro Station — 6 min walk, Valet parking available
+- OPEN MAP button links to Google Maps with correct coordinates
+
+## All Tests Passing
+- 5 test files, 19 tests, all passed
+- TypeScript: 0 errors

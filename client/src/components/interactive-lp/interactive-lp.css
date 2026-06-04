@@ -362,42 +362,180 @@
   opacity: 0;
 }
 
-/* ---- Mobile adjustments ---- */
+/* ---- Swipe indicator (mobile) ---- */
+.scene-swipe-hint {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 55;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  animation: swipeHintFade 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes swipeHintFade {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* ============================================================
+   MOBILE / PORTRAIT OPTIMIZATION
+   ============================================================ */
+
+/* Small screens (portrait phones) */
 @media (max-width: 640px) {
+  /* Tabs: horizontal scroll, smaller text */
   .scene-tabs {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
+  .scene-tabs::-webkit-scrollbar {
+    display: none;
   }
   .scene-tab {
     font-size: 9px;
     padding: 8px 4px;
     white-space: nowrap;
+    min-width: 0;
   }
+
+  /* Hide dot navigation on mobile — tabs + swipe are sufficient */
   .scene-dots {
     display: none;
   }
+
+  /* Arrows: move to bottom-center horizontal layout */
+  .scene-arrows {
+    bottom: 14px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+    gap: 8px;
+  }
+  .scene-arrow-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Persistent CTA: bottom-center, above arrows */
   .scene-persistent-cta {
     top: auto;
-    bottom: 12px;
+    bottom: 60px;
     right: 50%;
     transform: translateX(50%);
+    padding: 8px 18px;
+    font-size: 11px;
   }
   .scene-persistent-cta:active {
     transform: translateX(50%) scale(0.96);
   }
-  .scene-arrows {
-    bottom: 50%;
-    transform: translateY(50%);
+
+  /* Show swipe hint on mobile */
+  .scene-swipe-hint {
+    display: flex;
   }
+
+  /* Hotspots: larger touch targets on mobile */
+  .hotspot-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .hotspot-plus {
+    font-size: 22px;
+  }
+  .hotspot-ripple {
+    inset: -6px;
+  }
+
+  /* Popup: full-width with safe area padding */
+  .scene-popup {
+    padding: 16px 16px calc(20px + env(safe-area-inset-bottom));
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  .scene-popup-title {
+    font-size: 14px;
+  }
+  .scene-popup-body {
+    font-size: 11px;
+  }
+
+  /* Map link: smaller on mobile */
   .scene-map-link {
     width: 120px;
     height: 120px;
   }
+
+  /* CTA grid: single column on mobile */
   .scene-cta-grid {
     grid-template-columns: 1fr;
+    max-width: 100%;
   }
   .scene-cta-btn-primary {
     grid-column: span 1;
+  }
+  .scene-cta-btn {
+    padding: 14px 16px;
+  }
+
+  /* MDS badge: adjust for safe area */
+  .scene-mds-badge {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: calc(12px + env(safe-area-inset-left));
+  }
+}
+
+/* Portrait orientation specific (includes taller phones) */
+@media (max-width: 768px) and (orientation: portrait) {
+  /* Access scene: stack vertically */
+  .scene-access-wrap {
+    flex-direction: column !important;
+  }
+  .scene-access-left {
+    flex: none !important;
+    padding-bottom: 24px;
+  }
+  .scene-access-right {
+    flex: none !important;
+    justify-content: flex-start !important;
+    padding-top: 0;
+  }
+}
+
+/* Very small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+  .scene-tab {
+    font-size: 8px;
+    padding: 7px 3px;
+    letter-spacing: 0.04em;
+  }
+  .scene-persistent-cta {
+    bottom: 56px;
+    padding: 7px 14px;
+    font-size: 10px;
+  }
+  .scene-popup {
+    padding: 14px 12px calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+/* iOS safe area support */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .scene-arrows {
+    bottom: calc(14px + env(safe-area-inset-bottom));
+  }
+  .scene-popup {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
   }
 }
 
@@ -418,5 +556,9 @@
   }
   .scene-container.exiting {
     transform: none;
+  }
+  .scene-swipe-hint {
+    animation: none;
+    opacity: 0.5;
   }
 }

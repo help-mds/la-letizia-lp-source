@@ -32,8 +32,9 @@ const SCENE_DEFS: SceneDef[] = [
 
 /* ============================================================
    Hotspot data for each interactive scene
+   Desktop vs mobile positions (percentage-based)
    ============================================================ */
-const SCENE_HOTSPOTS: Record<string, Hotspot[]> = {
+const SCENE_HOTSPOTS_DESKTOP: Record<string, Hotspot[]> = {
   s1: [
     {
       id: 's1a',
@@ -109,6 +110,83 @@ const SCENE_HOTSPOTS: Record<string, Hotspot[]> = {
   ],
 };
 
+// Mobile hotspot positions: shifted to avoid edges and overlap with navigation
+const SCENE_HOTSPOTS_MOBILE: Record<string, Hotspot[]> = {
+  s1: [
+    {
+      id: 's1a',
+      x: 25,
+      y: 35,
+      title: 'Counter Seating',
+      body: '12 seats facing the marina. We recommend reserving for sunset hours.',
+      ctas: [{ label: 'Reserve counter seat', action: 'reserve' }],
+    },
+    {
+      id: 's1b',
+      x: 50,
+      y: 50,
+      title: 'Open Kitchen',
+      body: "Watch every moment of preparation up close. The chef's hands are within arm's reach.",
+    },
+    {
+      id: 's1c',
+      x: 75,
+      y: 35,
+      title: 'Private Room',
+      body: '6 seats with sliding doors. Available for groups of 4 or more.',
+      ctas: [{ label: 'Reserve private room', action: 'reserve' }],
+    },
+  ],
+  s2: [
+    {
+      id: 's2a',
+      x: 25,
+      y: 40,
+      title: 'Wagyu Sashimi',
+      body: 'A5 rank from Miyazaki, hand-sliced. Wasabi, shiso, a single grain of sea salt.',
+      price: 'AED 280',
+      ctas: [
+        { label: 'View full menu', action: 'menu' },
+        { label: 'Reserve', action: 'reserve' },
+      ],
+    },
+    {
+      id: 's2b',
+      x: 50,
+      y: 60,
+      title: 'Binchotan Grill',
+      body: 'White binchotan charcoal from Wakayama, 30 seconds per side. Nothing else.',
+      price: 'AED 360',
+      ctas: [{ label: 'Reserve', action: 'reserve' }],
+    },
+    {
+      id: 's2c',
+      x: 70,
+      y: 30,
+      title: "Chef's Omakase",
+      body: '7 seasonal courses. Available for guests arriving before 7pm.',
+      price: 'AED 880 / person',
+      ctas: [{ label: 'Reserve omakase', action: 'reserve' }],
+    },
+  ],
+  s3: [
+    {
+      id: 's3a',
+      x: 30,
+      y: 40,
+      title: 'Sourcing',
+      body: 'A5 wagyu exclusively from Miyazaki Prefecture. Weekly delivery, never frozen.',
+    },
+    {
+      id: 's3b',
+      x: 70,
+      y: 40,
+      title: '21-Day Aging',
+      body: '21 days of dry aging to develop depth. The fat softens, umami concentrates.',
+    },
+  ],
+};
+
 /* ============================================================
    Main Page Component
    ============================================================ */
@@ -125,8 +203,22 @@ export default function InteractiveLpPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionEyebrow, setTransitionEyebrow] = useState('');
   const [transitionTitle, setTransitionTitle] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const heroCompletedRef = useRef(false);
+
+  // Touch swipe state
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const exitSceneMode = useCallback(() => {
     document.body.style.overflow = '';
@@ -212,6 +304,62 @@ export default function InteractiveLpPage() {
     return () => window.removeEventListener('keydown', handler);
   }, [sceneMode, currentScene, navigateToScene]);
 
+  // Touch swipe navigation (mobile)
+  useEffect(() => {
+    if (!sceneMode) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!touchStartRef.current) return;
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - touchStartRef.current.x;
+      const dy = touch.clientY - touchStartRef.current.y;
+      const dt = Date.now() - touchStartRef.current.time;
+      touchStartRef.current = null;
+
+      // Minimum swipe distance and maximum time
+      const minDistance = 50;
+      const maxTime = 500;
+
+      if (dt > maxTime) return;
+
+      // Determine if horizontal or vertical swipe
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      if (absDx > absDy && absDx > minDistance) {
+        // Horizontal swipe
+        if (dx < 0) {
+          // Swipe left → next scene
+          navigateToScene(currentScene + 1);
+        } else {
+          // Swipe right → previous scene
+          navigateToScene(currentScene - 1);
+        }
+      } else if (absDy > absDx && absDy > minDistance) {
+        // Vertical swipe
+        if (dy < 0) {
+          // Swipe up → next scene
+          navigateToScene(currentScene + 1);
+        } else {
+          // Swipe down → previous scene
+          navigateToScene(currentScene - 1);
+        }
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [sceneMode, currentScene, navigateToScene]);
+
   const handleReserve = useCallback(() => {
     const ctaIndex = SCENE_DEFS.findIndex((s) => s.id === 'cta');
     navigateToScene(ctaIndex);
@@ -223,6 +371,15 @@ export default function InteractiveLpPage() {
     }
     // Other actions handled by ReservationScene directly
   }, [handleReserve]);
+
+  // Get hotspots based on viewport
+  const getHotspots = useCallback(
+    (sceneId: string) => {
+      const source = isMobile ? SCENE_HOTSPOTS_MOBILE : SCENE_HOTSPOTS_DESKTOP;
+      return source[sceneId] || [];
+    },
+    [isMobile],
+  );
 
   // Loading state
   if (isLoading || !lead) {
@@ -241,13 +398,23 @@ export default function InteractiveLpPage() {
     s3: '/manus-storage/lp-craft-scene_16c7baf2.png', // AI-generated craft scene
   };
 
-  // Reservation channels
+  // Reservation channels — use new DB fields when available
+  const whatsappUrl = lead.whatsappNumber
+    ? `https://wa.me/${lead.whatsappNumber.replace(/[^0-9]/g, '')}`
+    : '#';
+  const instagramUrl = lead.instagramHandle
+    ? `https://instagram.com/${lead.instagramHandle.replace('@', '')}`
+    : lead.instagramUrl || '#';
+  const mapsUrl = lead.mapLat && lead.mapLng
+    ? `https://www.google.com/maps?q=${lead.mapLat},${lead.mapLng}`
+    : lead.googleMapsUrl || '#';
+
   const channels: ReservationChannel[] = [
-    { type: 'reserve-form', label: 'Reserve Online', url: lead.infoReservationUrl || '#' },
-    { type: 'call', label: 'Call', sublabel: lead.infoPhone || '+971 4 XXX XXXX', url: `tel:${lead.infoPhone || ''}` },
-    { type: 'whatsapp', label: 'WhatsApp', sublabel: 'Message us', url: '#' },
-    { type: 'instagram', label: 'Instagram', sublabel: 'Latest posts', url: '#' },
-    { type: 'maps', label: 'Map', sublabel: 'Google Maps', url: '#' },
+    { type: 'reserve-form', label: 'Reserve Online', url: lead.reservationUrl || lead.infoReservationUrl || '#' },
+    { type: 'call', label: 'Call', sublabel: lead.infoPhone || lead.phoneNumber || '+971 4 XXX XXXX', url: `tel:${lead.infoPhone || lead.phoneNumber || ''}` },
+    { type: 'whatsapp', label: 'WhatsApp', sublabel: 'Message us', url: whatsappUrl },
+    { type: 'instagram', label: 'Instagram', sublabel: lead.instagramHandle || 'Latest posts', url: instagramUrl },
+    { type: 'maps', label: 'Map', sublabel: 'Google Maps', url: mapsUrl },
   ];
 
   return (
@@ -268,7 +435,7 @@ export default function InteractiveLpPage() {
         >
           {/* Hero overlay text */}
           <div className="absolute inset-0 flex items-end justify-center pointer-events-none pb-[15vh]">
-            <div className="text-center">
+            <div className="text-center px-4">
               <div
                 style={{
                   fontSize: '9px',
@@ -297,6 +464,7 @@ export default function InteractiveLpPage() {
                   opacity: 0.6,
                   marginTop: '8px',
                   maxWidth: '300px',
+                  margin: '8px auto 0',
                 }}
               >
                 Wagyu from Miyazaki, charcoal from Wakayama. Twelve seats facing the marina.
@@ -324,10 +492,10 @@ export default function InteractiveLpPage() {
                   className={`scene-container ${isActive ? 'active' : ''}`}
                 >
                   <AccessScene
-                    address={lead.infoAddress || 'Dubai Marina Walk, Tower 3\nP.O. Box 12345, Dubai UAE'}
-                    hours={lead.infoHours || 'Mon–Sat 18:00 – 24:00\nSunday Closed'}
+                    address={lead.infoAddress || 'Dubai Marina Walk\nTower 3, Ground Floor\nDubai, UAE'}
+                    hours={lead.infoHours || 'Daily 7:00 AM – 4:00 PM'}
                     accessNote="Dubai Marina Metro Station — 6 min walk\nValet parking available"
-                    mapsUrl="#"
+                    mapsUrl={mapsUrl}
                   />
                 </div>
               );
@@ -355,7 +523,7 @@ export default function InteractiveLpPage() {
               >
                 <InteractiveScene
                   imageUrl={sceneImages[scene.id as keyof typeof sceneImages] || ''}
-                  hotspots={SCENE_HOTSPOTS[scene.id] || []}
+                  hotspots={getHotspots(scene.id)}
                   isActive={isActive}
                   onCtaAction={handleCtaAction}
                 />
