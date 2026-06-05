@@ -63,7 +63,7 @@
 
 | 素材 | 用途 | フォーマット | サイズ目安 |
 |---|---|---|---|
-| **ヒーロー動画** (1本) | スクロールスクラブ用フレーム抽出 | MP4 → WebPフレーム | 8秒, 720p, 30fps = 240フレーム |
+| **ヒーロー動画** (1本) | スクロールスクラブ用フレーム抽出 | MP4 → WebPフレーム | **全業種共通: 8秒, 720p, 30fps = 240フレーム必須** |
 | **Space画像** (1枚) | シーン1 背景 | WebP | 1920x1080 |
 | **Selection画像** (1枚) | シーン2 背景 | WebP | 1920x1080 |
 | **Craft画像** (1枚) | シーン3 背景 | WebP | 1920x1080 |
@@ -102,7 +102,7 @@ const FRAME_DATA_BY_SLUG: Record<string, { hero: { count: number; frames: string
 - Craft: `/manus-storage/lp-craft-scene_16c7baf2.png`
 
 **salon:**
-- ヒーロー動画: 32フレーム（`client/src/data/noa-hair-frames.json`）
+- ヒーロー動画: **240フレーム必須**（現在の `noa-hair-frames.json` は32フレームの暫定版。本番では240フレームに差し替え）
 - Space: `noa-space-interior-YFnW9GusRqg2qpSZU7PJ3s.webp`
 - Selection: `noa-selection-overhead-L2j7VcBVnRf94ZeizB539m.webp`
 - Craft: `noa-craft-hands-9vWzVS5P8zw2W8uBkwdSWm.webp`
@@ -253,8 +253,8 @@ function googleMapsUrlToEmbed(url: string): string {
 
 ## 素材準備チェックリスト（新業種追加時）
 
-- [ ] ヒーロー動画（8秒, 720p, 店内ウォークスルー風）を撮影/生成
-- [ ] 動画を30fpsでWebPフレーム抽出 → JSONファイル作成
+- [ ] ヒーロー動画（**8秒, 720p, 30fps = 240フレーム必須**。店内ウォークスルー風）を撮影/生成
+- [ ] 動画を30fpsでWebPフレーム抽出（240枚）→ JSONファイル作成
 - [ ] Space画像（店内全景）を用意
 - [ ] Selection画像（メニュー/サービス俯瞰）を用意
 - [ ] Craft画像（技術/こだわりのクローズアップ）を用意
