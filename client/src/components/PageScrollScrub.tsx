@@ -148,6 +148,8 @@ export default function PageScrollScrub({
   }, [prefersReducedMotion, activeCount, getFrameAt, drawFrame]);
 
   // Scroll handler — just updates target (no RAF coalesce needed, lerp handles smoothing)
+  // Supports both window-level scrolling and #root-level scrolling (for hosting environments
+  // like SalesKPI that constrain #root with overflow:hidden auto + fixed height)
   const handleScroll = useCallback(() => {
     if (prefersReducedMotion) return;
     const container = containerRef.current;
@@ -165,13 +167,27 @@ export default function PageScrollScrub({
     }
   }, [prefersReducedMotion, scrollIndicatorVisible]);
 
-  // Attach scroll listener
+  // Detect scroll target: window or a constrained parent (e.g., #root with overflow:auto)
+  const getScrollTarget = useCallback((): HTMLElement | Window => {
+    const root = document.getElementById('root');
+    if (root) {
+      const style = getComputedStyle(root);
+      const hasConstrainedHeight = root.scrollHeight > root.clientHeight &&
+        (style.overflow === 'auto' || style.overflow === 'hidden auto' ||
+         style.overflowY === 'auto' || style.overflowY === 'scroll');
+      if (hasConstrainedHeight) return root;
+    }
+    return window;
+  }, []);
+
+  // Attach scroll listener to the appropriate target
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const target = getScrollTarget();
+    target.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      target.removeEventListener('scroll', handleScroll);
     };
-  }, [handleScroll]);
+  }, [handleScroll, getScrollTarget]);
 
   // Draw first frame once ready
   useEffect(() => {

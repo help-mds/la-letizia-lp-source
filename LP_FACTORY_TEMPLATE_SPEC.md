@@ -262,3 +262,195 @@ function googleMapsUrlToEmbed(url: string): string {
 - [ ] `SCENE_IMAGES_BY_SLUG` にエントリ追加
 - [ ] `FRAME_DATA_BY_SLUG` にエントリ追加
 - [ ] `HERO_OVERLAY_BY_SLUG` にエントリ追加（eyebrow=店名）
+
+
+---
+
+## セールスKPI再現時の技術要件
+
+### ヒーロー実装: `<canvas>` + WebPフレーム方式（必須）
+
+セールスKPIシステムでLPを再現する際、ヒーローセクションは **`<video>` 要素ではなく `<canvas>` + WebPフレーム方式** を使用すること。
+
+**理由:**
+
+1. **iOS Safari 互換性**: `<video>` 要素のスクロールスクラブ（`currentTime` 操作）はiOS Safariで不安定。`<canvas>` + 画像フレームなら全ブラウザで確実に動作する。
+2. **object-fit の信頼性**: `<video>` の `object-fit:cover` はブラウザ/OSバージョンで挙動が異なる。canvas描画ならJS側でcover-fit計算を完全制御できる。
+3. **モバイル黒幕問題の防止**: `<video>` 要素はモバイルで黒幕（letterbox）が出る場合がある。canvas方式なら発生しない。
+
+**実装仕様:**
+
+```
+┌─ 外側コンテナ (height: 400svh, position: relative) ─┐
+│                                                       │
+│  ┌─ sticky viewport (top:0, w:100%, h:100svh) ─┐    │
+│  │                                               │    │
+│  │  ┌─ <canvas> (absolute inset-0, w/h:100%) ─┐ │    │
+│  │  │  JS cover-fit描画                        │ │    │
+│  │  └─────────────────────────────────────────┘ │    │
+│  │                                               │    │
+│  │  [オーバーレイ: テキスト/UI]                   │    │
+│  │                                               │    │
+│  └───────────────────────────────────────────────┘    │
+│                                                       │
+└───────────────────────────────────────────────────────┘
+```
+
+**cover-fit描画ロジック:**
+
+```typescript
+// canvas描画時のcover-fit計算
+const imgRatio = img.naturalWidth / img.naturalHeight;
+const canvasRatio = canvasWidth / canvasHeight;
+
+let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
+
+if (imgRatio > canvasRatio) {
+  // 画像が横長 → 左右クロップ
+  sw = img.naturalHeight * canvasRatio;
+  sx = (img.naturalWidth - sw) / 2;
+} else {
+  // 画像が縦長 → 上下クロップ
+  sh = img.naturalWidth / canvasRatio;
+  sy = (img.naturalHeight - sh) / 2;
+}
+
+ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+```
+
+---
+
+### スクロールリスナーの注意事項
+
+本テンプレートのスクロールスクラブは **`window.addEventListener('scroll')` を使用** し、`getBoundingClientRect()` でスクロール進行度を計算している。
+
+**セールスKPIホスティング環境の問題:**
+
+セールスKPIシステム（`saleskpi.xyz/sites/{id}`）は、LPを `<iframe>` 的に埋め込む際に以下のCSSを `#root` に適用する:
+
+```css
+#root {
+  overflow: hidden auto;
+  height: 100vh; /* viewport高さに固定 */
+}
+```
+
+この結果:
+- `window` レベルのスクロールが発生しない（`window.scrollY` は常に0）
+- スクロールは `#root` 要素内部で起きる
+- `window` の `scroll` イベントが発火しない
+- `getBoundingClientRect().top` が変化しない
+
+**対策（セールスKPI側で実装）:**
+
+```typescript
+// 方法A: ホスティング環境のCSS制約を解除（推奨）
+// html, body, #root に overflow:visible / height:auto を強制
+const style = document.createElement('style');
+style.textContent = `
+  html, body, #root {
+    overflow: visible !important;
+    height: auto !important;
+  }
+`;
+document.head.appendChild(style);
+
+// 方法B: スクロールリスナーのターゲットを動的検出
+function getScrollTarget(): HTMLElement | Window {
+  const root = document.getElementById('root');
+  if (root && root.scrollHeight > root.clientHeight) {
+    return root; // #root内スクロール
+  }
+  return window; // 通常のwindowスクロール
+}
+
+const target = getScrollTarget();
+target.addEventListener('scroll', handleScroll, { passive: true });
+
+// progress計算も対応
+function calculateProgress(container: HTMLElement, target: HTMLElement | Window): number {
+  if (target === window) {
+    const rect = container.getBoundingClientRect();
+    const scrollableHeight = container.scrollHeight - window.innerHeight;
+    return Math.max(0, Math.min(1, -rect.top / scrollableHeight));
+  } else {
+    const scrollTop = (target as HTMLElement).scrollTop;
+    const scrollableHeight = container.scrollHeight - (target as HTMLElement).clientHeight;
+    return Math.max(0, Math.min(1, scrollTop / scrollableHeight));
+  }
+}
+```
+
+---
+
+### UI要素サイズ仕様
+
+再現時は以下のサイズを正確に適用すること。サイズが小さいと安っぽく見える。
+
+**デスクトップ（641px以上）:**
+
+| 要素 | サイズ | 追加スタイル |
+|------|--------|-------------|
+| ドットナビ (pill dot) | 32px × 32px | 内部circle: 8px, active: 10px |
+| 矢印ボタン (↑↓) | 52px × 52px | アイコン: 26px |
+| 共有ボタン | 46px × 46px | アイコン: 20px |
+| RESERVEボタン | padding 10px 18px | font-size: 10px, letter-spacing: 0.15em |
+| ホットスポット "?" | 48px × 48px | font-size: 22px |
+| ヘッダー店名 | font-size: 15px | letter-spacing: 0.15em |
+| ヘッダーCredit | font-size: 9px | letter-spacing: 0.25em |
+
+**モバイル（640px以下）:**
+
+| 要素 | サイズ | 追加スタイル |
+|------|--------|-------------|
+| ドットナビ (pill dot) | 28px × 28px | 内部circle: 7px, active: 9px |
+| 矢印ボタン (↑↓) | 44px × 44px | 位置: right-bottom |
+| 共有ボタン | 38px × 38px | 位置: left-bottom |
+| RESERVEボタン | padding 8px 14px | font-size: 9px |
+| ホットスポット "?" | 52px × 52px | タッチターゲット拡大 |
+| ヘッダー店名 | font-size: 13px | — |
+
+**メタリック/ガラス質スタイル（全要素共通）:**
+
+```css
+/* エンクロージャー（外枠） */
+background: rgba(255, 255, 255, 0.55);
+backdrop-filter: blur(24px);
+box-shadow:
+  inset 0 1px 1px rgba(255, 255, 255, 0.8),
+  inset 0 -1px 1px rgba(0, 0, 0, 0.05),
+  0 4px 16px rgba(0, 0, 0, 0.12),
+  0 1px 3px rgba(0, 0, 0, 0.08);
+border: 1px solid rgba(255, 255, 255, 0.4);
+border-radius: 適切な値;
+```
+
+---
+
+### フレームアセット仕様
+
+| 項目 | 値 | 備考 |
+|------|-----|------|
+| 解像度 | 720×1280 (ポートレート 9:16) | モバイルファースト |
+| フォーマット | WebP | 軽量・高品質 |
+| フレーム数 | 240枚 (8秒 × 30fps) | stride=2でモバイル最適化 |
+| ファイル名規則 | `frame_001.webp` 〜 `frame_240.webp` | 連番 |
+| 合計サイズ目安 | 15-25MB | WebP圧縮後 |
+
+**モバイル最適化:**
+- `stride=2`: モバイル（768px未満）では1フレームおきにロード（120枚）
+- cover-fit描画: ポートレートフレームをランドスケープcanvasに描画する際は上下クロップ
+
+---
+
+### セールスKPI再現チェックリスト
+
+- [ ] ヒーローは `<canvas>` + WebPフレーム方式で実装（`<video>` 不可）
+- [ ] スクロールリスナーが正しく動作（`#root` overflow制約に対応）
+- [ ] モバイルで黒幕なし（cover-fit描画確認）
+- [ ] UI要素サイズが本家と一致（上記サイズ表参照）
+- [ ] メタリック/ガラス質スタイルが正しく適用
+- [ ] スクロール完了後のシーンモード遷移が動作
+- [ ] スワイプ/ホイールでシーン間移動が動作
+- [ ] ポップアップ自動再生が動作
+- [ ] ローディング画面が表示される
