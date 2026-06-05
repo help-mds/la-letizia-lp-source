@@ -179,6 +179,7 @@ export default function InteractiveLpPage() {
   const [heroFadingOut, setHeroFadingOut] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const heroCompletedRef = useRef(false);
+  const sceneEntryLockRef = useRef(false);
 
   // Loading state: controls light glass → dark glass transition
   const [lpLoading, setLpLoading] = useState(true);
@@ -249,7 +250,13 @@ export default function InteractiveLpPage() {
         setTransitionTitle(sceneDefs[1].title);
       }
       setIsTransitioning(true);
-      setTimeout(() => setIsTransitioning(false), 1600);
+      // Lock swipe/wheel during initial scene entry
+      sceneEntryLockRef.current = true;
+      setTimeout(() => {
+        setIsTransitioning(false);
+        // Keep lock a bit longer after transition ends to prevent accidental skip
+        setTimeout(() => { sceneEntryLockRef.current = false; }, 800);
+      }, 1600);
     }, 500);
   }, [sceneDefs]);
 
@@ -299,7 +306,7 @@ export default function InteractiveLpPage() {
     const WHEEL_THRESHOLD = 80;
 
     const triggerNav = (direction: 'next' | 'prev') => {
-      if (cooldown || isTransitioning) return;
+      if (cooldown || isTransitioning || sceneEntryLockRef.current) return;
       cooldown = true;
       if (direction === 'next') {
         navigateToScene(currentScene + 1);
