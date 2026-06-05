@@ -24,10 +24,10 @@ export default function AccessScene({
   return (
     <div
       className="scene-access-wrap absolute inset-0 flex flex-col md:flex-row"
-      style={{ background: '#FBFAF8' }}
+      style={{ background: '#FBFAF8', color: '#1a1a1a' }}
     >
       {/* Left/Top: Info */}
-      <div className="scene-access-left flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-16 pt-14 md:pt-0">
+      <div className="scene-access-left flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-16 pt-24 md:pt-0">
         <div
           style={{
             fontSize: '9px',
