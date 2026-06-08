@@ -10,15 +10,44 @@
 
 ---
 
-## LP Factory フォーム仕様（新・3項目のみ）
+## LP Factory フォーム仕様（簡素化版）
 
-### 入力項目
+### 見込み客ごとの入力項目（毎回入れ替えるのはこれだけ）
 
 | # | フィールド | 型 | 必須 | 説明 |
 |---|---|---|---|---|
 | 1 | **店名** | `string` | ✅ | ローディング画面・ヘッダー・Accessセクションに表示 |
-| 2 | **業種** | `enum: "restaurant" \| "salon"` | ✅ | テンプレート素材セットの切り替えに使用 |
-| 3 | **GoogleマップURL** | `string (URL)` | ✅ | Accessセクションの地図埋め込み + 住所自動取得 |
+| 2 | **GoogleマップURL** | `string (URL)` | ✅ | Accessセクションの地図埋め込み + 住所自動取得 |
+
+### 素材セット選択（コンテンツタブから自動選択）
+
+業種×グレードの組み合わせで素材セットが自動決定される。見込み客ごとに素材を変える必要はない。
+
+| # | フィールド | 型 | 説明 |
+|---|---|---|---|
+| 1 | **業種** | `enum` | コンテンツタブの業種行を選択 |
+| 2 | **グレード** | `enum: "高級" \| "カジュアル"` | 同業種内のトーン選択 |
+
+現在コンテンツタブに登録済みの業種×グレード:
+
+| 業種 | グレード | 素材ステータス |
+|------|----------|---------------|
+| カフェ | カジュアル | ✅ 動画+画像4枚登録済 |
+| カフェ | 高級 | ⚠️ 動画・画像未登録 |
+| 焼肉 | カジュアル | ✅ 動画+画像4枚登録済 |
+| 焼肉 | 高級 | ✅ 動画+画像4枚登録済 |
+
+### 運用フロー（見込み客ごとのLP発行）
+
+```
+1. 業種×グレードを選択（コンテンツタブから）
+2. 店名を入力
+3. GoogleマップURLを入力
+4. 「発行」ボタン押下
+   → LPが即座に生成（https://saleskpi.xyz/sites/{ID}）
+```
+
+**ポイント:** 素材（動画・画像）は業種×グレードで共通。見込み客ごとに変わるのは「店名」と「Googleマップ（地図）」だけ。
 
 ### 廃止する項目（旧 /lp-input の全フィールド）
 
@@ -55,11 +84,11 @@
 
 ---
 
-## 業種別素材セット
+## 業種×グレード別素材セット
 
-業種を選ぶと、**コンテンツタブの該当業種の素材**を自動で当てこむ。
+業種×グレードを選ぶと、**コンテンツタブの該当行の素材**を自動で当てこむ。見込み客ごとに素材を変える必要はない。
 
-### 必要素材（業種ごとに1セット）
+### 必要素材（業種×グレードごとに1セット）
 
 | 素材 | 用途 | フォーマット | サイズ目安 |
 |---|---|---|---|
@@ -93,19 +122,18 @@ const FRAME_DATA_BY_SLUG: Record<string, { hero: { count: number; frames: string
 };
 ```
 
-### 現在の素材セット
+### 現在の素材セット（コンテンツタブ対応）
 
-**restaurant:**
-- ヒーロー動画: 240フレーム（`client/src/data/37west-frames.json`）
-- Space: `/manus-storage/37west-space-interior_400cd9de.webp`
-- Selection: `lp-selection-overhead-eHmSyrXD96nxSAFVzzMQiM.webp`
-- Craft: `/manus-storage/lp-craft-scene_16c7baf2.png`
+| 業種 | グレード | ヒーロー動画 | Space | Selection | Craft |
+|------|----------|------------|-------|-----------|-------|
+| カフェ | カジュアル | ✅ 登録済 | ✅ | ✅ | ✅ |
+| カフェ | 高級 | ❌ 未登録 | ❌ | ❌ | ❌ |
+| 焼肉 | カジュアル | ✅ 登録済 | ✅ | ✅ | ✅ |
+| 焼肉 | 高級 | ✅ 登録済 | ✅ | ✅ | ✅ |
 
-**salon:**
-- ヒーロー動画: **240フレーム必須**（現在の `noa-hair-frames.json` は32フレームの暫定版。本番では240フレームに差し替え）
-- Space: `noa-space-interior-YFnW9GusRqg2qpSZU7PJ3s.webp`
-- Selection: `noa-selection-overhead-L2j7VcBVnRf94ZeizB539m.webp`
-- Craft: `noa-craft-hands-9vWzVS5P8zw2W8uBkwdSWm.webp`
+**旧マッピング（参考）:**
+- restaurant（焼肉高級）: 240フレーム（`client/src/data/37west-frames.json`）
+- salon（サロン）: 32フレーム暫定版（`noa-hair-frames.json`）
 
 ---
 
@@ -161,28 +189,27 @@ slug は `{店名}-{エリア}` のケバブケース（例: `la-letizia-dubai-m
 ### 1. フォーム送信時の処理フロー
 
 ```
-[フォーム入力: 店名 + 業種 + GoogleマップURL]
+[フォーム入力: 業種×グレード選択 + 店名 + GoogleマップURL]
         ↓
 [slug生成: kebab-case(店名)]
         ↓
-[業種に応じた素材セットを自動割り当て]
-  - restaurant → restaurant素材セット
-  - salon → salon素材セット
+[業種×グレードに応じた素材セットを自動割り当て]
+  - コンテンツタブの該当行から動画1本 + 画像4枚を取得
         ↓
 [DB にレコード作成]
   - storeName: 入力値
-  - businessType: 入力値
+  - businessType: 業種×グレード（例: "yakiniku-premium"）
   - googleMapsUrl: 入力値
   - slug: 自動生成
-  - status: 'READY' (動画生成パイプラインは不要)
+  - status: 'READY'
   - その他: 全てnull/デフォルト
         ↓
 [LP発行: https://saleskpi.xyz/sites/{id}]
 ```
 
-### 2. 素材差し替えのみで新LP生成
+### 2. 素材は業種×グレードで共通（見込み客ごとの差し替え不要）
 
-動画生成パイプライン（`server/pipeline/`）は**使わない**。素材は事前にコンテンツタブに業種別で用意しておき、業種選択で自動マッピングする。
+動画生成パイプライン（`server/pipeline/`）は**使わない**。素材は事前にコンテンツタブに業種×グレード別で用意しておき、選択で自動マッピングする。見込み客ごとに変わるのは「店名」と「Googleマップ」だけ。
 
 ### 3. GoogleマップURL → 地図埋め込み変換
 
@@ -207,15 +234,22 @@ function googleMapsUrlToEmbed(url: string): string {
 
 ## コード上の差し替えポイント一覧
 
-### 新しいLPを追加する際に変更が必要な箇所
+### 見込み客ごとに変わる箇所（店名 + Googleマップのみ）
 
 | ファイル | 変数/箇所 | 差し替え内容 |
 |---|---|---|
-| `InteractiveLpPage.tsx` L117 | `SCENE_IMAGES_BY_SLUG[slug]` | 業種別の画像3枚URL |
-| `InteractiveLpPage.tsx` L133 | `FRAME_DATA_BY_SLUG[slug]` | ヒーロー動画フレームJSON |
-| `InteractiveLpPage.tsx` L147 | `HERO_OVERLAY_BY_SLUG[slug]` | eyebrow=店名, title/subtitle=xxxxxx |
-| `client/src/data/` | `{slug}-frames.json` | 動画フレームURLリスト |
-| DB `leads` テーブル | レコード | storeName, businessType, googleMapsUrl, slug |
+| `InteractiveLpPage.tsx` | `HERO_OVERLAY_BY_SLUG[slug].eyebrow` | 店名（実値） |
+| DB `leads` テーブル | `storeName` | 店名 |
+| DB `leads` テーブル | `googleMapsUrl` | GoogleマップURL |
+| DB `leads` テーブル | `slug` | 自動生成 |
+
+### 業種×グレードで共通（コンテンツタブから自動マッピング）
+
+| ファイル | 変数/箇所 | 内容 |
+|---|---|---|
+| `InteractiveLpPage.tsx` | `SCENE_IMAGES_BY_SLUG[slug]` | 業種×グレード共通の画像3枚URL |
+| `InteractiveLpPage.tsx` | `FRAME_DATA_BY_SLUG[slug]` | 業種×グレード共通のフレームJSON |
+| `client/src/data/` | `{businessType}-frames.json` | 動画フレームURLリスト |
 
 ### 変更不要（固定）
 
@@ -231,17 +265,18 @@ function googleMapsUrlToEmbed(url: string): string {
 
 以下をセールスKPIシステムの LP Factory 実装担当に伝えてください：
 
-> **「LP Factory テンプレート v1 確定。GitHub リポジトリ参照。」**
+> **「LP Factory テンプレート v2 確定。GitHub リポジトリ参照。」**
 >
 > - リポジトリ: https://github.com/help-mds/la-letizia-lp-source
 > - 仕様書: `LP_FACTORY_TEMPLATE_SPEC.md`（このファイル）
 >
 > **要点:**
-> 1. 入力フォームは **3項目のみ**（店名・業種・GoogleマップURL）に簡素化
-> 2. テキストは全て `xxxxxx` 固定（店名と地図だけ実値）
-> 3. 業種選択で素材セット（動画1 + 画像3）を自動割り当て
+> 1. 見込み客ごとに入れ替えるのは **店名 + GoogleマップURL のみ**
+> 2. 素材は業種×グレード（コンテンツタブ）で共通—見込み客ごとの差し替え不要
+> 3. テキストは全て `xxxxxx` 固定（店名と地図だけ実値）
 > 4. 発行URLは `https://saleskpi.xyz/sites/{連番}` — manus.space は露出しない
-> 5. 動画生成パイプラインは不使用（事前用意の素材を当てこむだけ）
+> 5. 画面右下に「自社用に修正する」CTAボタン → TimeRex予約リンク
+> 6. 動画生成パイプラインは不使用
 >
 > **テンプレートの核心ファイル:**
 > - `client/src/pages/InteractiveLpPage.tsx` — メインLP（全ロジック）
@@ -454,3 +489,5 @@ border-radius: 適切な値;
 - [ ] スワイプ/ホイールでシーン間移動が動作
 - [ ] ポップアップ自動再生が動作
 - [ ] ローディング画面が表示される
+- [ ] 「自社用に修正する」CTAボタンが右下に表示される
+- [ ] CTAボタンクリックでTimeRex予約ページに遷移する

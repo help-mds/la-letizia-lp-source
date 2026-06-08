@@ -822,7 +822,8 @@
 .scene-pill-nav-container,
 .scene-arrows-container,
 .scene-persistent-cta,
-.scene-share-container {
+.scene-share-container,
+.scene-customize-container {
   transition: all 0.5s ease;
 }
 
@@ -838,8 +839,72 @@
 .scene-pill-nav-container.light-glass,
 .scene-arrows-container.light-glass,
 .scene-persistent-cta.light-glass,
-.scene-share-container.light-glass {
+.scene-share-container.light-glass,
+.scene-customize-container.light-glass {
   /* Same as base */
+}
+
+/* ============================================================
+   "自社用に修正する" CTA Button — fixed bottom-right
+   ============================================================ */
+.scene-customize-container {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.05),
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  padding: 4px;
+  text-decoration: none;
+  display: block;
+}
+.scene-customize-btn {
+  display: block;
+  padding: 12px 22px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  text-transform: none;
+  border-radius: 50px;
+  border: 1.5px solid rgba(160, 160, 170, 0.4);
+  /* Metallic gradient */
+  background: linear-gradient(160deg, rgba(60, 60, 70, 0.9) 0%, rgba(30, 30, 40, 0.85) 50%, rgba(50, 50, 60, 0.9) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.scene-customize-container:hover .scene-customize-btn {
+  background: linear-gradient(160deg, rgba(80, 80, 90, 0.95) 0%, rgba(40, 40, 55, 0.9) 50%, rgba(65, 65, 75, 0.95) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.scene-customize-container:active .scene-customize-btn {
+  transform: scale(0.97);
+}
+
+@media (max-width: 640px) {
+  .scene-customize-container {
+    bottom: 16px;
+    right: 12px;
+  }
+  .scene-customize-btn {
+    padding: 10px 18px;
+    font-size: 10px;
+  }
 }
 
 /* ---- Reduced motion ---- */

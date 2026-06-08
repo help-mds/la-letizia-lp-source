@@ -458,3 +458,15 @@
 
 ### テンプレートスペック全体
 - [x] LP_FACTORY_TEMPLATE_SPEC.md に「セールスKPI再現時の技術要件」セクション追加
+
+## LP Factory簡素化 & CTAボタン追加
+
+### 「自社用に修正する」CTAボタン
+- [x] 画面右下に固定CTAボタン「自社用に修正する」を追加
+- [x] ボタンクリックでTimeRex予約リンク（https://timerex.net/s/ichikawa_9fa0_0088/dbb48451）に遷移
+- [x] メタリック/ガラス質デザインで他のUI要素と統一
+
+### LP Factory仕様簡素化
+- [x] LP_FACTORY_TEMPLATE_SPEC.md更新: 見込み客ごとの入力は「店名」+「GoogleマップURL」のみ
+- [x] 業種×グレード（高級/カジュアル）の素材セットはコンテンツタブから自動選択
+- [x] フォーム仕様を「店名 + GoogleマップURL + 業種×グレード選択」に整理

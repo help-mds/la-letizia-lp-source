@@ -501,6 +501,7 @@ export default function InteractiveLpPage() {
               }
             }}
             onReserve={handleReserve}
+            customizeUrl="https://timerex.net/s/ichikawa_9fa0_0088/dbb48451"
           />
         </div>
       </div>

@@ -9,6 +9,8 @@ interface SceneNavigationProps {
   storeName?: string;
   /** When true, uses light glass style (for white loading background) */
   isLoading?: boolean;
+  /** URL for the "自社用に修正する" CTA button */
+  customizeUrl?: string;
 }
 
 /**
@@ -25,6 +27,7 @@ export default function SceneNavigation({
   onReserve,
   storeName = '',
   isLoading = false,
+  customizeUrl,
 }: SceneNavigationProps) {
   const [copied, setCopied] = useState(false);
 
@@ -130,6 +133,18 @@ export default function SceneNavigation({
         </button>
         {copied && <span className="scene-share-copied">コピーしました</span>}
       </div>
+
+      {/* "自社用に修正する" CTA — fixed bottom-right */}
+      {customizeUrl && (
+        <a
+          href={customizeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`scene-customize-container ${modeClass}`}
+        >
+          <span className="scene-customize-btn">自社用に修正する</span>
+        </a>
+      )}
     </>
   );
 }
