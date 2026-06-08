@@ -3,141 +3,69 @@ import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 
 /**
- * /lp-input — Public form for Pakistan team to register new restaurant leads.
- * No authentication required.
- * Collects all data needed to generate a premium LP at /r/{slug}.
+ * /lp-input — LP Factory: 簡素化版LP作成フォーム
+ * 入力は3項目のみ:
+ *   1. 業種×グレード選択
+ *   2. 店名
+ *   3. GoogleマップURL
  */
 
-type MenuItem = { name: string; desc: string; price: string };
+// 業種×グレードの選択肢（コンテンツタブに対応）
+const BUSINESS_TYPE_OPTIONS = [
+  { value: 'cafe-casual', label: 'カフェ（カジュアル）', available: true },
+  { value: 'cafe-premium', label: 'カフェ（高級）', available: false },
+  { value: 'yakiniku-casual', label: '焼肉（カジュアル）', available: true },
+  { value: 'yakiniku-premium', label: '焼肉（高級）', available: true },
+] as const;
 
 export default function LpInput() {
   const [submitted, setSubmitted] = useState(false);
   const [resultSlug, setResultSlug] = useState('');
   const [resultId, setResultId] = useState(0);
 
-  // Form state
+  // Form state — 3項目のみ
+  const [businessTypeGrade, setBusinessTypeGrade] = useState('yakiniku-premium');
   const [storeName, setStoreName] = useState('');
-  const [area, setArea] = useState('');
-  const [businessType, setBusinessType] = useState<'restaurant' | 'salon'>('restaurant');
-  const [businessSubtype, setBusinessSubtype] = useState('');
-  const [notes, setNotes] = useState('');
-
-  // Contact
   const [googleMapsUrl, setGoogleMapsUrl] = useState('');
-  const [instagramUrl, setInstagramUrl] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [whatsappNumber, setWhatsappNumber] = useState('');
-
-  // Ambiance
-  const [template, setTemplate] = useState('restaurant-luxury');
-  const [ambianceLighting, setAmbianceLighting] = useState('');
-  const [ambianceSurfaces, setAmbianceSurfaces] = useState('');
-  const [ambianceColorPalette, setAmbianceColorPalette] = useState('');
-  const [ambianceMood, setAmbianceMood] = useState('');
-  const [ambianceTimeOfDay, setAmbianceTimeOfDay] = useState('');
-  const [paletteAccent, setPaletteAccent] = useState('#B0552F');
-
-  // Content
-  const [heroTagline, setHeroTagline] = useState('');
-  const [heroSubtitle, setHeroSubtitle] = useState('');
-  const [storyParagraphs, setStoryParagraphs] = useState('');
-  const [atmosphereCaption, setAtmosphereCaption] = useState('');
-  const [ctaTitle, setCtaTitle] = useState('');
-  const [ctaSubtitle, setCtaSubtitle] = useState('');
-
-  // Menu
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
-    { name: '', desc: '', price: '' },
-  ]);
-
-  // Gallery
-  const [galleryImages, setGalleryImages] = useState('');
-  const [galleryCaptions, setGalleryCaptions] = useState('');
-
-  // Info
-  const [infoAddress, setInfoAddress] = useState('');
-  const [infoHours, setInfoHours] = useState('');
-  const [infoPhone, setInfoPhone] = useState('');
-  const [infoReservationUrl, setInfoReservationUrl] = useState('');
-
-  // Source photos (for video pipeline)
-  const [sourcePhotos, setSourcePhotos] = useState('');
 
   const createLead = trpc.leads.create.useMutation();
-
-  const handleAddMenuItem = () => {
-    setMenuItems([...menuItems, { name: '', desc: '', price: '' }]);
-  };
-
-  const handleRemoveMenuItem = (index: number) => {
-    setMenuItems(menuItems.filter((_, i) => i !== index));
-  };
-
-  const handleMenuItemChange = (index: number, field: keyof MenuItem, value: string) => {
-    const updated = [...menuItems];
-    updated[index] = { ...updated[index], [field]: value };
-    setMenuItems(updated);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!storeName.trim() || !area.trim()) {
-      toast.error('Store Name and Area are required.');
+    if (!storeName.trim()) {
+      toast.error('店名を入力してください');
       return;
     }
+    if (!googleMapsUrl.trim()) {
+      toast.error('GoogleマップURLを入力してください');
+      return;
+    }
+
+    // 業種×グレードからbusiness_typeを分解
+    const [businessType] = businessTypeGrade.split('-');
 
     try {
       const result = await createLead.mutateAsync({
         store_name: storeName.trim(),
-        area: area.trim(),
-        business_type: businessType,
-        business_subtype: businessSubtype || undefined,
-        notes: notes || undefined,
-        google_maps_url: googleMapsUrl || undefined,
-        instagram_url: instagramUrl || undefined,
-        phone_number: phoneNumber || undefined,
-        email: email || undefined,
-        whatsapp_number: whatsappNumber || undefined,
-        template: template || undefined,
-        ambiance_lighting: ambianceLighting || undefined,
-        ambiance_surfaces: ambianceSurfaces || undefined,
-        ambiance_color_palette: ambianceColorPalette || undefined,
-        ambiance_mood: ambianceMood || undefined,
-        ambiance_time_of_day: ambianceTimeOfDay || undefined,
-        palette_accent: paletteAccent || undefined,
-        hero_tagline: heroTagline || undefined,
-        hero_subtitle: heroSubtitle || undefined,
-        story_paragraphs: storyParagraphs ? storyParagraphs.split('\n').filter(Boolean) : undefined,
-        atmosphere_caption: atmosphereCaption || undefined,
-        cta_title: ctaTitle || undefined,
-        cta_subtitle: ctaSubtitle || undefined,
-        menu_items: menuItems.filter(m => m.name.trim()).map(m => ({
-          name: m.name.trim(),
-          desc: m.desc.trim() || undefined,
-          price: m.price.trim() || undefined,
-        })),
-        gallery_images: galleryImages ? galleryImages.split('\n').filter(Boolean) : undefined,
-        gallery_captions: galleryCaptions ? galleryCaptions.split('\n').filter(Boolean) : undefined,
-        source_photos: sourcePhotos ? sourcePhotos.split('\n').filter(Boolean) : undefined,
-        info_address: infoAddress || undefined,
-        info_hours: infoHours || undefined,
-        info_phone: infoPhone || undefined,
-        info_reservation_url: infoReservationUrl || undefined,
+        area: 'auto', // GoogleマップURLから自動取得
+        business_type: businessType as 'restaurant' | 'salon',
+        business_subtype: businessTypeGrade,
+        google_maps_url: googleMapsUrl.trim(),
+        template: businessTypeGrade,
       });
 
       setResultSlug(result.slug);
       setResultId(result.id);
       setSubmitted(true);
-      toast.success('LP created successfully!');
+      toast.success('LP作成完了！');
     } catch (err: any) {
-      toast.error(err.message || 'Failed to create LP');
+      toast.error(err.message || 'LP作成に失敗しました');
     }
   };
 
   if (submitted) {
-    const lpUrl = `${window.location.origin}/r/${resultSlug}`;
+    const lpUrl = `${window.location.origin}/lp/${resultSlug}`;
     return (
       <div className="min-h-screen bg-[#0E0D0C] flex items-center justify-center p-6">
         <div className="max-w-lg w-full text-center space-y-8">
@@ -146,7 +74,7 @@ export default function LpInput() {
               LP Factory
             </p>
             <h1 className="text-3xl font-light text-white/90 italic" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-              Site Created
+              LP作成完了
             </h1>
           </div>
 
@@ -162,22 +90,22 @@ export default function LpInput() {
             </a>
             <div className="pt-4 flex gap-3 justify-center">
               <button
-                onClick={() => navigator.clipboard.writeText(lpUrl).then(() => toast.success('Copied!'))}
+                onClick={() => navigator.clipboard.writeText(lpUrl).then(() => toast.success('コピーしました！'))}
                 className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white/80 text-sm rounded transition-colors"
               >
-                Copy URL
+                URLコピー
               </button>
               <button
-                onClick={() => { setSubmitted(false); setResultSlug(''); }}
+                onClick={() => { setSubmitted(false); setResultSlug(''); setStoreName(''); setGoogleMapsUrl(''); }}
                 className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white/80 text-sm rounded transition-colors"
               >
-                Create Another
+                もう1件作成
               </button>
             </div>
           </div>
 
           <p className="text-white/30 text-xs">
-            ID: {resultId} • Video pipeline has been triggered automatically.
+            ID: {resultId} • 素材は業種×グレードから自動割り当て済み
           </p>
         </div>
       </div>
@@ -185,342 +113,112 @@ export default function LpInput() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F6F3] py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-[#F8F6F3] flex items-center justify-center py-12 px-4">
+      <div className="max-w-md w-full">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <p className="text-[#0E0D0C]/40 text-xs tracking-[0.3em] uppercase mb-2">
             LP Factory
           </p>
           <h1
-            className="text-4xl font-light text-[#0E0D0C] italic"
+            className="text-3xl font-light text-[#0E0D0C] italic"
             style={{ fontFamily: 'Cormorant Garamond, serif' }}
           >
-            New Restaurant LP
+            新規LP作成
           </h1>
           <p className="text-[#0E0D0C]/50 text-sm mt-3">
-            Fill in the details below to generate a premium landing page.
+            3項目を入力するだけでLPが即座に生成されます
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-10">
-          {/* === Basic Info === */}
-          <Section title="Basic Information">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Store Name *" value={storeName} onChange={setStoreName} placeholder="La Letizia" />
-              <Field label="Area *" value={area} onChange={setArea} placeholder="Dubai Marina" />
-              <SelectField
-                label="Business Type"
-                value={businessType}
-                onChange={(v) => setBusinessType(v as 'restaurant' | 'salon')}
-                options={[
-                  { value: 'restaurant', label: 'Restaurant' },
-                  { value: 'salon', label: 'Salon' },
-                ]}
-              />
-              <Field label="Subtype" value={businessSubtype} onChange={setBusinessSubtype} placeholder="cafe, steakhouse, japanese..." />
-            </div>
-            <TextArea label="Notes" value={notes} onChange={setNotes} placeholder="Brief description of the restaurant..." rows={3} />
-          </Section>
-
-          {/* === Contact === */}
-          <Section title="Contact Information">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Google Maps URL" value={googleMapsUrl} onChange={setGoogleMapsUrl} placeholder="https://maps.google.com/..." />
-              <Field label="Instagram URL" value={instagramUrl} onChange={setInstagramUrl} placeholder="https://instagram.com/..." />
-              <Field label="Phone Number" value={phoneNumber} onChange={setPhoneNumber} placeholder="+971 4 555 0123" />
-              <Field label="Email" value={email} onChange={setEmail} placeholder="info@restaurant.com" />
-              <Field label="WhatsApp" value={whatsappNumber} onChange={setWhatsappNumber} placeholder="+971..." />
-            </div>
-          </Section>
-
-          {/* === Ambiance & Style === */}
-          <Section title="Ambiance & Style">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <SelectField
-                label="Template"
-                value={template}
-                onChange={setTemplate}
-                options={[
-                  { value: 'restaurant-luxury', label: 'Restaurant Luxury' },
-                  { value: 'restaurant-casual', label: 'Restaurant Casual' },
-                  { value: 'salon-luxury', label: 'Salon Luxury' },
-                ]}
-              />
-              <SelectField
-                label="Lighting"
-                value={ambianceLighting}
-                onChange={setAmbianceLighting}
-                options={[
-                  { value: '', label: '— Auto detect —' },
-                  { value: 'warm_golden', label: 'Warm Golden' },
-                  { value: 'cool_neutral', label: 'Cool Neutral' },
-                  { value: 'dim_moody', label: 'Dim Moody' },
-                  { value: 'bright_natural', label: 'Bright Natural' },
-                ]}
-              />
-              <SelectField
-                label="Surfaces"
-                value={ambianceSurfaces}
-                onChange={setAmbianceSurfaces}
-                options={[
-                  { value: '', label: '— Auto detect —' },
-                  { value: 'marble', label: 'Marble' },
-                  { value: 'wood', label: 'Wood' },
-                  { value: 'concrete', label: 'Concrete' },
-                  { value: 'leather', label: 'Leather' },
-                  { value: 'mixed', label: 'Mixed' },
-                ]}
-              />
-              <SelectField
-                label="Color Palette"
-                value={ambianceColorPalette}
-                onChange={setAmbianceColorPalette}
-                options={[
-                  { value: '', label: '— Auto detect —' },
-                  { value: 'warm_earth', label: 'Warm Earth' },
-                  { value: 'cool_neutral', label: 'Cool Neutral' },
-                  { value: 'dark_dramatic', label: 'Dark Dramatic' },
-                  { value: 'bright_airy', label: 'Bright Airy' },
-                ]}
-              />
-              <SelectField
-                label="Mood"
-                value={ambianceMood}
-                onChange={setAmbianceMood}
-                options={[
-                  { value: '', label: '— Auto detect —' },
-                  { value: 'refined', label: 'Refined' },
-                  { value: 'cozy', label: 'Cozy' },
-                  { value: 'energetic', label: 'Energetic' },
-                  { value: 'intimate', label: 'Intimate' },
-                  { value: 'dramatic', label: 'Dramatic' },
-                ]}
-              />
-              <SelectField
-                label="Time of Day"
-                value={ambianceTimeOfDay}
-                onChange={setAmbianceTimeOfDay}
-                options={[
-                  { value: '', label: '— Auto detect —' },
-                  { value: 'morning', label: 'Morning' },
-                  { value: 'midday', label: 'Midday' },
-                  { value: 'golden_hour', label: 'Golden Hour' },
-                  { value: 'evening', label: 'Evening' },
-                  { value: 'night', label: 'Night' },
-                ]}
-              />
-            </div>
-            <div className="mt-4">
-              <label className="block text-xs text-[#0E0D0C]/50 uppercase tracking-wider mb-1.5">
-                Accent Color
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={paletteAccent}
-                  onChange={(e) => setPaletteAccent(e.target.value)}
-                  className="w-10 h-10 rounded border border-[#0E0D0C]/10 cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={paletteAccent}
-                  onChange={(e) => setPaletteAccent(e.target.value)}
-                  className="flex-1 px-3 py-2 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm"
-                  placeholder="#B0552F"
-                />
-              </div>
-            </div>
-          </Section>
-
-          {/* === Content === */}
-          <Section title="Content & Copy">
-            <div className="space-y-4">
-              <Field label="Hero Tagline" value={heroTagline} onChange={setHeroTagline} placeholder="Marina Daylight, Slow Coffee" />
-              <Field label="Hero Subtitle" value={heroSubtitle} onChange={setHeroSubtitle} placeholder="A marble counter, a clear glass of water..." />
-              <TextArea
-                label="Story Paragraphs (one per line)"
-                value={storyParagraphs}
-                onChange={setStoryParagraphs}
-                placeholder="A place where mornings stretch longer...&#10;Marble surfaces catch the light..."
-                rows={4}
-              />
-              <Field label="Atmosphere Caption" value={atmosphereCaption} onChange={setAtmosphereCaption} placeholder="Where mornings stretch longer." />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Field label="CTA Title" value={ctaTitle} onChange={setCtaTitle} placeholder="Your table is waiting" />
-                <Field label="CTA Subtitle" value={ctaSubtitle} onChange={setCtaSubtitle} placeholder="Experience [Store] in person." />
-              </div>
-            </div>
-          </Section>
-
-          {/* === Menu === */}
-          <Section title="Menu Items">
-            <div className="space-y-3">
-              {menuItems.map((item, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <div className="flex-1 grid grid-cols-3 gap-2">
-                    <input
-                      type="text"
-                      value={item.name}
-                      onChange={(e) => handleMenuItemChange(i, 'name', e.target.value)}
-                      placeholder="Item name"
-                      className="px-3 py-2 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm"
-                    />
-                    <input
-                      type="text"
-                      value={item.desc}
-                      onChange={(e) => handleMenuItemChange(i, 'desc', e.target.value)}
-                      placeholder="Description"
-                      className="px-3 py-2 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm"
-                    />
-                    <input
-                      type="text"
-                      value={item.price}
-                      onChange={(e) => handleMenuItemChange(i, 'price', e.target.value)}
-                      placeholder="AED 28"
-                      className="px-3 py-2 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveMenuItem(i)}
-                    className="p-2 text-red-400 hover:text-red-600 transition-colors text-sm"
-                  >
-                    ✕
-                  </button>
-                </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* 1. 業種×グレード */}
+          <div>
+            <label className="block text-xs text-[#0E0D0C]/60 uppercase tracking-wider mb-2 font-medium">
+              業種 × グレード
+            </label>
+            <div className="space-y-2">
+              {BUSINESS_TYPE_OPTIONS.map((opt) => (
+                <label
+                  key={opt.value}
+                  className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                    businessTypeGrade === opt.value
+                      ? 'border-[#B0552F] bg-[#B0552F]/5'
+                      : 'border-[#0E0D0C]/10 bg-white hover:border-[#0E0D0C]/20'
+                  } ${!opt.available ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="businessTypeGrade"
+                    value={opt.value}
+                    checked={businessTypeGrade === opt.value}
+                    onChange={(e) => setBusinessTypeGrade(e.target.value)}
+                    disabled={!opt.available}
+                    className="w-4 h-4 text-[#B0552F] accent-[#B0552F]"
+                  />
+                  <span className="text-sm text-[#0E0D0C]/80">{opt.label}</span>
+                  {!opt.available && (
+                    <span className="ml-auto text-[10px] text-[#0E0D0C]/40 bg-[#0E0D0C]/5 px-2 py-0.5 rounded">
+                      素材未登録
+                    </span>
+                  )}
+                </label>
               ))}
-              <button
-                type="button"
-                onClick={handleAddMenuItem}
-                className="text-sm text-[#B0552F] hover:text-[#D4723F] transition-colors"
-              >
-                + Add menu item
-              </button>
             </div>
-          </Section>
+          </div>
 
-          {/* === Gallery === */}
-          <Section title="Gallery & Media">
-            <TextArea
-              label="Gallery Image URLs (one per line)"
-              value={galleryImages}
-              onChange={setGalleryImages}
-              placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"
-              rows={4}
+          {/* 2. 店名 */}
+          <div>
+            <label className="block text-xs text-[#0E0D0C]/60 uppercase tracking-wider mb-2 font-medium">
+              店名 <span className="text-[#B0552F]">*</span>
+            </label>
+            <input
+              type="text"
+              value={storeName}
+              onChange={(e) => setStoreName(e.target.value)}
+              placeholder="例: La Letizia"
+              className="w-full px-4 py-3 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm focus:outline-none focus:border-[#B0552F]/40 transition-colors"
             />
-            <TextArea
-              label="Gallery Captions (one per line, matching image order)"
-              value={galleryCaptions}
-              onChange={setGalleryCaptions}
-              placeholder="The pour&#10;The space&#10;Morning ritual"
-              rows={3}
-            />
-            <TextArea
-              label="Source Photos for Video (one URL per line)"
-              value={sourcePhotos}
-              onChange={setSourcePhotos}
-              placeholder="https://example.com/source1.jpg&#10;https://example.com/source2.jpg"
-              rows={3}
-            />
-          </Section>
+            <p className="text-[10px] text-[#0E0D0C]/40 mt-1">
+              LP上のヘッダー・ローディング画面に表示されます
+            </p>
+          </div>
 
-          {/* === Info === */}
-          <Section title="Store Information">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextArea label="Address" value={infoAddress} onChange={setInfoAddress} placeholder="Dubai Marina Walk&#10;Tower 3, Ground Floor&#10;Dubai, UAE" rows={3} />
-              <div className="space-y-4">
-                <Field label="Hours" value={infoHours} onChange={setInfoHours} placeholder="Daily 7:00 AM – 4:00 PM" />
-                <Field label="Phone" value={infoPhone} onChange={setInfoPhone} placeholder="+971 4 555 0123" />
-                <Field label="Reservation URL" value={infoReservationUrl} onChange={setInfoReservationUrl} placeholder="https://..." />
-              </div>
-            </div>
-          </Section>
+          {/* 3. GoogleマップURL */}
+          <div>
+            <label className="block text-xs text-[#0E0D0C]/60 uppercase tracking-wider mb-2 font-medium">
+              GoogleマップURL <span className="text-[#B0552F]">*</span>
+            </label>
+            <input
+              type="url"
+              value={googleMapsUrl}
+              onChange={(e) => setGoogleMapsUrl(e.target.value)}
+              placeholder="https://maps.google.com/..."
+              className="w-full px-4 py-3 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm focus:outline-none focus:border-[#B0552F]/40 transition-colors"
+            />
+            <p className="text-[10px] text-[#0E0D0C]/40 mt-1">
+              Accessセクションの地図埋め込みに使用されます
+            </p>
+          </div>
 
-          {/* === Submit === */}
-          <div className="pt-6 border-t border-[#0E0D0C]/10">
+          {/* Submit */}
+          <div className="pt-4">
             <button
               type="submit"
-              disabled={createLead.isPending}
-              className="w-full py-4 bg-[#0E0D0C] text-white rounded-lg text-sm uppercase tracking-[0.2em] hover:bg-[#1a1918] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={createLead.isPending || !BUSINESS_TYPE_OPTIONS.find(o => o.value === businessTypeGrade)?.available}
+              className="w-full py-4 bg-[#0E0D0C] text-white rounded-lg text-sm uppercase tracking-[0.2em] hover:bg-[#1a1918] transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
-              {createLead.isPending ? 'Creating...' : 'Generate LP'}
+              {createLead.isPending ? '作成中...' : 'LP発行'}
             </button>
           </div>
         </form>
+
+        {/* Footer note */}
+        <p className="text-center text-[10px] text-[#0E0D0C]/30 mt-8">
+          素材（動画・画像）は業種×グレードに応じて自動で割り当てられます。<br />
+          テキストは全て「xxxxxx」固定です。
+        </p>
       </div>
-    </div>
-  );
-}
-
-// ─── Reusable form components ────────────────────────────────────────────────
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-medium text-[#0E0D0C]/80 border-b border-[#0E0D0C]/10 pb-2">
-        {title}
-      </h2>
-      {children}
-    </div>
-  );
-}
-
-function Field({
-  label, value, onChange, placeholder,
-}: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
-  return (
-    <div>
-      <label className="block text-xs text-[#0E0D0C]/50 uppercase tracking-wider mb-1.5">
-        {label}
-      </label>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-3 py-2 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm focus:outline-none focus:border-[#B0552F]/40 transition-colors"
-      />
-    </div>
-  );
-}
-
-function TextArea({
-  label, value, onChange, placeholder, rows = 3,
-}: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; rows?: number }) {
-  return (
-    <div>
-      <label className="block text-xs text-[#0E0D0C]/50 uppercase tracking-wider mb-1.5">
-        {label}
-      </label>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        rows={rows}
-        className="w-full px-3 py-2 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm resize-y focus:outline-none focus:border-[#B0552F]/40 transition-colors"
-      />
-    </div>
-  );
-}
-
-function SelectField({
-  label, value, onChange, options,
-}: { label: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
-  return (
-    <div>
-      <label className="block text-xs text-[#0E0D0C]/50 uppercase tracking-wider mb-1.5">
-        {label}
-      </label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 rounded-lg border border-[#0E0D0C]/10 bg-white text-sm focus:outline-none focus:border-[#B0552F]/40 transition-colors"
-      >
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
-      </select>
     </div>
   );
 }
